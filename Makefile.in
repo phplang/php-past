@@ -1,0 +1,521 @@
+# +----------------------------------------------------------------------+
+# | PHP HTML Embedded Scripting Language Version 3.0                     |
+# +----------------------------------------------------------------------+
+# | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+# +----------------------------------------------------------------------+
+# | This program is free software; you can redistribute it and/or modify |
+# | it under the terms of the GNU General Public License as published by |
+# | the Free Software Foundation; either version 2 of the License, or    |
+# | (at your option) any later version.                                  |
+# |                                                                      |
+# | This program is distributed in the hope that it will be useful,      |
+# | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+# | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+# | GNU General Public License for more details.                         |
+# |                                                                      |
+# | You should have received a copy of the GNU General Public License    |
+# | along with this program; if not, write to the Free Software          |
+# | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+# +----------------------------------------------------------------------+
+
+#
+# $Id: Makefile.in,v 1.179 1998/02/02 21:35:32 zeev Exp $
+#
+
+prefix = /usr/local
+srcdir = @srcdir@
+VPATH = @srcdir@
+bindir = @bindir@
+
+CC = @CC@
+AR = ar rc
+BINNAME = @BINNAME@
+INSTALL_IT = @INSTALL_IT@
+INCLUDE = -I. @GDBM_INCLUDE@ @ORACLE_INCLUDE@ @APACHE_INCLUDE@ @ADA_INCLUDE@ @IODBC_INCLUDE@ @SYBASE_INCLUDE@ @SYBASE_CT_INCLUDE@ @MYSQL_INCLUDE@ @MSQL_INCLUDE@ @SOLID_INCLUDE@ @PGSQL_INCLUDE@ @LDAP_INCLUDE@
+PROF_CFLAGS =
+CFLAGS = @CFLAGS@ $(INCLUDE) @DEBUG_CFLAGS@ @STRONGHOLD@ $(PROF_CFLAGS)
+LDFLAGS = @LDFLAGS@
+REGCFLAGS = -O2 
+RANLIB = @RANLIB@
+YACC = @YACC@
+MAINT = @MAINT@
+
+SOURCE = language-parser.tab.c language-scanner.c main.c hash.c operators.c \
+       variables.c token_cache.c stack.c internal_functions.c \
+       snprintf.c alloc.c list.c highlight.c debugger.c \
+       configuration-parser.tab.c configuration-scanner.c \
+       request_info.c safe_mode.c fopen-wrappers.c
+OBJS = language-parser.tab.o language-scanner.o main.o hash.o operators.o \
+       variables.o token_cache.o stack.o internal_functions.o \
+       snprintf.o alloc.o list.o highlight.o debugger.o \
+       configuration-parser.tab.o configuration-scanner.o \
+       request_info.o safe_mode.o fopen-wrappers.o @LIBOBJS@
+
+FUNCTIONS_SOURCE = functions/adabasd.c functions/apache.c \
+       functions/basic_functions.c \
+       functions/crypt.c functions/datetime.c functions/db.c \
+       functions/dbase.c functions/dir.c \
+       functions/dl.c functions/dns.c functions/exec.c functions/file.c \
+       functions/filepro.c functions/filestat.c \
+       functions/formatted_print.c functions/fsock.c functions/gd.c \
+       functions/head.c functions/html.c functions/image.c \
+       functions/link.c functions/mail.c functions/math.c \
+       functions/md5.c functions/microtime.c functions/mime.c \
+       functions/msql.c functions/mysql.c \
+       functions/oracle.c functions/pageinfo.c functions/pgsql.c \
+       functions/post.c functions/rand.c functions/reg.c \
+       functions/solid.c functions/soundex.c \
+       functions/string.c functions/syslog.c functions/type.c \
+       functions/uniqid.c functions/sybsql.c functions/sybase.c \
+       functions/sybase-ct.c functions/url.c functions/base64.c \
+       functions/info.c functions/number.c functions/bcmath.c \
+	   functions/unified_odbc.c functions/ldap.c functions/browscap.c
+
+FUNCTIONS = functions/adabasd.o functions/apache.o \
+       functions/basic_functions.o \
+       functions/crypt.o functions/datetime.o functions/db.o \
+       functions/dbase.o functions/dir.o \
+       functions/dl.o functions/dns.o functions/exec.o functions/file.o \
+       functions/filepro.o functions/filestat.o \
+       functions/formatted_print.o functions/fsock.o functions/gd.o \
+       functions/head.o functions/html.o functions/image.o \
+       functions/link.o functions/mail.o functions/math.o \
+       functions/md5.o functions/microtime.o functions/mime.o \
+       functions/msql.o functions/mysql.o \
+       functions/oracle.o functions/pageinfo.o functions/pgsql.o \
+       functions/post.o functions/rand.o functions/reg.o \
+       functions/solid.o functions/soundex.o \
+       functions/string.o functions/syslog.o functions/type.o \
+       functions/uniqid.o functions/sybsql.o functions/sybase.o \
+       functions/sybase-ct.o functions/url.o functions/base64.o \
+       functions/info.o functions/number.o functions/bcmath.o \
+	   functions/unified_odbc.o functions/ldap.o functions/browscap.o
+
+LIBS = $(PHPLIBS) @best_dbm@ @DBASE_LIB@ @REGEX_LIB@ @LIBS@ \
+       @ORACLE_LFLAGS@ @ORACLE_LIBS@ \
+       @IODBC_LFLAGS@ @IODBC_LIBS@ \
+       @SYBASE_LFLAGS@ @SYBASE_LIBS@ \
+       @SYBASE_CT_LFLAGS@ @SYBASE_CT_LIBS@ \
+       @MYSQL_LFLAGS@ @MYSQL_LIBS@ \
+       @MSQL_LFLAGS@ @MSQL_LIBS@ \
+       @ADA_LFLAGS@ @ADA_LIBS@ \
+       @SOLID_LIBS@ \
+       @PGSQL_LFLAGS@ @PGSQL_LIBS@ \
+       @LDAP_LFLAGS@ @LDAP_LIBS@
+
+all: $(BINNAME)
+
+php: $(OBJS) $(FUNCTIONS) @REGEX_LIB@ @DBASE_LIB@
+	$(CC) $(CFLAGS) -o $(BINNAME) $(LDFLAGS) $(OBJS) $(FUNCTIONS) $(LIBS)
+
+libphp3.a: $(OBJS) $(FUNCTIONS) @DBASE_LIB@
+	$(AR) $(BINNAME) $(OBJS) $(FUNCTIONS) @DBASE_LIB@
+	$(RANLIB) $(BINNAME)
+
+docs:
+	cd doc; $(MAKE)
+
+regex/libregex.a:
+	(cd $(srcdir)/regex;$(MAKE) lib CC='$(CC)' AUX_CFLAGS='$(REGCFLAGS)' RANLIB=$(RANLIB))
+
+dbase/libdbf.a:
+	(cd $(srcdir)/dbase;$(MAKE) CC='$(CC)' AUX_CFLAGS='$(CFLAGS)' RANLIB=$(RANLIB))
+
+language-parser.tab.h language-parser.tab.c: language-parser.y
+	bison -p php -v -d language-parser.y
+
+language-scanner.o:
+	$(CC) $(CFLAGS) -w -c language-scanner.c
+
+language-scanner.c:  language-scanner.lex
+	flex -Pphp -olanguage-scanner.c -i language-scanner.lex
+
+configuration-parser.tab.h configuration-parser.tab.c:	configuration-parser.y
+	bison -p cfg -v -d configuration-parser.y
+
+configuration-scanner.o:
+	$(CC) $(CFLAGS) -w -c configuration-scanner.c
+
+configuration-scanner.c:	configuration-scanner.lex
+	flex -Pcfg -oconfiguration-scanner.c -i configuration-scanner.lex
+
+clean:  
+	-rm -f *.tab.? *-scanner.c *.output libphp3.a php *.o
+	-rm -f $(FUNCTIONS)
+
+distclean: clean
+	-rm -f config.status config.cache config.log
+	-rm -f Makefile Makefile.depend config.h build-defs.h
+	-rm -f regex/*.o regex/*.a regex/*.ih
+	-rm -f dbase/*.o dbase/*.a
+
+bench: $(BINNAME)
+	./$(BINNAME) tests/bench.phtml
+
+# can't use a single rule for this because 'test' is a directory
+test: regression
+regression check: $(BINNAME)
+	cd test && ./testall
+
+config.status: configure
+	cd $(srcdir) && ./config.status --recheck
+
+build-defs.h config.h: stamp-h
+stamp-h: config.h.in config.status
+	./config.status
+
+Makefile: Makefile.in config.status
+	./config.status
+
+#
+# You must use '--enable-maintainer-mode' with configure to enable
+# these rules, which requires autoconf be installed.
+#
+configure: @MAINT@ configure.in aclocal.m4
+	cd $(srcdir) && autoconf
+
+config.h.in: @MAINT@ stamp-h.in
+stamp-h.in: configure.in aclocal.m4 acconfig.h
+	cd ${srcdir} && autoheader && touch ${srcdir}/stamp-h.in
+
+install: $(BINNAME)
+	$(INSTALL_IT)
+
+indent:	clean
+	indent -v -kr -cli4 -ts4 \
+	-T YYSTYPE -T HashTable -T Bucket -T Token -T TokenCache TokenCacheManager \
+	-T switch_expr -T internal_function -T control_structure_data \
+	-T MemoryHashTable -T MemoryBucket \
+	-T yystype_value -T Stack *.c *.h functions/*.c functions/*.h
+	rm -f *~ functions/*~
+
+functions/%.o: functions/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
+functions/number.o: functions/number.c
+	$(CC) $(CFLAGS) -w -c $< -o $@
+
+parser-scanner:	configuration-parser.tab.c configuration-scanner.c language-parser.tab.c language-scanner.c
+
+depend:	parser-scanner
+	$(CC) $(CFLAGS) -MM $(SOURCE) | perl -pe 's|regex/regex.h||;' > Makefile.depend
+	$(CC) $(CFLAGS) -MM $(FUNCTIONS_SOURCE) | perl -pe 's|^(.+\.o)|functions/$$1|; s|regex/regex.h||;' >> Makefile.depend
+
+language-parser.tab.o: language-parser.tab.c parser.h version.h \
+ config.h request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h control_structures.h control_structures_inline.h \
+ internal_functions.h modules.h functions/head.h main.h list.h
+language-scanner.o: language-scanner.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h language-parser.tab.h language-scanner.h main.h \
+ control_structures.h highlight.h functions/post.h
+main.o: main.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h build-defs.h \
+ language-parser.tab.h main.h control_structures.h modules.h \
+ internal_functions.h functions/info.h functions/head.h \
+ functions/post.h functions/type.h highlight.h list.h snprintf.h
+hash.o: hash.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h
+operators.o: operators.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h
+variables.o: variables.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h control_structures.h \
+ functions/head.h modules.h
+token_cache.o: token_cache.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h language-parser.tab.h control_structures.h main.h \
+ highlight.h
+stack.o: stack.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h
+internal_functions.o: internal_functions.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h \
+ internal_functions_registry.h list.h functions/php3_ldap.h \
+ functions/php3_mysql.h functions/php3_bcmath.h functions/php3_msql.h \
+ functions/basic_functions.h functions/phpmath.h \
+ functions/php3_string.h functions/oracle.h functions/odbc.h \
+ functions/base64.h functions/php3_dir.h functions/dns.h \
+ functions/php3_pgsql.h functions/php3_sybase.h \
+ functions/php3_sybase-ct.h functions/reg.h functions/mail.h \
+ functions/md5.h functions/global.h functions/php3_gd.h \
+ functions/html.h functions/dl.h functions/head.h functions/post.h \
+ functions/exec.h functions/php3_solid.h functions/sybsql.h \
+ functions/adabasd.h functions/file.h functions/dbase.h \
+ functions/filepro.h functions/db.h functions/php3_syslog.h \
+ functions/php3_filestat.h functions/php3_browscap.h php3_debugger.h \
+ functions/php3_unified_odbc.h dl/snmp/php3_snmp.h
+snprintf.o: snprintf.c config.h
+alloc.o: alloc.c alloc.h parser.h version.h config.h request_info.h \
+ hash.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h main.h
+list.o: list.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h list.h modules.h functions/db.h
+highlight.o: highlight.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h language-parser.tab.h \
+ main.h highlight.h
+debugger.o: debugger.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h main.h
+configuration-parser.tab.o: configuration-parser.tab.c parser.h \
+ version.h config.h request_info.h hash.h alloc.h  \
+ safe_mode.h fopen-wrappers.h mod_php3.h stack.h operators.h \
+ token_cache.h variables.h modules.h functions/dl.h functions/file.h
+configuration-scanner.o: configuration-scanner.c parser.h version.h \
+ config.h request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h configuration-parser.tab.h
+request_info.o: request_info.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h
+safe_mode.o: safe_mode.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h functions/pageinfo.h
+fopen-wrappers.o: fopen-wrappers.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h modules.h list.h functions/head.h functions/url.h \
+ functions/base64.h functions/fsock.h functions/php3_string.h
+functions/adabasd.o: functions/adabasd.c config.h build-defs.h parser.h \
+ version.h request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_string.h \
+ functions/head.h functions/adabasd.h
+functions/apache.o: functions/apache.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h
+functions/basic_functions.o: functions/basic_functions.c parser.h version.h \
+ config.h request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h modules.h internal_functions.h \
+ internal_functions_registry.h list.h functions/basic_functions.h \
+ functions/phpmath.h functions/php3_string.h functions/dns.h \
+ functions/md5.h functions/global.h functions/html.h functions/post.h \
+ functions/exec.h functions/info.h functions/url.h \
+ functions/datetime.h functions/fsock.h functions/image.h \
+ functions/php3_link.h functions/php3_filestat.h functions/microtime.h \
+ functions/pageinfo.h functions/uniqid.h functions/base64.h
+functions/crypt.o: functions/crypt.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/php3_string.h
+functions/datetime.o: functions/datetime.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/datetime.h \
+ snprintf.h
+functions/db.o: functions/db.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h internal_functions.h modules.h \
+ list.h functions/db.h functions/php3_string.h
+functions/dbase.o: functions/dbase.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h list.h
+functions/dir.o: functions/dir.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h list.h functions/php3_dir.h
+functions/dl.o: functions/dl.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h internal_functions.h modules.h \
+ functions/dl.h
+functions/dns.o: functions/dns.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/dns.h
+functions/exec.o: functions/exec.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/php3_string.h functions/head.h functions/exec.h
+functions/file.o: functions/file.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h functions/head.h \
+ modules.h internal_functions.h list.h functions/php3_string.h \
+ functions/file.h snprintf.h functions/fsock.h
+functions/filepro.o: functions/filepro.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/filepro.h
+functions/filestat.o: functions/filestat.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_filestat.h
+functions/formatted_print.o: functions/formatted_print.c parser.h version.h \
+ config.h request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/head.h \
+ functions/php3_string.h
+functions/fsock.o: functions/fsock.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h list.h \
+ internal_functions.h modules.h functions/fsock.h functions/base64.h \
+ functions/file.h functions/post.h functions/url.h build-defs.h
+functions/gd.o: functions/gd.c parser.h version.h config.h request_info.h hash.h \
+ alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h stack.h \
+ operators.h token_cache.h variables.h internal_functions.h modules.h \
+ list.h functions/head.h functions/php3_gd.h
+functions/head.o: functions/head.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/reg.h functions/php3_string.h \
+ functions/pageinfo.h main.h functions/datetime.h functions/head.h \
+ functions/post.h functions/url.h
+functions/html.o: functions/html.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/reg.h functions/html.h
+functions/image.o: functions/image.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/image.h
+functions/link.o: functions/link.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/php3_link.h
+functions/mail.o: functions/mail.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h build-defs.h \
+ internal_functions.h modules.h functions/mail.h
+functions/math.o: functions/math.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/phpmath.h
+functions/md5.o: functions/md5.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/md5.h functions/global.h
+functions/microtime.o: functions/microtime.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/microtime.h \
+ snprintf.h
+functions/mime.o: functions/mime.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/type.h functions/post.h functions/mime.h
+functions/msql.o: functions/msql.c config.h parser.h version.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/php3_msql.h functions/reg.h \
+ functions/php3_string.h
+functions/mysql.o: functions/mysql.c config.h build-defs.h parser.h version.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_string.h \
+ functions/php3_mysql.h
+functions/oracle.o: functions/oracle.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/oracle.h
+functions/pageinfo.o: functions/pageinfo.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h functions/pageinfo.h
+functions/pgsql.o: functions/pgsql.c config.h parser.h version.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/php3_pgsql.h
+functions/post.o: functions/post.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/mime.h functions/type.h functions/php3_string.h \
+ functions/post.h functions/url.h
+functions/rand.o: functions/rand.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/phpmath.h
+functions/reg.o: functions/reg.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/reg.h
+functions/solid.o: functions/solid.c config.h build-defs.h parser.h version.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h list.h \
+ functions/php3_solid.h
+functions/soundex.o: functions/soundex.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_string.h
+functions/string.o: functions/string.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/reg.h \
+ functions/post.h functions/php3_string.h
+functions/syslog.o: functions/syslog.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_syslog.h
+functions/type.o: functions/type.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h functions/type.h
+functions/uniqid.o: functions/uniqid.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/uniqid.h
+functions/sybsql.o: functions/sybsql.c config.h parser.h version.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/sybsql.h list.h \
+ main.h functions/head.h
+functions/sybase.o: functions/sybase.c config.h parser.h version.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_sybase.h \
+ functions/php3_string.h
+functions/sybase-ct.o: functions/sybase-ct.c config.h parser.h version.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_sybase-ct.h \
+ functions/php3_string.h
+functions/url.o: functions/url.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h functions/url.h
+functions/base64.o: functions/base64.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/base64.h
+functions/info.o: functions/info.c parser.h version.h config.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h functions/head.h \
+ modules.h functions/info.h build-defs.h
+functions/number.o: functions/number.c functions/number.h parser.h version.h \
+ config.h request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h
+functions/bcmath.o: functions/bcmath.c config.h build-defs.h parser.h version.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h
+functions/unified_odbc.o: functions/unified_odbc.c config.h build-defs.h \
+ parser.h version.h request_info.h hash.h alloc.h  \
+ safe_mode.h fopen-wrappers.h mod_php3.h stack.h operators.h \
+ token_cache.h variables.h internal_functions.h modules.h \
+ functions/php3_string.h functions/php3_unified_odbc.h \
+ functions/head.h
+functions/ldap.o: functions/ldap.c config.h parser.h version.h request_info.h \
+ hash.h alloc.h  safe_mode.h fopen-wrappers.h mod_php3.h \
+ stack.h operators.h token_cache.h variables.h internal_functions.h \
+ modules.h
+functions/browscap.o: functions/browscap.c parser.h version.h config.h \
+ request_info.h hash.h alloc.h  safe_mode.h \
+ fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
+ variables.h internal_functions.h modules.h functions/php3_browscap.h
+
+# Local Variables:
+# tab-width: 4
+# End:

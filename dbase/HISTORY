@@ -1,0 +1,51 @@
+Revision History of DBF
+
+Version 1.6
+	released to comp.sources.misc 6/17/94
+
+	added stdio.h and sys/types.h to dbf_misc.c for those people
+	that do not have NULL in their base defines
+
+	added a compile time arg to Makefile for index vs strchr (Pyramid)
+
+	added dbfcr.sh as a shell script that allows you to build a a
+	database without knowing the required steps to do it by hand...
+
+	added some stuff to support flex
+
+	added some pieces to support Borland C
+
+	added some new options to dbflst, and dbfget to facilitate usage
+	in scripts.  mainly to allow only data, and only current records.
+
+	added installation pieces for use other than in current directory
+
+	added floating point output to dbfndx in -v mode
+
+	add new dbfscan to use an index to display a dbf file
+
+	created an sql parser/recognizer for the ODBC minimum sql set
+	referenced by Appendix C in Microsoft's "ODBC 2.0 Programmer's
+	Reference and SDK Guide"
+
+Version 1.5		10/27/93
+	released to comp.sources.misc
+
+	added the SHELL variable to the Makefile so that the embedded
+	scripts will function properly
+
+	added the dbfcreat program to use a database of the proper structure
+	to create a new database
+
+	modified all the programs that modify the database to change the
+	last modified field in the header of the database to the current date
+
+	added this HISTORY file to the package
+
+Version 1.4		8/17/93
+	initial release to the net as a whole (comp.database)
+
+Version 1.1-1.3
+	various point releases to specific people.
+
+$Revision: 1.1 $

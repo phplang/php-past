@@ -48,23 +48,23 @@ BEGIN		{
 				if(file) {
 					if(file==1) {
 						file=2;
-						print $0 >"phpfi.in";
+						print $0 >"php.in";
 					} else {
-						print $0 >>"phpfi.in";
+						print $0 >>"php.in";
 					}
 				} else if(expect) {
 					if(expect==1) {
 						expect=2;
-						print $0 >"phpfi.out";
+						print $0 >"php.out";
 					} else {
-						print $0 >>"phpfi.out";
+						print $0 >>"php.out";
 					}
 				} else if(testcase) {
 					if(expect==1) {
 						expect=2;
-						printf $0 >"phpfi.desc";
+						printf $0 >"php.desc";
 					} else {
-						printf $0 >>"phpfi.desc";
+						printf $0 >>"php.desc";
 					}
 				} else if(post) {
 					post=0;
@@ -77,13 +77,14 @@ BEGIN		{
 END			{
 				p = "REQUEST_METHOD=POST CONTENT_TYPE=application/x-www-form-urlencoded CONTENT_LENGTH";
 				if(length(Post) && length(Get)) {
-					cmd = sprintf("echo %s | (%s=%d QUERY_STRING=%s ../src/php.cgi ./phpfi.in) >phpfi.test", Post,p,length(Post),Get);
+					cmd = sprintf("echo %s | (%s=%d QUERY_STRING=%s ../php ./php.in) >php.test", Post,p,length(Post),Get);
 				} else if(length(Post) && !length(Get)) {
-					cmd = sprintf("echo %s | (%s=%d ../src/php.cgi ./phpfi.in) >phpfi.test",Post,p,length(Post));
+					cmd = sprintf("echo %s | (%s=%d ../php ./php.in) >php.test",Post,p,length(Post));
 				} else if(!length(Post) && length(Get)) {
-					cmd = sprintf("(QUERY_STRING=%s ../src/php.cgi ./phpfi.in) >phpfi.test",Get);
+					cmd = sprintf("(QUERY_STRING=%s ../php ./php.in) >php.test",Get);
 				} else {
-					cmd = "../src/php.cgi ./phpfi.in >phpfi.test";
+					cmd = "../php ./php.in >php.test";
 				}
+				print "cat php.desc;\n";
 				print cmd;
 			}

@@ -1,0 +1,531 @@
+
+ <reference id="ref.math">
+  <title>Mathematical Functions</title>
+
+
+  <refentry id="function.abs">
+   <refnamediv>
+    <refname>Abs</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>abs</function></funcdef>
+     <paramdef>mixed <parameter>number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the absolute value of number.  If the argument number is
+     float, return type is also float, otherwise it is int.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.acos">
+   <refnamediv>
+    <refname>Acos</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>acos</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the arc cosine of arg in radians.
+
+    <para>
+     See also <link linkend="function.asin">asin</link> and <link
+     linkend="function.atan">atan</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.asin">
+   <refnamediv>
+    <refname>Asin</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>asin</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the arc sine of arg in radians.
+
+    <para>
+     See also <link linkend="function.acos">acos</link> and <link
+     linkend="function.atan">atan</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.atan">
+   <refnamediv>
+    <refname>Atan</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>atan</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the arc tangent of arg in radians.
+     
+    <para>
+     See also <link linkend="function.acos">acos</link> and <link
+      linkend="function.atan">atan</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.bindec">
+   <refnamediv>
+    <refname>BinDec</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>bindec</function></funcdef>
+     <paramdef>string <parameter>binary_string</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the decimal equivalent of the binary number represented by
+     the binary_string argument.
+
+    <para>
+     OctDec converts a binary number to a decimal number. The largest
+     number that can be converted is 31 bits of 1's or 2147483647 in
+     decimal.
+
+    <para>
+     See also the <link linkend="function.decbin">decbin</link>
+     function.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ceil">
+   <refnamediv>
+    <refname>Ceil</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ceil</function></funcdef>
+     <paramdef>float <parameter>number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns an int value up to the next integer from number.  Using
+     ceil() on int is absolutely waste time.
+
+    <para>
+     See also <link linkend="function.floor">floor</link>.  NOTE:
+    PHP2 used to return. Use: <literal>$new =
+    (double)Ceil($number);</literal>
+    to get the old behaviour.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.cos">
+   <refnamediv>
+    <refname>Cos</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>cos</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the cosine of arg in radians.
+
+    <para>
+     See also <link linkend="function.sin">sin</link> and <link
+     linkend="function.tan">tan</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.decbin">
+   <refnamediv>
+    <refname>DecBin</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>decbin</function></funcdef>
+     <paramdef>int <parameter>number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns a string containing a binary representation of the given
+     number argument.  The largest number that can be converted is
+     2147483647 in decimal resulting to a string of 31 1's.
+
+    <para>
+     See also the <link linkend="function.bindec">bindec</link>
+     function.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.dechex">
+   <refnamediv>
+    <refname>DecHex</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>dechex</function></funcdef>
+     <paramdef>int <parameter>number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns a string containing a hexadecimal representation of the
+     given number argument.  The largest number that can
+     be converted is 2147483647 in decimal resulting to "7fffffff".
+
+    <para>
+     See also the <link linkend="function.hexdec">hexdec</link>
+     function.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.decoct">
+   <refnamediv>
+    <refname>DecOct</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>decoct</function></funcdef>
+     <paramdef>int <parameter>number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns a string containing an octal representation of the given
+     number argument.  The largest number that can be converted is
+     2147483647 in decimal resulting to "17777777777". See also <link
+     linkend="function.octdec">octdec</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.exp">
+   <refnamediv>
+    <refname>Exp</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>exp</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns e raised to the power of arg.
+
+    <para>
+     See also <link linkend="function.pow">pow</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.floor">
+   <refnamediv>
+    <refname>Floor</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>floor</function></funcdef>
+     <paramdef>float <parameter>number</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns an int value down to the previous integer from number.
+     Using floor() on int is absolutely waste of time.
+    <para>
+     See also <link linkend="function.ceil">ceil</link>. NOTE:
+     PHP2 used to return float. Use: <literal>$new =
+      (double)Floor($number);</literal> to get the old behaviour.
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.hexdec">
+   <refnamediv>
+    <refname>HexDec</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>hexdec</function></funcdef>
+     <paramdef>string <parameter>hex_string</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the decimal equivalent of the hexadecimal number
+     represented by the hex_string argument.  HexDec converts a
+     hexadecimal string to a decimal number. The largest number that
+     can be converted is 7fffffff or 2147483647 in decimal.
+
+    <para>
+     See also the <link linkend="function.dechex">dechex</link>
+     function.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.log">
+   <refnamediv>
+    <refname>Log</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>log</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the natural logarithm of arg.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.log10">
+   <refnamediv>
+    <refname>Log10</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>log10</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the base-10 logarithm of arg.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.max">
+   <refnamediv>
+    <refname>max</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>max</function></funcdef>
+     <paramdef>mixed <parameter>arg1</parameter></paramdef>
+     <paramdef>mixed <parameter>arg2</parameter></paramdef>
+     <paramdef>mixed <parameter>argn</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Max() returns the numerically highest of the parameter values.
+
+    <para>
+     If the first parameter is an array, max() returns the highest
+     value in that array.  If the first parameter is an integer,
+     string or double, you need at least two parameters and max()
+     returns the biggest of these values.  You can compare an
+     unlimited number of values.
+
+    <para>
+     If one or more of the values is a double, all the values will be
+     treated as doubles, and a double is returned.  If none of the
+     values is a double, all of them will be treated as integers, and
+     an integer is returned.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.min">
+   <refnamediv>
+    <refname>min</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>mixed <function>min</function></funcdef>
+     <paramdef>mixed <parameter>arg1</parameter></paramdef>
+     <paramdef>mixed <parameter>arg2</parameter></paramdef>
+     <paramdef>mixed <parameter>argn</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Min() returns the numerically highest of the parameter values.
+
+    <para>
+     If the first parameter is an array, min() returns the lowest
+     value in that array.  If the first parameter is an integer, string
+     or double, you need at least two parameters and min() returns the
+     lowest of these values.  You can compare an unlimited number of
+     values.
+
+    <para>
+     If one or more of the values is a double, all the values will be
+     treated as doubles, and a double is returned.  If none of the
+     values is a double, all of them will be treated as integers, and
+     an integer is returned.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.octdec">
+   <refnamediv>
+    <refname>OctDec</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>octdec</function></funcdef>
+     <paramdef>string <parameter>octal_string</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the decimal equivalent of the hexadecimal number
+     represented by the hex_string argument.
+     OctDec converts an octal string to a decimal number. The largest
+     number that can be converted is 17777777777 or 2147483647 in
+     decimal.
+
+    <para>
+     See also <link linkend="function.decoct">decoct</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.pow">
+   <refnamediv>
+    <refname>pow</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>pow</function></funcdef>
+     <paramdef>float <parameter>base</parameter></paramdef>
+     <paramdef>float <parameter>exp</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns base raised to the power of exp.
+
+    <para> See also <link linkend="function.exp">exp</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.sin">
+   <refnamediv>
+    <refname>Sin</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>sin</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the sine of arg in radians.
+
+    <para>
+     See also <link linkend="function.cos">cos</link> and <link
+     linkend="function.tan">tan</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.sqrt">
+   <refnamediv>
+    <refname>Sqrt</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>sqrt</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+
+    <para>
+     Returns the square root of arg.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.tan">
+   <refnamediv>
+    <refname>Tan</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>float <function>tan</function></funcdef>
+     <paramdef>float <parameter>arg</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the tangent of arg in radians.
+
+    <para>
+     See also <link linkend="function.sin">sin</link> and <link
+     linkend="function.cos">cos</link>.
+
+   </refsect1>
+  </refentry>
+
+
+ </reference>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:"../manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

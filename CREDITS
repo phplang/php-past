@@ -1,0 +1,113 @@
+PHP Version 3.0 Development Team
+
+------------------------------------------------------------------------------
+
+Core Developers
+===============
+
+Rasmus Lerdorf (rasmus@lerdorf.on.ca)
+
+* Concept
+* Original language definition and implementation
+* CGI loader and many internal functions
+* Apache module support
+* SNMP module
+* Original mSQL, MySQL and Sybase modules
+* Project Coordinator
+
+
+Andi Gutmans (andi@php.net) and Zeev Suraski (zeev@php.net)
+
+* New language definition and implementation
+* Internal functions API design
+* General hash table implementation for symbol tables, arrays and objects
+* Memory manager
+* Token cache manager
+* Several internal functions and migration from PHP 2.0
+* Syntax highlighting mode
+* Configuration file parser
+* New persistent/multilink MySQL, PosgresSQL, Sybase and mSQL modules
+
+
+Stig Bakken (ssb@guardian.no)
+
+* Oracle support
+* configure/install script work
+* sprintf reimplementation
+* SGML documentation framework
+
+
+Shane Caraveo (shane@caraveo.com)
+
+* Porting to Visual C++
+* Generalization to support different server APIs
+* Work on ISAPI and NSAPI APIs
+
+
+Jim Winstead (jimw@php.net)
+
+* Lots of PHP2 -> PHP3 porting
+* dBase support
+* URL parsing functions
+* Makefile work
+* Regex rewrite
+* Win32 work
+
+
+------------------------------------------------------------------------------	
+
+Major Contributors
+==================
+
+* Bjørn Borud (borud@guardian.no) 
+  soundex code and lots of enthusiasm
+
+* Mitch Golden (mgolden@interport.net)
+  Oracle testing and bug fixes
+
+* Simon Gornall (simon@oyster.co.uk)
+  Illustra
+
+* Mark Henderson (mark@togglemedia.com)
+  Various odds and ends
+
+* Jaakko Hyvätti (jaakko@hyvatti.iki.fi)
+  Prototype cop and regular expression code fixes
+
+* Andreas Karajannis (Andreas.Karajannis@gmd.de) 
+  Adabas D
+
+* Muhammad A Muquit (MA_Muquit@fccc.ed)
+  Original Sybase module
+  
+* Jeroen van der Most (jvdmost@digiface.nl)
+  Solid
+  
+* Chad Robinson (chadr@brttech.com)
+  Documentation, FilePro
+
+* John Robinson (john@intelligent.co.uk)
+  Postgres
+
+* Lachlan Roche (lr@www.wwi.com.au)
+  MD5
+  
+* Brian Schaffner (brian@tool.net)
+  ODBC Support, PHP3 API testing
+
+* (sopwith@redhat.com)
+  Solid
+  
+* Adam Sussman (asussman@vidya.com)
+  Postgres
+
+* Lars Torben Wilson (cslawi@uta.fi)
+  Documentation
+
+* Ori Cohen (oki@netvision.net.il)
+  PHP 3 logos
+
+------------------------------------------------------------------------------
+
+Andi Gutmans and Zeev Suraski would like to thank Professor Michael Rodeh for
+his positive input during the initial development of the interpreter.

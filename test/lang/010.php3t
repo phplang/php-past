@@ -1,0 +1,14 @@
+--TEST--
+Testing function parameter passing with a return value        ...
+--POST--
+--GET--
+--FILE--
+<?  old_function Test $b (
+		$b++;
+		return($b);
+	);
+	$a = Test(1);
+	echo $a?>
+--EXPECT--
+Content-type: text/html
+2

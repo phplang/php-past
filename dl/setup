@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# The following is a massive hack.  It tries to steal the
+# mechanism for build a dynamic library from Perl's -V output
+# If this script fails on this machine, try running 'perl -V'
+# manually and pick out the setting for:
+#   
+#    cc, optimize, ccflags, ld, cccdlflags and lddlflags
+#
+# Replace the below definitions with the output you see.
+#
+if test ! -r "perl.out"; then
+	perl -V > perl.out
+fi
+
+# if the greps and cuts don't do the job, set these manually
+CC=`grep cc= perl.out | cut -d, -f1 | cut -d\' -f2`
+OPT=`grep optimize= perl.out | cut -d, -f2 | cut -d\' -f2`
+CCFLAGS=`grep ccflags perl.out | cut -d, -f1 | cut -d\' -f2`
+LD=`grep ld= perl.out | cut -d, -f1 | cut -d\' -f2`
+LFLAGS=`grep cccdlflags= perl.out | cut -d, -f1 | cut -d\' -f2`
+CCDLFLAGS=`grep ccdlflags= perl.out | cut -d, -f4 | cut -d\' -f2 | sed "s, ,,"`
+LDDLFLAGS=`grep lddlflags perl.out | cut -d, -f2 | cut -d\' -f2`
+#--------
+
+if [ ! ".$CCDLFLAGS" = "." ]; then
+	echo "To use extensions on your OS, you will need to recompile PHP."
+	echo "You need to edit the Makefile in the php3 directory and add  "
+	echo "$CCDLFLAGS to the start of the LDFLAGS line at the top of the " 
+	echo "Makefile.  Then type: 'make clean; make'                      "
+	echo "You can still go ahead and build the extensions now by typing"
+	echo "'make' in this directory.  They just won't work correctly    "
+	echo "until you recompile your PHP.                                "
+fi
+
+CC="$CC $OPT $CCFLAGS -I. -I.. $LFLAGS"
+LD="$LD $LDDLFLAGS $CCDLFLAGS"
+
+sed "s,@CC@,$CC,
+	 s,@LD@,$LD," <Makefile.tmpl >Makefile

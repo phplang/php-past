@@ -1,0 +1,102 @@
+#
+# Copyright (c) 1991, 1992, 1993, 1994 Brad Eacker,
+#              (Music, Intuition, Software, and Computers)
+# All Rights Reserved
+
+OPT=-O2 -Wall
+DEBUG=-DDEBUG=1 -g
+CFLAGS=$(OPT) $(DEBUG)
+
+SHELL=/bin/sh
+
+TARGETS = dbflst tmpl dbfadd dbfdel dbfpack dbfget dbfndx dbfcreat \
+	  dbfcr dbfscan dbftst
+THINGS = tmpl.dbf
+
+BIN=/usr/local/bin
+LIB=/usr/local/lib
+
+DBF_SRCS=dbf.h dbf_head.c dbf_rec.c dbf_misc.c dbftst.c dbflst.c \
+	dbf_sym.h yyerr.c tmpl.c dbfadd.c \
+	dbfdel.c dbfpack.c dbfget.c dbf_ndx.h dbf_ndx.c dbfndx.c \
+	dbfcreat.c dbfcr.sh dbfscan.sh
+
+DBF_LIB=libdbf.a
+DBF_OBJS=dbf_head.o dbf_rec.o dbf_misc.o dbf_ndx.o
+
+all: $(DBF_LIB) $(TARGETS) $(THINGS)
+
+$(DBF_LIB): $(DBF_OBJS)
+	rm -f $(DBF_LIB)
+	ar crv $(DBF_LIB) $(DBF_OBJS)
+	$(RANLIB) $(DBF_LIB)
+
+extras: tmpl.dbf
+
+install: all
+	cp $(TARGETS) $(BIN)
+	if [ ! -d $(LIB)/dbase ] ; then mkdir $(LIB)/dbase ; fi
+	cp $(DBF_LIB) $(LIB)
+	cp $(THINGS) $(LIB)/dbase
+
+dbftst: dbftst.o $(DBF_LIB)
+	$(CC) -o $@ dbftst.o $(DBF_LIB)
+
+dbflst: dbflst.o $(DBF_LIB)
+	$(CC) -o $@ dbflst.o $(DBF_LIB)
+
+tmpl.dbf: tmpl
+	./tmpl
+
+tmpl: tmpl.o $(DBF_LIB)
+	$(CC) -o $@ tmpl.o $(DBF_LIB)
+
+dbfadd: dbfadd.o $(DBF_LIB)
+	$(CC) -o $@ dbfadd.o $(DBF_LIB)
+
+dbfdel: dbfdel.o $(DBF_LIB)
+	$(CC) -o $@ dbfdel.o $(DBF_LIB)
+
+dbfpack: dbfpack.o $(DBF_LIB)
+	$(CC) -o $@ dbfpack.o $(DBF_LIB)
+
+dbfget: dbfget.o $(DBF_LIB)
+	$(CC) -o $@ dbfget.o $(DBF_LIB)
+
+dbfcreat: dbfcreat.o $(DBF_LIB)
+	$(CC) -o $@ dbfcreat.o $(DBF_LIB)
+
+dbfndx: dbfndx.o $(DBF_LIB)
+	$(CC) -o $@ dbfndx.o $(DBF_LIB)
+
+dbfcr: dbfcr.sh
+	sed "s;LIB_DEF;$(LIB);" dbfcr.sh >dbfcr
+	chmod +x dbfcr
+
+dbfscan: dbfscan.sh
+	sed "s;LIB_DEF;$(LIB);" dbfscan.sh >dbfscan
+	chmod +x dbfscan
+
+shar:
+	shar README $(DBF_SRCS) Makefile HISTORY >dbf.shar
+
+clean:
+	rm -f *.o *.a
+	rm -f errs output *~ tg.out rw_*.list core
+
+clobber: clean
+	rm -f $(TEST_TARGS) $(TARGETS) $(THINGS)
+
+dbf_head.o: dbf.h dbf_head.c
+dbf_rec.o: dbf.h dbf_rec.c
+dbf_misc.o: dbf.h dbf_misc.c
+dbf_ndx.o: dbf.h dbf_ndx.h dbf_ndx.c
+dbinter.o: dbinter.c
+dbflst.o: dbf.h dbflst.c
+dbftst.o: dbf.h dbftst.c
+dbfadd.o: dbf.h dbfadd.c
+dbfdel.o: dbf.h dbfdel.c
+dbfpack.o: dbf.h dbfpack.c
+dbfget.o: dbf.h dbfget.c
+dbfndx.o: dbf.h dbf_ndx.h dbfndx.c
+tmpl.o: dbf.h tmpl.c

@@ -1,0 +1,31 @@
+
+<?
+  echo "does bogus exist? " . fileAtime("bogus") . "\n";
+  echo "how about Makefile? " . fileAtime("Makefile") . "\n";
+  echo "atime: " . fileAtime("Makefile") . "\n";
+  echo "ctime: " . fileCtime("Makefile") . "\n";
+  echo "group: " . fileGroup("Makefile") . "\n";
+  echo "inode: " . fileInode("Makefile") . "\n";
+  echo "mtime: " . fileMtime("Makefile") . "\n";
+  echo "owner: " . fileOwner("Makefile") . "\n";
+  echo "perms: " . filePerms("Makefile") . "\n";
+  echo " size: " .  fileSize("Makefile") . "\n";
+  echo " type: " .  fileType("Makefile") . "\n";
+
+  $statdata = stat("config.h.in");
+  echo "  dev: " . $statdata[0] . "\n";
+  echo "inode: " . $statdata[1] . "\n";
+  echo " mode: " . $statdata[2] . "\n";
+  echo "nlink: " . $statdata[3] . "\n";
+  echo "  uid: " . $statdata[4] . "\n";
+  echo "  gid: " . $statdata[5] . "\n";
+  echo " rdev: " . $statdata[6] . "\n";
+  echo " size: " . $statdata[7] . "\n";
+  echo "atime: " . $statdata[8] . "\n";
+  echo "mtime: " . $statdata[9] . "\n";
+  echo "ctime: " . $statdata[10] . "\n";
+  echo "blksize: " . $statdata[11] . "\n";
+  echo "blocks: " . $statdata[12] . "\n";
+
+  echo "type of functions: " . fileType("functions") . "\n";
+?>

@@ -1,0 +1,16 @@
+<?
+
+$iterations = 100000;
+
+$starttime=time();
+$i=0;
+$sum=0;
+while ($i<$iterations) {
+  $sum = $sum+time()/1000000;
+  $i++;
+}
+$endtime=time();
+
+$delta = $endtime-$starttime;
+
+echo "Took $delta seconds\n";

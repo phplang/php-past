@@ -1,0 +1,13 @@
+<?
+
+$i = "Andi";
+
+cfunction a()
+{
+	global $i;
+	echo $i;
+	unset($i);
+	echo $i;
+}
+a();
+echo $i;

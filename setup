@@ -1,0 +1,334 @@
+#!/bin/sh
+# 
+# +----------------------------------------------------------------------+
+# | PHP HTML Embedded Scripting Language Version 3.0                     |
+# +----------------------------------------------------------------------+
+# | Copyright (c) 1997,1998 PHP Development Team (See Credits file)      |
+# +----------------------------------------------------------------------+
+# | This program is free software; you can redistribute it and/or modify |
+# | it under the terms of the GNU General Public License as published by |
+# | the Free Software Foundation; either version 2 of the License, or    |
+# | (at your option) any later version.                                  |
+# |                                                                      |
+# | This program is distributed in the hope that it will be useful,      |
+# | but WITHOUT ANY WARRANTY; without even the implied warranty of       |
+# | MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        |
+# | GNU General Public License for more details.                         |
+# |                                                                      |
+# | You should have received a copy of the GNU General Public License    |
+# | along with this program; if not, write to the Free Software          |
+# | Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.            |
+# +----------------------------------------------------------------------+
+# | Authors: Stig Sæther Bakken <ssb@guardian.no>                        |
+# +----------------------------------------------------------------------+
+# 
+# $Id: setup,v 1.10 1998/02/02 04:50:36 ssb Exp $
+#
+
+if [ "$1" = "-q" ]; then
+    quiet_mode=on
+    shift
+fi
+
+if echo '\c' | grep -s c >/dev/null 2>&1
+then
+    ECHO_N="echo -n"
+    ECHO_C=""
+else
+    ECHO_N="echo"
+    ECHO_C='\c'
+fi
+
+echo '
+  ***************************************************************************
+  *                                                                         *
+  *  Welcome to the PHP 3.0 setup script.  Use this script if you do not    *
+  *  want or know how to use the configure program.  See the INSTALL file   *
+  *  for further installation instructions.                                 *
+  *                                                                         *
+  *  You will now be asked a series of questions for your installation.     *
+  *  For each question, your options will be shown in parantheses, and      *
+  *  for some a default value is listed shown in brackets.                  *
+  *                                                                         *
+  ***************************************************************************
+'
+
+display_prompt()
+{
+    prm=$1
+    shift
+    typ=$1
+    shift
+    def=$1
+    shift
+    $ECHO_N "$prm $ECHO_C"
+    case $typ in
+	yesno) $ECHO_N "(yes/no) $ECHO_C";;
+        yesnodir) $ECHO_N "(\`yes', \`no' or dir) $ECHO_C";;
+        dir) $ECHO_N "(dir) $ECHO_C";;
+    esac
+    if test "$typ" = "yesnodir"; then
+	set $def
+	def=$1
+    fi
+    $ECHO_N "[$def] : $ECHO_C"
+}
+
+define_option()
+{
+    if test "$#" != "5"; then
+        echo "wrong number of arguments to define_option" >&2
+        return
+    fi
+    name=$1
+    shift
+    prompt=$1
+    shift
+    type=$1
+    shift
+    default=$1
+    shift
+    docstring=$1
+    optname=`echo $name | sed -e 's/[^a-zA-Z0-9_]/_/g'`
+    options="$options $optname"
+    eval "option_name_$optname='$name'"
+    eval "option_prompt_$optname='$prompt'"
+    eval "option_type_$optname='$type'"
+    eval "option_default_$optname='$default'"
+    eval "option_docstring_$optname='$docstring'"
+    answer=""
+    if [ "$quiet_mode" != "on" ]; then
+	show_help "$optname" "$type" "$default"
+    fi
+    while test "$answer" = ""; do
+        display_prompt "$prompt" "$type" "$default"
+    	read answer
+    	test -t || echo $answer # Echo the answer if it did not come
+    				# from a terminal.
+	if test "$type" = "yesnodir"; then
+	    case "$answer" in
+	        */*) ;;
+		[Yy]*) set $default
+		       dir=$2
+		       shift
+		       shift
+		       $ECHO_N "Enter $@ directory [$dir] : $ECHO_C"
+		       read answer
+		       test -t || echo $answer
+		       if test "$answer" = ""; then
+			   answer=$dir
+		       fi
+		       ;;
+	    esac
+	fi
+    	if test "$answer" = ""; then
+	    if test "$type" = "yesnodir"; then
+		set $default
+		answer=$1
+	    else
+		answer=$default
+	    fi
+        elif test "$answer" = "?"; then
+	    show_help "$optname" "$type" "$default"
+            answer=""
+    	fi
+    done
+    if test "$type" = "yesnodir"; then
+	case "$answer" in
+	    [Yy]*) set $default
+		   answer=$2;;
+	    [Nn]*) answer=no;;
+	esac
+    elif test "$type" = "yesno"; then
+	case "$answer" in
+	    [Yy]*) answer=yes;;
+	    [Nn]*) answer=no;;
+	esac
+    fi
+    eval "option_value_$optname='$answer'"
+}
+
+show_help()
+{
+    echo ''
+    ( eval "echo \$option_docstring_$1" ;
+      if test "$2" = "yesnodir"; then
+	  set $3
+          echo "If you answer \`yes', the default directory is \`$2'."
+      fi ) | fmt
+    echo ''
+}
+
+generate_config_command()
+{
+    configure_options=""
+    for optname in $options; do
+	eval "name=\$option_name_$optname"
+	eval "value=\$option_value_$optname"
+	eval "default=\$option_default_$optname"
+	set $default
+	if test "$value" != "$1"; then
+	    if test "$value" != "$2"; then
+		configure_options="$configure_options --$name=$value"
+	    else
+		configure_options="$configure_options --$name"
+	    fi
+	fi
+    done
+    echo "./configure$configure_options"
+}
+
+# now define all the options
+
+define_option with-apache 'Build as an Apache module?' yesnodir \
+    'no /usr/local/etc/httpd Apache base' \
+'    Whether to build PHP as an Apache module.  If you are running
+    Apache, building PHP as a module will give better performance and
+    security.  Enter your Apache base install directory here.'
+
+define_option with-adabas 'Adabas D support?' yesnodir \
+    'no /usr/local Adabas D install' \
+'    Whether to build with Adabas D support.  Enter the Adabas D 
+    install root here. 
+    More info about Adabas D can be found at http://www.softwareag.com/.'
+
+define_option with-msql 'mSQL support?' yesnodir \
+    'no /usr/local/Hughes mSQL install' \
+'    Whether to build PHP with mSQL support.  PHP supports both mSQL 1.0 and
+    mSQL 2.0.  However, if you build PHP with mSQL 1.0 libraries, you will
+    only be able to access mSQL 1.0 databases, ditto for mSQL 2.0.
+    More info about mSQL can be found at http://www.hughes.com.au/.'
+
+define_option with-sybase 'Sybase support?' yesnodir \
+    'no /usr/local Sybase install' \
+'    Whether to build PHP with Sybase support (DBLib only).
+    More info about Sybase can be found at http://www.sybase.com/.'
+
+define_option with-mysql 'MySQL support?' yesnodir \
+    'no /usr/local MySQL install' \
+'    Whether to build PHP with MySQL support.
+    More info about MySQL can be found at http://www.tcx.se/.'
+
+define_option with-iodbc 'ODBC support?' yesnodir \
+    'no /usr/local iODBC install' \
+'    Whether to build PHP with iODBC support.  This feature was first
+    developed for iODBC, but using other ODBC libraries should work as
+    well with some Makefile tweaking.  Enter your iODBC install
+    directory here.
+    More info about iODBC can be found at http://www.tcx.se/.'
+
+if test "$ORACLE_HOME" = ""; then
+    oradir=/usr/local/oracle/product/732
+else
+    oradir=$ORACLE_HOME
+fi
+
+define_option with-oracle 'Oracle support?' yesnodir \
+    "no $oradir Oracle home" \
+'    Whether to build PHP with Oracle support.  Has been confirmed to
+    work with Oracle versions 7.0 to 7.3.  If you have not set up your
+    Oracle environment, enter what $ORACLE_HOME is usually set to here.
+    More info about Oracle can be found at http://www.oracle.com/.'
+
+define_option with-pgsql 'Postgres95 support?' yesnodir \
+    'no /usr/local Postgres95 install' \
+'    Whether to build PHP with Postgres95 support.
+    More info about Postgres95 can be found at
+    http://www.ndim.edrc.cmu.edu/postgres95/index.html.'
+
+define_option with-solid 'Solid support?' yesnodir \
+    'no /usr/local/solid Solid install' \
+'    Whether to build PHP with Solid support.
+     More information about Solid can be found at http://www.solidtech.com/.'
+
+if test "$option_value_with_iodbc" != "no" -o \
+        "$option_value_with_solid" != "no" -o \
+        "$option_value_with_adabas" != "no"
+then
+    uodbc=yes
+else
+    uodbc=no
+fi
+
+define_option enable-unified-odbc 'Enable unified ODBC support?' yesno \
+    "$uodbc" \
+'    Whether to enabled the unified ODBC support.  This is a database
+    module that compiles with the C API of several DBMSes that happen to
+    use ODBC as their C-API.  Has been tested with iODBC, Solid and Adabas
+    D.  Requires that one (and only one) of these modules is enabled.'
+
+define_option with-dbase 'dBase support? ' yesno no \
+'    Whether to use the bundled dbase library.'
+
+define_option with-filepro 'filePro support? ' yesno no \
+'    Whether to use the bundled filePro library.  Read-access only.'
+
+define_option with-config-file-path 'Default config directory?' dir \
+    "/usr/local/lib" \
+'    Directory where the PHP3 configuration file (php3.ini) is
+    located.'
+
+if test "$option_value_with_apache" != "no"; then
+  defexecdir="$option_value_with_apache/php-bin"
+else
+  defexecdir=/usr/local/etc/httpd/php-bin
+fi
+
+define_option with-exec-dir 'Default safe mode exec dir?' dir "$defexecdir" \
+"    The directory where executables that may be run from safe mode
+    are located."
+
+define_option enable-debug 'Compile with debug information?' yesno yes \
+'    Whether to enable debug information.  Doing this will make PHP 
+    run faster, but it will be harder to trace bugs.  You are 
+    encouraged to leave debugging on while PHP 3.0 is in alpha and 
+    beta state.'
+
+define_option enable-short-tags 'Allow short tag?' yesno yes \
+"    Whether to enable the short form of the PHP HTML embed tags.
+    The short form is \"<? code; ?>\", while the long form is
+    \"<?php code; ?>\".  If you plan on using XML on your site, you
+    should disable the short form."
+
+if test "$option_value_with_apache" != "no"; then
+  safemode=no
+else
+  safemode=yes
+fi
+
+define_option enable-safe-mode 'Enable safe mode?' yesno "$safemode" \
+"    Whether to enable PHP safe mode.  This imposes several
+    restrictions on what PHP can do, such as opening only files within
+    the document root.  Read the Security chapter of the documentation
+    for more information.  CGI users should always enable secure mode."
+
+define_option enable-url-includes 'Enable URL includes?' yesno no \
+"    Whether to make it possible to use http and ftp URLs in the
+    Include() function.  This feature is disabled by default to make
+    sure people are aware of the dangers of including code from other
+    sites, especially if you are using any kind of user input in the
+    given URL."
+
+define_option enable-debugger 'Enable PHP remote debugger?' yesno no \
+"    Whether to enable PHP remote debugging support.  This feature
+    is still under development."
+
+define_option enable-track-vars 'Enable variable tracking?' yesno yes \
+'    Enable the HTTP_GET_VARS, HTTP_POST_VARS and HTTP_COOKIE_VARS arrays by
+    default (can be turned on or off in the configuration file).'
+
+echo '
+
+  ***************************************************************************
+  *                                                                         *
+  *                      Running configure...                               *
+  *                                                                         *
+  ***************************************************************************
+'
+if test ! -f configure; then
+    autoconf
+fi
+
+command=`generate_config_command`
+echo $command
+eval $command

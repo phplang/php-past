@@ -1,0 +1,20 @@
+<?
+
+$iterations = 100000;
+
+function mul $i,$j (
+  return $i*$j;
+);
+
+$starttime=time();
+$i=0;
+$sum=0;
+while ($i<$iterations) {
+  $sum = $sum+mul($i,$i);
+  $i++;
+}
+$endtime=time();
+
+$delta = $endtime-$starttime;
+
+echo "Took $delta seconds\n";

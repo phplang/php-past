@@ -1,0 +1,20 @@
+#ifndef _INCLUDED_IMAP_H
+#define _INCLUDED_IMAP_H
+
+#include "../phpdl.h"
+
+/* Functions accessable to PHP */
+
+extern int imap_init(INITFUNCARG);
+DLEXPORT void php3_imap_open(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_close(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_num_msg(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_headers(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_header(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_body(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_expunge(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_delete(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_undelete(INTERNAL_FUNCTION_PARAMETERS);
+DLEXPORT void php3_imap_check(INTERNAL_FUNCTION_PARAMETERS);
+
+#endif

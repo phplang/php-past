@@ -1,0 +1,10 @@
+--TEST--
+backreferences not replaced recursively                       ...
+--POST--
+--GET--
+--FILE--
+<?$a="a\\2bxc";
+  echo ereg_replace("a(.*)b(.*)c","\\1",$a)?>
+--EXPECT--
+Content-type: text/html
+\2

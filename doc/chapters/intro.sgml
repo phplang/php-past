@@ -1,0 +1,63 @@
+ <chapter id="introduction">
+  <title>An introduction to PHP3</title>
+  <simpara></simpara>
+
+  <sect1>
+   <title>What is PHP3?</title>
+   <simpara>
+    Professional Home Pages Version 3.0 is an HTML-embedded scripting
+    language.
+
+  <sect1>
+   <title>What can PHP3 do?</title>
+   <para>
+    Perhaps the strongest and most significant feature in PHP3 is its
+    database integration layer.  Writing a database-enabled web page
+    is incredibly simple.  The following databases are currently
+    supported:
+    <blockquote>
+     <simplelist columns=2>
+      <member>Oracle</member>
+      <member>Sybase</member>
+      <member>mSQL 1.x and 2.x</member>
+      <member>MySQL</member>
+      <member>Solid</member>
+      <member>Generic ODBC</member>
+      <member>PostgreSQL</member>
+      <member>Adabas D</member>
+      <member>FilePro</member>
+      <member>dBase</member>
+      <member>Unix dbm</member>
+     </simplelist>
+    </blockquote>
+
+  <sect1>
+   <title>PHP3 Concepts</title>
+   <simpara></simpara>
+
+  <sect1>
+   <title>What can PHP3 not do?</title>
+   <simpara></simpara>
+
+  <sect1>
+   <title>Some examples</title>
+   <simpara></simpara>
+
+ </chapter>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:"../manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

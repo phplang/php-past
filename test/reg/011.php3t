@@ -1,0 +1,10 @@
+--TEST--
+\0 back reference                                             ...
+--POST--
+--GET--
+--FILE--
+<?$a="abc123";
+  echo ereg_replace("123","def\\0ghi",$a)?>
+--EXPECT--
+Content-type: text/html
+abcdef123ghi

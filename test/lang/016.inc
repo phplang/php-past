@@ -1,5 +1,5 @@
 <?
-	Function MyFunc $a (
+	old_function MyFunc $a (
 		echo $a;
 	);
->
+?>

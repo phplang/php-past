@@ -1,0 +1,2 @@
+To make all the utilities, use:
+nmake /f dbase.mak CFG="dbase - Win32 Release"

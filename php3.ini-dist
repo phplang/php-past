@@ -1,0 +1,119 @@
+[PHP_3]
+engine = 1  ; enable PHP 3.0 parser
+
+max_execution_time = 30     ; Maximum execution time of each script, in seconds
+memory_limit = 4194304		; Maximum amount of memory a script may consume (4MB)
+
+; This is a bit-field.  Add each number up to get desired error reporting level
+;  1 = Normal errors
+;  2 = Normal warnings
+;  4 = Parser errors
+;  8 = Really picky warnings - ie. using a variable before defining it
+error_reporting=7
+display_errors=1           ; Print out errors (as a part of the HTML script)
+log_errors=1			   ; Log errors into a log file (server-specific log, stderr, or error_log (below))
+track_errors=0             ; Store the last error/warning message in $php_errormsg (boolean)
+;error_log=filename		; log errors to specified file
+;error_log=syslog		; log errors to syslog (Event Log on NT, not valid in Windows 95)
+
+magic_quotes_gpc = 1       ; magic quotes for incoming GET/POST/Cookie data
+magic_quotes_runtime = 0   ; magic quotes for runtime-generated data, e.g. data from SQL, from exec(), etc.
+magic_quotes_sybase = 0    ; Use Sybase-style magic quotes (escape ' with '' instead of \')
+track_vars=1               ; enable $PHP_GET_VARS[], $PHP_POST_VARS[] and $PHP_COOKIE_VARS[] arrays
+short_open_tag=1           ; allow the <? tag.  otherwise, only <?php is recognized.
+
+; paths and directories
+include_path=
+doc_root=/webshare/wwwroot    ; the document root of the web server
+user_dir=public_html          ; the directory under which the web server checks when using /~username
+upload_tmp_dir=\windows\temp  ; temporary directory for HTTP uploaded files
+extension_dir=./              ; directory in which the loadable extensions (modules) reside
+
+
+; file extensions (meaningless in UNIX)
+cgi_ext=php3
+isapi_ext=php3
+nsapi_ext=php3
+
+
+; automatically add files before or after any PHP 3.0 document
+auto_prepend_file=
+auto_append_file=
+
+
+[mail function]
+SMTP=localhost                  ;for win32 only
+sendmail_from=me@localhost.com  ;for win32 only
+sendmail_path=                  ;for unix only
+
+[safemode]
+safe_mode=0
+safe_mode_exec_dir=
+
+[Debugger]
+debugger.host=localhost
+debugger.port=7869
+debugger.enabled=0
+
+[Logging]
+logging=0
+log_DBM=0
+log_DBM_dir=.
+log_SQL=0
+
+[LoadExtensions]
+; if you wish to have an extension loaded automaticly, use the
+; following syntax:  extension=modulename.extension
+; for example, on windows,
+; extension=msql.dll
+
+[Highlight]
+; Colors for Syntax Highlighting mode.  Anything that's acceptable in <font color=???> would work.
+highlight.string	=	#DD0000
+highlight.comment	=	#FF8000
+highlight.keyword	=	#007700
+highlight.bg		=	#FFFFFF
+highlight.default	=	#0000BB
+highlight.html		=	#000000
+
+
+[SQL]
+sql.safe_mode=0
+
+[MySQL]
+mysql.allow_persistent=1 ; allow or prevent persistent link
+mysql.max_persistent=-1  ; maximum number of persistent links. -1 means no limit
+mysql.max_links=-1       ; maximum number of links (persistent+non persistent).  -1 means no limit
+
+[mSQL]
+msql.allow_persistent=1 ; allow or prevent persistent link
+msql.max_persistent=-1  ; maximum number of persistent links. -1 means no limit
+msql.max_links=-1       ; maximum number of links (persistent+non persistent).  -1 means no limit
+
+[PostgresSQL]
+pgsql.allow_persistent=1 ; allow or prevent persistent link
+pgsql.max_persistent=-1  ; maximum number of persistent links. -1 means no limit
+pgsql.max_links=-1       ; maximum number of links (persistent+non persistent).  -1 means no limit
+
+[Sybase]
+sybase.allow_persistent=1 ; allow or prevent persistent link
+sybase.max_persistent=-1  ; maximum number of persistent links. -1 means no limit
+sybase.max_links=-1       ; maximum number of links (persistent+non persistent).  -1 means no limit
+;sybase.interface_file = "/usr/sybase/interfaces"
+sybase.min_error_severity=10   ; minimum error severity to display
+sybase.min_message_severity=10 ; minimum message severity to display
+
+
+[Sybase-CT]
+sybct.allow_persistent=1 ; allow or prevent persistent link
+sybct.max_persistent=-1  ; maximum number of persistent links. -1 means no limit
+sybct.max_links=-1       ; maximum number of links (persistent+non persistent).  -1 means no limit
+sybct.min_server_severity=10 ; minimum server message severity to display
+sybct.min_client_severity=10 ; minimum client message severity to display
+
+
+[bcmath]
+bcmath.scale = 3    ; number of decimal digits for all bcmath functions
+
+[browscap]
+;browscap = extra/browscap.ini

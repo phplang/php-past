@@ -1,0 +1,74 @@
+PHP/FI 2.0 -> PHP 3.0 convertor
+===============================
+
+
+What it does
+------------
+
+Naturally, it converts PHP/FI 2.0 scripts to PHP 3.0.  However, this
+is an overstatement.  In many cases, there are things it does not
+(yet) do, and things that it'll never do.  Look at the CHANGES
+file to see a full list of the downwards incompatible differences
+between PHP/FI 2.0 and PHP 3.0.
+
+Currently, the convertor handles:
+
+* End PHP tag convertion, from > to ?>
+* Semicolon to colon conversions:
+  while(); .. endwhile;  =>  while(): .. endwhile;
+  if(); .. elseif(); .. else; .. endif;   =>  if(): .. elseif(): .. else:  .. endif;
+  switch(); .. endswitch;  =>  switch():  ..  endswitch;
+  In addition, it converts the semicolons following case and default with colons,
+  even though PHP 3.0 supports both formats, colons are the prefered way.
+* Converts the 'function' word to 'old_function', so that user-functions would work.
+  It does NOT convert the functions to the PHP 3.0 style, but rather, modifies the
+  function word so that PHP 3.0 recognizes a PHP/FI 2.0 style function.
+
+
+In order not to develop too many expectations, the convertor isn't going to get
+MUCH more advanced than this.  It's aimed to give you a quicker start at converting
+your PHP/FI 2.0 scripts to PHP 3.0, but you'll still have to go over your code, most
+probably, to ensure nothing broke.
+
+
+Installation
+------------
+
+To get the convertor built, simply run 'make'.
+
+
+Usage
+-----
+
+To convert a PHP/FI 2.0 named script.phtml script to a PHP 3.0 
+script, named script.php3, run:
+
+./convertor < script.phtml > script.php3
+
+
+If everything works right, you should receive no response, and the generated
+script.php3 is the converted script (even though, as mentioned before,
+you may have to play with it a bit more before it works under PHP 3.0, because
+of the differences the convertor doesn't handle).
+
+If instead of nothing you see 'parse error', this means one of two things:
+
+1.  There's a bug in the convertor.
+2.  Your script was working under PHP/FI 2.0 even though it wasn't supposed
+    to;  PHP/FI 2.0's grammar didn't catch the bug in your script but the
+    convertor did. (** See below)
+
+In either case, please report to us at php-dev@php.iquest.net, and be sure to
+the script with which you're having problems.
+
+
+
+** This may sound far-fetched, but we've already stumbled upon an example
+   of this.  The convertor is based on the PHP 3.0 parser, modified to
+   recognize the PHP/FI 2.0 language and spit out the converted script.
+   Because of the major differences between the PHP/FI 2.0 parser and
+   the PHP 3.0 one, the language that the modified PHP 3.0 parser recognizes
+   is well-defined, and disregarding possible implementation bugs, it
+   may recognize the PHP/FI 2.0 language better than PHP/FI 2.0 itself.
+
+    

@@ -1,0 +1,11 @@
+These icons are courtesy of Colin Viebrock <cmv@shmooze.net>
+
+To make apache display these icons next to PHP files,  you
+should add (something along the lines of) the following lines
+to your srm.conf:
+
+AddIcon /icons/php3.gif .php3
+AddIcon /icons/php2.gif .phtml
+AddIcon /icons/phps.gif .php3s .phps
+
+And of course, copy these files to your apache icons directory.

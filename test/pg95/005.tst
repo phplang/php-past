@@ -122,7 +122,7 @@ l
 -1
 varchar
 int4
-float8
+float4
 <b><i>phpfi.in:</i> Field index is larger than the number of fields on line 74</b><br>
 <tt>	echo pg_fieldType($res, 3<b><blink>);
 </blink></b></tt><br>
@@ -134,7 +134,7 @@ float8
 </blink></b></tt><br>-1
 0
 4
-8
+4
 <b><i>phpfi.in:</i> Field foo not found on line 92</b><br>
 <tt>	echo pg_fieldSize($res, &quot;foo&quot;<b><blink>);
 </blink></b></tt><br>-1

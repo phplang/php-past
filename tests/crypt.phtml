@@ -1,0 +1,14 @@
+Testing the crypt() function...
+
+<?
+
+$seed = "az";
+$string = "gazonk";
+
+$crypt1 = crypt($string);
+$crypt2 = crypt($string, $seed);
+
+echo ("Without specifying a seed: $crypt1\n");
+echo ("Specifying a seed: $crypt2\n");
+
+?>

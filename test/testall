@@ -1,0 +1,16 @@
+#!/bin/sh
+
+count=0
+fail=0
+
+for i in `find . -name "*.php3t" -print`; do
+  ./testphp $i
+  if [ $? -gt 0 ]; then
+    echo $i >> test.log
+    diff -w -c a.tmp b.tmp >> test.log
+    fail=`expr $fail + 1`
+  fi
+  count=`expr $count + 1`
+done
+rm -f php* *.tmp
+echo failed $fail out of $count

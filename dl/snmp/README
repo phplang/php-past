@@ -1,0 +1,49 @@
+PHP3 UCD-SNMP Extension
+
+What is it?
+
+This is an extension library which ties the ucd-snmp library to
+PHP3.  Only snmpget and snmpwalk are supported at this time.  If
+you need other functions, feel free to add them and send me a
+patch. (rasmus@lerdorf.on.ca)
+
+
+Installation
+
+You first need to get a hold of ucd-snmp-3.2.  This extension 
+hasn't been tested with any other version.
+Compile and install it.  Make sure the following header files from
+the ucd-3.2/snmplib directory get copied to /usr/local/include, 
+or wherever dl/Makefile tries to include files from.
+
+asn1.h, snmp_api.h, snmp_client.h, snmp_impl.h, snmp.h, parse.h
+
+Then type: make snmp.so
+from the php3/dl directory.
+
+If there is no Makefile, run ./setup
+
+You may also need to add some -I<path> statements to the CC line.
+
+
+How to call it from PHP3
+
+On the page where you need to make an SNMP call, load the library:
+
+   <? dl("<path>/snmp.so"); ?>
+
+To fetch an object:
+
+   <? $value = snmpget("hostname","community","object_id"); ?>
+
+For example: snmpget("127.0.0.0","public","system.sysContact.0")
+
+The arguments to snmpwalk() are identical.  The difference being that the
+returned value is an array of snmp objects.  You can step through them
+with a loop.
+
+For example:   $a = snmpwalk("127.0.0.0","public","");
+               for($i=0;$i<count($a);$i++) {
+                   echo $a[$i];
+               }
+

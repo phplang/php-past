@@ -1,0 +1,935 @@
+
+ <reference id="ref.filesystem">
+  <title>Filesystem Functions</title>
+
+
+  <refentry id="function.chgrp">
+   <refnamediv>
+    <refname>chgrp</refname>
+    <refpurpose>change file group</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>chgrp</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>mixed <parameter>group</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Attempts to change the group of the file filename to group. Only
+     the superuser may change the group of a file arbitrarily; other
+     users may change the group of a file to any group of which that
+     user is a member.
+
+    <para>
+     Returns 0 on success; otherwise returns -1.
+
+    <para>
+     On Windows, does nothing and returns 0.
+
+    <para>
+     See also <link linkend="function.chown">chown</link>.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.chmod">
+   <refnamediv>
+    <refname>chmod</refname>
+    <refpurpose>change file mode</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>chmod</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>int <parameter>mode</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Attempts to change the mode of the file specified by
+     filename to that given in mode.
+
+    <para>
+     Returns 0 on success and -1 otherwise.
+    
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.chown">
+   <refnamediv>
+    <refname>chown</refname>
+    <refpurpose>change file owner</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>chown</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>mixed <parameter>user</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Attempts to change the owner of the file filename to user
+     user. Only the superuser may change the owner of a file.
+
+    <para>
+     Returns 0 on success; otherwise returns -1.
+
+     <note>
+      <simpara>On Windows, does nothing and returns 0.</simpara>
+     </note>
+
+    <para>
+     See also <link linkend="function.chgrp">chgrp</link>.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.clearstatcache">
+   <refnamediv>
+    <refname>clearstatcache</refname>
+    <refpurpose>clear file stat cache</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>clearstatcache</function></funcdef>
+     <void>
+    </funcsynopsis>
+    <para>
+     Invoking the stat() system call on most systems is quite
+     expensive. Therefore, the result of the last call to any of the
+     status functions (listed below) is stored for use on the next
+     such call using the same filename. If you wish to force a new
+     status check, for instance if the file is being checked many
+     times and may change or disappear, use this function to clear the
+     results of the last call from memory.
+
+    <para>
+     Affected functions include <link
+     linkend="function.stat">stat</link>, <link
+     linkend="function.filectime">filectime</link>, <link
+     linkend="function.fileatime">fileatime</link>, <link
+     linkend="function.fileinode">fileinode</link>, <link
+     linkend="function.filegroup">filegroup</link>, <link
+     linkend="function.fileowner">fileowner</link>, <link
+     linkend="function.filesize">filesize</link>, <link
+     linkend="function.filetype">filetype</link>, and <link
+     linkend="function.fileperms">fileperms</link>.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fclose">
+   <refnamediv>
+    <refname>fclose</refname>
+    <refpurpose>close an open file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fclose</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     The file pointed to by fp is closed.
+
+    <para>
+     If the close fails fclose() returns 0; otherwise returns non-zero.
+
+    <para>
+     The file pointer must be valid, and must point to a file
+     successfully opened by <link
+     linkend="function.fopen">fopen</link> or <link
+     linkend="function.fopen-with-path">fopen_with_path</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.feof">
+   <refnamediv>
+    <refname>feof</refname>
+    <refpurpose>test for end-of-file on a file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>feof</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns true if the file pointer is at EOF; otherwise returns
+     false.  If an error occurs, non-zero is returned.
+
+    <para>
+     The file pointer must be valid, and must point to a file
+      successfully opened by <link
+      linkend="function.fopen">fopen</link> or <link
+      linkend="function.fopen-with-path">fopen_with_path</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fgetc">
+   <refnamediv>
+    <refname>fgetc</refname>
+    <refpurpose>get character from file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>fgetc</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns a string of containing a single character read from
+    the file pointed to by fp.  Returns FALSE
+	on EOF which will also cause <link linkend="function.feof">feof</link> to return
+	FALSE.
+  <para>    If an error occurs, FALSE is returned.
+  <para>    The file pointer must be valid, and must point to a file
+    successfully opened by <link linkend="function.fopen">fopen</link>, <link linkend="function.fopen-with-path">fopen_with_path</link>, or <link linkend="function.popen">popen</link>.
+  <para>   
+    See also <link linkend="function.fopen">fopen</link>, <link linkend="function.fopen-with-path">fopen_with_path</link>,
+    <link linkend="function.popen">popen</link>, and <link linkend="function.fgets">fgets</link>.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fgets">
+   <refnamediv>
+    <refname>fgets</refname>
+    <refpurpose>get line from file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>fgets</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>length</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns a string of up to length - 1 bytes read from
+    the file pointed to by fp. Reading ends when
+    length - 1 bytes have been read, on a newline, or on
+    EOF (whichever comes first).
+  <para>    If an error occurs, FALSE is returned.
+  <para>    The file pointer must be valid, and must point to a file
+    successfully opened by <link linkend="function.fopen">fopen</link>, <link linkend="function.fopen-with-path">fopen_with_path</link>, or <link linkend="function.popen">popen</link>.
+  <para>   
+    See also <link linkend="function.fopen">fopen</link>, <link linkend="function.fopen-with-path">fopen_with_path</link>, 
+    <link linkend="function.popen">popen</link>, and <link linkend="function.fgetc">fgetc</link>.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fgetss">
+   <refnamediv>
+    <refname>fgetss</refname>
+    <refpurpose>get line from file pointer and strip HTML tags</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>fgetss</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>length</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Identical to <link linkend="function.fgets">fgets</link>,
+     except that fgetss attempts to strip any HTML and PHP tags from
+     the text it reads.
+
+    <para>
+     See also <link linkend="function.fgets">fgets</link>, <link
+     linkend="function.fopen">fopen</link>, <link
+     linkend="function.popen">popen</link> and <link
+     linkend="function.fopen-with-path">fopen_with_path</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.file">
+   <refnamediv>
+    <refname>file</refname>
+    <refpurpose>read entire file into an array</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>file</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Identical to <link linkend="function.readfile">readfile</link>, except that file() returns
+    the file in an array.
+  <para>    See also <link linkend="function.readfile">readfile</link>, <link linkend="function.fopen">fopen</link>, <link linkend="function.popen">popen</link> and <link linkend="function.fopen-with-path">fopen_with_path</link>.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fileatime">
+   <refnamediv>
+    <refname>fileatime</refname>
+    <refpurpose>get last access time of file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fileatime</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the time the file was last accessed, or 0 in case of an
+    error.
+    
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.filectime">
+   <refnamediv>
+    <refname>filectime</refname>
+    <refpurpose>get inode modification time of file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>filectime</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the time the file was last changed, or 0 in case of an
+    error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.filegroup">
+   <refnamediv>
+    <refname>filegroup</refname>
+    <refpurpose>get file group</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>filegroup</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the group ID of the owner of the file, or 0 in case of an
+    error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fileinode">
+   <refnamediv>
+    <refname>fileinode</refname>
+    <refpurpose>get file inode</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fileinode</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the inode number of the file, or 0 in case of an error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.filemtime">
+   <refnamediv>
+    <refname>filemtime</refname>
+    <refpurpose>get file modification time</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>filemtime</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the time the file was last modified, or 0 in case of an
+    error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fileowner">
+   <refnamediv>
+    <refname>fileowner</refname>
+    <refpurpose>get file owner</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fileowner</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the user ID of the owner of the file, or 0 in case of an
+    error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fileperms">
+   <refnamediv>
+    <refname>fileperms</refname>
+    <refpurpose>get file permissions</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fileperms</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the permissions on the file, or 0 in case of an error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.filesize">
+   <refnamediv>
+    <refname>filesize</refname>
+    <refpurpose>get file size</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>filesize</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the size of the file, or 0 in case of an error.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.filetype">
+   <refnamediv>
+    <refname>filetype</refname>
+    <refpurpose>get file type</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>filetype</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Returns the type of the file. Possible values are
+    fifo, char, dir,
+    block, link, file, and
+    unknown.
+  <para>    Returns 0 if an error occurs.
+  
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fileumask">
+   <refnamediv>
+    <refname>fileumask</refname>
+    <refpurpose>get file umask</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fileumask</function></funcdef>
+     <paramdef>int <parameter>umask</parameter></paramdef>
+    </funcsynopsis>
+<para>    Sets the umask to umask & 0777.
+  <para>    Returns the old umask.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fopen">
+   <refnamediv>
+    <refname>fopen</refname>
+    <refpurpose>open file or URL</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fopen</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>string <parameter>mode</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     If filename begins with "http://" (not case sensitive), an HTTP
+     1.0 connection is opened to the specified server and a file
+     pointer is returned to the beginning of the text of the response.
+
+    <para>
+     Does not handle HTTP redirects, so you must include trailing
+     slashes on directories.
+
+    <para>
+     If filename begins with "ftp://" (not case sensitive), an ftp
+     connection to the specified server is opened and a pointer to the
+     requested file is returned. If the server does not support passive
+     mode ftp, this will fail.
+
+    <para>
+     If neither of these conditions is met, the file will be opened
+     from the filesystem, and a file pointer to the file opened is
+     returned.
+
+    <para>
+     If the open fails, the function returns false.
+    
+    <para><example>
+      <title>fopen() example</title>
+      <programlisting>
+$fp = fopen( "/home/rasmus/file.txt", "r" );
+$fp = fopen( "http://www.php.net/", "r" );
+</programlisting></example>
+
+    <para>
+     See also <link
+     linkend="function.fopen-with-path">fopen_with_path</link> and
+     <link linkend="function.fclose">fclose</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fopen-with-path">
+   <refnamediv>
+    <refname>fopen_with_path</refname>
+    <refpurpose>open file or URL in one of several dirs</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fopen_with_path</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>string <parameter>mode</parameter></paramdef>
+     <paramdef>string <parameter>path</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     If successful returns a file pointer to the file opened.
+
+    <para>
+     If the open fails, the function returns 0 and unless called as
+     @fopen_with_path, an error message will be printed out.
+    
+    <para>
+     See also <link linkend="function.fopen">fopen</link> and
+     <link linkend="function.fclose">fclose</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fpassthru">
+   <refnamediv>
+    <refname>fpassthru</refname>
+    <refpurpose>output all remaining data on a file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fpassthru</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Reads to EOF on the given file pointer and writes the results to
+     standard output.
+
+    <para>
+     If an error occurs, returns false.
+
+    <para>
+     The file pointer must be valid, and must point to a file
+     successfully opened by <link
+      linkend="function.fopen">fopen</link>, <link
+      linkend="function.fopen-with-path">fopen_with_path</link>, or
+     <link linkend="function.popen">popen</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fputs">
+   <refnamediv>
+    <refname>fputs</refname>
+    <refpurpose>write to a file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fputs</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>string <parameter>str</parameter></paramdef>
+    </funcsynopsis>
+<para>    Writes str to the file stream pointed to by
+    fp.
+  <para>    Returns: If an error occurs, returns 0.
+  <para>    The file pointer must be valid, and must point to a file
+    successfully opened by <link linkend="function.fopen">fopen</link>, <link linkend="function.fopen-with-path">fopen_with_path</link>, or <link linkend="function.popen">popen</link>.
+  <para>    See also <link linkend="function.fgets">fgets</link> and <link linkend="function.fgetss">fgetss</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.fseek">
+   <refnamediv>
+    <refname>fseek</refname>
+    <refpurpose>seek on a file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>fseek</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+     <paramdef>int <parameter>offset</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Sets the file position indicator for the file referenced by fp to
+     offset bytes into the file stream. Equivalent to calling (in C)
+     <literal>fseek( fp, offset, SEEK_SET )</literal>.
+
+    <para>
+     Upon success, returns 0; otherwise, returns -1. Note that seeking
+     past EOF is not considered an error.
+     
+    <para>
+     May not be used on file pointers returned by <link
+     linkend="function.fopen">fopen</link> if they use the
+     "http://" or "ftp://" formats.
+
+    <para>    
+     See also <link linkend="function.ftell">ftell</link> and
+     <link linkend="function.rewind">rewind</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.ftell">
+   <refnamediv>
+    <refname>ftell</refname>
+    <refpurpose>tell file pointer read/write position</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>ftell</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Returns the position of the file pointer referenced by fp; i.e.,
+     its offset into the file stream.
+
+    <para>
+     If an error occurs, returns 0.
+
+    <para>
+     The file pointer must be valid, and must point to a file
+     successfully opened by <link
+     linkend="function.fopen">fopen</link> or <link
+     linkend="function.fopen-with-path">fopen_with_path</link>.
+
+    <para>    
+     See also <link linkend="function.fseek">fseek</link> and
+     <link linkend="function.rewind">rewind</link>.
+     
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.mkdir">
+   <refnamediv>
+    <refname>mkdir</refname>
+    <refpurpose>make directory</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>mkdir</function></funcdef>
+     <paramdef>string <parameter>pathname</parameter></paramdef>
+     <paramdef>int <parameter>mode</parameter></paramdef>
+    </funcsynopsis>
+<para>    Attempts to create the directory specified by pathname.
+  <para>    Returns non-zero on success; otherwise returns 0.
+  <para>    
+    See also <link linkend="function.rmdir">rmdir</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.pclose">
+   <refnamediv>
+    <refname>pclose</refname>
+    <refpurpose>close process file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>pclose</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+<para>    Closes a file pointer to a pipe opened by <link linkend="function.popen">popen</link>.
+  <para>    The file pointer must be valid, and must have been returned by a
+    successful call to <link linkend="function.popen">popen</link>.
+  <para>    Returns 1 unless an error occurs, in which case it returns 0.
+  <para>    
+    See also <link linkend="function.popen">popen</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.popen">
+   <refnamediv>
+    <refname>popen</refname>
+    <refpurpose>open process file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>popen</function></funcdef>
+     <paramdef>string <parameter>command</parameter></paramdef>
+     <paramdef>string <parameter>mode</parameter></paramdef>
+    </funcsynopsis>
+<para>    Opens a pipe to a process executed by forking the command given by
+    command.
+  <para>    Returns a file pointer identical to that returned by <link linkend="function.fopen">fopen</link> or <link linkend="function.fopen-with-path">fopen_with_path</link> except that it is
+    unidirectional (may only be used for reading or writing), and must
+    be closed with <link linkend="function.pclose">pclose</link>. This pointer may be used with
+    <link linkend="function.fgets">fgets</link>, <link linkend="function.fgetss">fgetss</link>, and <link linkend="function.fputs">fputs</link>.  If an error occurs, returns 0.
+  <para>    
+    <informalexample>
+ <programlisting>
+      $fp = popen( "/bin/ls", "r" );
+    </programlisting></informalexample>
+
+  <para>    See also <link linkend="function.pclose">pclose</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.readfile">
+   <refnamediv>
+    <refname>readfile</refname>
+    <refpurpose>output a file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>readfile</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+<para>    Reads a file and writes it to standard output.
+  <para>    Returns the number of bytes read from the file. If an error
+    occurs, FALSE is returned and unless the function was called as
+    @readfile, an error message is printed.
+  <para>    If filename begins with "http://"
+    (not case sensitive), an HTTP 1.0 connection is opened to the 
+    specified server and the text of the response is written to
+    standard output.
+  <para>    Does not handle HTTP redirects, so you must include trailing
+    slashes on directories.
+  <para>    If filename begins with "ftp://"
+    (not case sensitive), an ftp connection to the specified server is
+    opened and the requested file is written to standard output. If the server
+    does not support passive mode ftp, this will fail.
+  <para>    If neither of these conditions is met, the file will be opened
+    from the filesystem and its contents written to standard
+    output.
+  <para>    
+    See also <link linkend="function.fpassthru">fpassthru</link>, <link linkend="function.file">file</link>, <link linkend="function.fopen">fopen</link> and <link linkend="function.fopen-with-path">fopen_with_path</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.rename">
+   <refnamediv>
+    <refname>rename</refname>
+    <refpurpose>rename a file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>rename</function></funcdef>
+     <paramdef>string <parameter>oldname</parameter></paramdef>
+     <paramdef>string <parameter>newname</parameter></paramdef>
+    </funcsynopsis>
+<para>    Attempts to rename oldname to newname.
+  <para>    If an error occurs, returns 0.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.rewind">
+   <refnamediv>
+    <refname>rewind</refname>
+    <refpurpose>rewind the position of a file pointer</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>rewind</function></funcdef>
+     <paramdef>int <parameter>fp</parameter></paramdef>
+    </funcsynopsis>
+<para>    Sets the file position indicator for fp to the
+    beginning of the file stream.
+  <para>    If an error occurs, returns 0.
+  <para>    The file pointer must be valid, and must point to a file
+    successfully opened by <link linkend="function.fopen">fopen</link> or <link linkend="function.fopen-with-path">fopen_with_path</link>.
+  <para>    
+    See also <link linkend="function.fseek">fseek</link> and <link linkend="function.ftell">ftell</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.rmdir">
+   <refnamediv>
+    <refname>rmdir</refname>
+    <refpurpose>remove directory</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>rmdir</function></funcdef>
+     <paramdef>string <parameter>dirname</parameter></paramdef>
+    </funcsynopsis>
+<para>    Attempts to remove the directory named by pathname. The
+    directory must be empty, and the relevant permissions must permit
+    this.
+  <para>    If an error occurs, returns 0.
+  <para>    
+    See also <link linkend="function.mkdir">mkdir</link>.
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.stat">
+   <refnamediv>
+    <refname>stat</refname>
+    <refpurpose>give information about a file</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>array <function>stat</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Gathers the statistics of the file named by filename.
+    <para>
+     Returns an array with the statistics of the file with the
+     following elements:
+     <orderedlist>
+      <listitem><simpara>device</simpara></listitem>
+      <listitem><simpara>inode</simpara></listitem>
+      <listitem><simpara>number of links</simpara></listitem>
+      <listitem><simpara>user id of owner</simpara></listitem>
+      <listitem><simpara>group id owner</simpara></listitem>
+      <listitem><simpara>device type if inode device *</simpara></listitem>
+      <listitem><simpara>size in bytes</simpara></listitem>
+      <listitem><simpara>time of last access</simpara></listitem>
+      <listitem><simpara>time of last modification</simpara></listitem>
+      <listitem><simpara>time of last change</simpara></listitem>
+      <listitem><simpara>blocksize for filesystem I/O *</simpara></listitem>
+      <listitem><simpara>number of blocks allocated</simpara></listitem>
+     </orderedlist>
+     * - only valid on systems supporting the st_blksize type--other
+     systems (i.e. Windows) return -1
+    
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.tempnam">
+   <refnamediv>
+    <refname>tempnam</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>string <function>tempnam</function></funcdef>
+     <paramdef>string <parameter>dir</parameter></paramdef>
+     <paramdef>string <parameter>prefix</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Creates a unique temporary filename.
+
+    <para>
+     Returns the new temporary filename, or the null string on
+     failure.
+    
+     <example><title>tempnam() example</title>
+      <programlisting>
+$tmpfname = tempnam( "/tmp", "FOO" );
+</programlisting></example>
+
+   </refsect1>
+  </refentry>
+
+
+  <refentry id="function.touch">
+   <refnamediv>
+    <refname>touch</refname>
+    <refpurpose></refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>int <function>touch</function></funcdef>
+     <paramdef>string <parameter>filename</parameter></paramdef>
+     <paramdef>int <parameter>time</parameter></paramdef>
+    </funcsynopsis>
+    <para>
+     Attempts to set the modification time of the file named by
+     filename to the value given by time. If the option time is not
+     given, uses the present time.
+
+    <para>
+     If the file does not exist, it is created.
+
+    <para>
+     Returns true on success and false otherwise.
+  
+   </refsect1>
+  </refentry>
+
+
+ </reference>
+
+<!-- Keep this comment at the end of the file
+Local variables:
+mode: sgml
+sgml-omittag:t
+sgml-shorttag:t
+sgml-minimize-attributes:nil
+sgml-always-quote-attributes:t
+sgml-indent-step:1
+sgml-indent-data:t
+sgml-parent-document:nil
+sgml-default-dtd-file:"../manual.ced"
+sgml-exposed-tags:nil
+sgml-local-catalogs:nil
+sgml-local-ecat-files:nil
+End:
+-->

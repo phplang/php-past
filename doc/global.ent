@@ -1,0 +1,45 @@
+<!-- -*- SGML -*-
+
+ $Id: global.ent,v 1.4 1998/01/26 06:45:22 ssb Exp $
+
+ Contains global "macros" for all the SGML documents.
+
+ -->
+
+<!ENTITY url.docbook "http://www.ora.com/davenport/">
+<!ENTITY url.docbook-ref "http://www.ora.com/davenport/">
+<!ENTITY url.docbook-dtdref "http://www.ora.com/homepages/dtdparse/docbook/3.0/">
+<!ENTITY url.jade "http://www.jclark.com/jade/">
+<!ENTITY url.dbstyle "http://www.berkshire.net/~norm/dsssl/docbook/">
+<!ENTITY url.emacs-src "ftp://ftp.gnu.org/pub/gnu/emacs-20.2.tar.gz">
+<!ENTITY url.emacs-nt "http://ftp.sunet.se/pub/os/Win32/ntEmacs/docs/ntemacs.html">
+<!ENTITY url.psgml "ftp://ftp.lysator.liu.se/pub/sgml/psgml-1.0.1.tar.gz">
+<!ENTITY url.php "http://www.php.net">
+<!ENTITY url.phpbugs "http://ca.php.net/bugs.php3">
+<!ENTITY url.dsssl "http://www.jclark.com/dsssl/">
+<!ENTITY url.jclark "http://www.jclark.com/bio.htm">
+<!ENTITY url.nwalsh "http://www.berkshire.net/~norm/">
+
+<!ENTITY php.homepage '<literal><ulink url="&url.php;">&url.php;</ulink></literal>'>
+
+<!ENTITY email.rasmus 'rasmus@lerdorf.on.ca'>
+<!ENTITY email.zeev   'zeev@php.net'>
+<!ENTITY email.andi   'andi@php.net'>
+<!ENTITY email.stig   'stig@php.net'>
+<!ENTITY email.jim    'jimw@php.net'>
+<!ENTITY email.shane  'shane@caraveo.com'>
+<!ENTITY email.ssilk  'ssilk@ssilkon.franken.de'>
+<!ENTITY email.egon   'eschmid@delos.lf.net'>
+<!ENTITY email.chad   'chadr@brt.com'>
+<!ENTITY email.torben 'cslawi@uta.fi'>
+
+<!ENTITY link.rasmus '<ulink url="mailto:&email.rasmus;">Rasmus Lerdorf</ulink>'>
+<!ENTITY link.zeev   '<ulink url="mailto:&email.zeev;">Zeev Suraski</ulink>'>
+<!ENTITY link.andi   '<ulink url="mailto:&email.andi;">Andi Gutmans</ulink>'>
+<!ENTITY link.stig   '<ulink url="mailto:&email.stig;">Stig Sæther Bakken</ulink>'>
+<!ENTITY link.jim    '<ulink url="mailto:&email.jim;">Jim Winstead</ulink>'>
+<!ENTITY link.shane  '<ulink url="mailto:&email.shane;">Shane Caraveo</ulink>'>
+<!ENTITY link.ssilk  '<ulink url="mailto:&email.ssilk;">Alexander Aulbach</ulink>'>
+<!ENTITY link.egon   '<ulink url="mailto:&email.egon;">Egon Schmid</ulink>'>
+<!ENTITY link.chad   '<ulink url="mailto:&email.chad;">Chad Robinson</ulink>'>
+<!ENTITY link.torben '<ulink url="mailto:&email.torben;">Lars Torben Wilson</ulink>'>

@@ -1,0 +1,29 @@
+<?
+
+function hey (
+  for ($i=0; $i<10; $i++) {
+    if ($i<3) {
+      continue;
+    }
+    if ($i>7) {
+      break;
+    }
+    echo "i=$i\n";
+    for ($j=0; $j<10; $j++) {
+      if ($j<3) {
+        continue;
+      }
+      if ($j>7) {
+        break; 
+      }
+      echo "j=$j\n";
+    }
+  }
+);
+
+
+for ($i=0; $i<5; $i++) {
+  echo "Before call, i=$i...\n";
+  hey();
+  echo "After call, i=$i\n";
+}

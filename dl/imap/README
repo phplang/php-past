@@ -1,0 +1,37 @@
+To build this extension, grab ftp://ftp.cac.washington.edu/imap/old/imap-4.tar.Z
+and build the library.  Then copy c-client/c-client.a to /usr/local/lib 
+or some other directory on your link path and copy c-client/rfc822.h, mail.h 
+and linkage.h to /usr/local/include.  Then type: make imap.so from the 
+php3/dl directory. 
+
+imap_open  - opens a mailbox
+imap_num_msg - number of mesages in mbox
+imap_headers - array of header lines
+imap_header - individual message header
+imap_body - individual message body
+imap_expunge - delete message marked for deleation.
+imap_delete - mark message for deleation
+imap_undelete - unmark message for deleation
+imap_check - get current status of mailbox
+imap_close - close mailbox
+
+
+Here is a sample program
+
+<title> Imap Example </title>
+</head>
+<body>
+<pre>
+<?
+    dl("/your/path/to/dl/imap.so");
+    $mbox=imap_open("{Imap host}INBOX","?user?","?password?");
+    echo imap_check($mbox),"\n";
+    $num=imap_num_msg($mbox);
+    $h=imap_headers($mbox);
+    for ( $i=1 ; $i <= $num ; $i++){
+        echo $h[$i-1],"\n";
+    }
+    imap_close($mbox);
+?>
+</pre>
+</body>

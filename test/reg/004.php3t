@@ -1,0 +1,17 @@
+--TEST--
+simple ereg test                                              ...
+--POST--
+--GET--
+--FILE--
+<?$a="This is a nice and simple string";
+  if (ereg(".*nice and simple.*",$a)) {
+    echo "ok\n";
+  }
+  if (!ereg(".*doesn't exist.*",$a)) {
+    echo "ok\n";
+  }
+?>
+--EXPECT--
+Content-type: text/html
+ok
+ok

@@ -1,0 +1,30 @@
+<!ENTITY preface                     SYSTEM "preface.sgml">
+<!ENTITY bookinfo                    SYSTEM "bookinfo.sgml">
+
+<!ENTITY chapter.copyright           SYSTEM "chapters/copyright.sgml">
+<!ENTITY chapter.install             SYSTEM "chapters/install.sgml">
+<!ENTITY chapter.config              SYSTEM "chapters/config.sgml">
+<!ENTITY chapter.introduction        SYSTEM "chapters/intro.sgml">
+<!ENTITY chapter.language-constructs SYSTEM "chapters/lang-const.sgml">
+<!ENTITY chapter.features            SYSTEM "chapters/features.sgml">
+<!ENTITY chapter.syntax              SYSTEM "chapters/lang-syntax.sgml">
+<!ENTITY chapter.expressions         SYSTEM "chapters/lang-expr.sgml">
+<!ENTITY chapter.functions           SYSTEM "chapters/functions.sgml">
+
+<!ENTITY reference.adabas            SYSTEM "functions/adabas.sgml">
+<!ENTITY reference.array             SYSTEM "functions/array.sgml">
+<!ENTITY reference.datetime          SYSTEM "functions/datetime.sgml">
+<!ENTITY reference.dir               SYSTEM "functions/dir.sgml">
+<!ENTITY reference.filesystem        SYSTEM "functions/filesystem.sgml">
+<!ENTITY reference.image             SYSTEM "functions/image.sgml">
+<!ENTITY reference.math              SYSTEM "functions/math.sgml">
+<!ENTITY reference.msql              SYSTEM "functions/msql.sgml">
+<!ENTITY reference.mysql             SYSTEM "functions/mysql.sgml">
+<!ENTITY reference.oracle            SYSTEM "functions/oracle.sgml">
+<!ENTITY reference.pgsql             SYSTEM "functions/pgsql.sgml">
+<!ENTITY reference.regex             SYSTEM "functions/regex.sgml">
+<!ENTITY reference.strings           SYSTEM "functions/strings.sgml">
+<!ENTITY reference.url               SYSTEM "functions/url.sgml">
+
+<!ENTITY appendix.migration          SYSTEM "appendices/migration.sgml">
+<!ENTITY appendix.development        SYSTEM "appendices/phpdevel.sgml">

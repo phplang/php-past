@@ -1,23 +1,34 @@
 #!/bin/sh
-rm -f phpfi.in phpfi.out phpfi.test phpfi.desc
+
+# get rid of temp files left laying around
+rm -f php.in php.out php.test php.desc
+
+# figure out how to echo with an end-of-line
+if echo '\c' | grep -s c >/dev/null 2>&1
+then
+        ECHO_N="echo -n"
+        ECHO_C=""
+else
+        ECHO_N="echo"
+        ECHO_C='\c'
+fi
+
+# this is handy for debugging
+$ECHO_N $ECHO_C "$1: "
+
 CMD=`awk -f testphp.awk $1`
 eval $CMD
-cat phpfi.test | tr -d '\015' | awk '{ if(length($0)) print $0 }' > a.tmp
-awk '{ if(length($0)) print $0 }' phpfi.out >b.tmp
-#rm -f phpfi.test phpfi.out
+
+cat php.test | tr -d '\015' | awk '{ if(length($0)) print $0 }' > a.tmp
+awk '{ if(length($0)) print $0 }' php.out >b.tmp
+#rm -f php.test php.out
+
 diff -w b.tmp a.tmp >/dev/null
 ret=$?
-if [ -f phpfi.desc ]; then
-	cat phpfi.desc
-	if [ "$ret" = "1" ]; then
-		echo FAIL
-	else
-		echo PASS
-	fi
+
+if [ "$ret" = "1" ]; then
+	echo " FAILED"
 else
-	if [ "$ret" = "1" ]; then
-		echo "$1 ... FAIL"
-	else
-		echo "$1 ... PASS"
-	fi
+	echo " passed"
 fi
+exit $ret

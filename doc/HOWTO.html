@@ -1,0 +1,394 @@
+<head>
+ <title>PHP 3.0 SGML HOWTO</title>
+</head>
+
+<!-- $Id: HOWTO.html,v 1.10 1998/01/05 10:47:27 ssb Exp $ -->
+
+<body bgcolor="#ffffff" text="#000000">
+
+<center>
+<h1>PHP 3.0 SGML HOWTO</h1>
+Stig Bakken, <a href="mailto:ssb@guardian.no">ssb@guardian.no</a> <br>
+<font size="-1">$Date: 1998/01/05 10:47:27 $ $Revision: 1.10 $</font> <br>
+</center>
+
+<hr>
+
+<blockquote>
+<h3>Contents</h3>
+<a href="#tools"><font size="+1">1. Tools</font></a><br>
+<a href="#editor">1.1. SGML Editor</a><br>
+<a href="#sgml-tools">1.2. Conversion tools</a><br>
+<a href="#writing"><font size="+1">2. Writing SGML documents</font></a><br>
+<a href="#linuxdoc">2.1. LINUXDOC reference</a><br>
+<a href="#phpdoc.example">2.2. PHPDOC startup example</a><br>
+<a href="#phpdoc">2.3. PHPDOC reference</a><br>
+<a href="#phpdoc.dtd"><font size="-1">2.3.1. Document structure</font></a><br>
+<a href="#phpdoc.tags"><font size="-1">2.3.2. PHPDOC elements</font></a><br>
+<a href="#phpdoc.types"><font size="-1">2.3.3 Variable types</font></a><br>
+<a href="#connecting"><font size="+1">3. Connecting stuff</font></a><br>
+<a href="#connecting.phpdoc">3.1. New PHPDOC files</a><br>
+<a href="#connecting.labels">3.2. Label name conventions</a><br>
+<a href="#convert"><font size="+1">4. Converting from SGML</font></a><br>
+<a href="#convert.html">4.1. HTML</a><br>
+<a href="#convert.text">4.2. Plain text</a><br>
+<a href="#convert.text">4.3. Other formats...</a><br>
+</blockquote>
+
+<hr>
+
+<p> For now this document describes how to find the tools you need on
+UNIX.  Since I am not a Windows user myself, information about SGML on
+Windows will show up as soon as it has been gathered.  This means that
+Windows users have to give some feedback.
+
+<a name="tools"></a><h1>1. Tools</h1>
+
+<a name="editor"></a><h2>1.1. SGML Editor</h2>
+
+<p> Although it is possible to use a simple text editor such as vi or
+notepad to write the SGML, it is recommended to use an SGML editor
+that helps you along and makes sure your document is proper SGML
+conforming to the used document type definition (DTD).
+
+<p> A pretty good and free SGML editor is Emacs or XEmacs with PSGML.
+XEmacs is a fancier Emacs with better X support and a pile of Emacs
+Lisp packages included.  Emacs is ported to Windows 95/NT.
+
+<p>URLs:
+
+<ul>
+  <li><a href="ftp://ftp.gnu.org/pub/gnu/emacs-20.2.tar.gz">
+      ftp://ftp.gnu.org/pub/gnu/emacs-20.2.tar.gz</a>
+  <li><a href="ftp://ftp.xemacs.org/pub/xemacs/xemacs-20.2/">
+      ftp://ftp.xemacs.org/pub/xemacs/xemacs-20.2/</a>
+  <li><a href="ftp://ftp.lysator.liu.se/pub/sgml/psgml-1.0.1.tar.gz">
+      ftp://ftp.lysator.liu.se/pub/sgml/psgml-1.0.1.tar.gz</a>
+  <li><a href="http://ftp.sunet.se/pub/os/Win32/ntEmacs/docs/ntemacs.html">
+      http://ftp.sunet.se/pub/os/Win32/ntEmacs/docs/ntemacs.html</a>
+</ul>
+
+<p> If you do not use XEmacs you probably have to add this to your
+<tt>~/.emacs</tt> file to make sure Emacs finds the installed files:
+
+<pre>
+ (add-to-list 'load-path
+   (expand-file-name "<i>PREFIX</i>/share/emacs/site-lisp/psgml"))
+</pre>
+
+<p> Replace <i>PREFIX</i> with the prefix you used when installing psgml
+(the default is <tt>/usr/local</tt>).
+
+<p> Anyway you'll need this in your <tt>~/.emacs</tt> to load psgml at
+startup and make sure psgml is used for all files with <tt>.sgml</tt>
+file ending:
+
+<pre>
+ (autoload 'sgml-mode "psgml" "Major mode for editing SGML files." t)
+</pre>
+
+<p> The existing <tt>.phpdoc</tt> files have "<tt>&lt;!-- -*- SGML -*-
+--&gt;</tt>" in their header.  When Emacs sees a pattern like "<tt>-*-
+foo -*-</tt>" in the first line of a file, it tries to go into
+<i>foo</i>-mode.  So to activate psgml for <tt>.phpdoc</tt> files you
+can include the above SGML comment in the first lines of the files you
+write.  Or, you can tell Emacs it should always open <tt>.phpdoc</tt>
+files in sgml-mode by putting this in <tt>~/.emacs</tt>:
+
+<pre>
+ (add-to-list 'auto-mode-alist '("\\.phpdoc$" . sgml-mode))
+</pre>
+
+<p> For Windows users without NTFS, the <tt>.emacs</tt> file is called
+<tt>_emacs</tt>, and resides in the directory given by the HOME
+environment variable or <tt>C:/</tt>.
+
+<p><i>If you have information about other SGML editors, please <a
+href="mailto:ssb@guardian.no">send it</a>.</i>
+
+<a name="sgml-tools"></a><h2>1.2. Conversion tools</h2>
+
+SGML-Tools (previously known as "Linuxdoc-SGML") contains almost all
+the things you is needed to verify and convert PHP's SGML
+documentation (you need Perl, too).  Use version <b>1.0.2</b> of
+SGML-Tools.
+
+<p>URLs:
+
+<ul>
+  <li><a href="http://www.xs4all.nl/~cg/sgmltools/">
+      http://www.xs4all.nl/~cg/sgmltools/</a>
+</ul>
+
+<hr>
+
+<a name="writing"></a><h1>2. Writing SGML documents</h1>
+
+<a name="linuxdoc"></a><h2>2.1. LINUXDOC reference</h2>
+
+<a name="linuxdoc"></a><h2>2.2. PHPDOC startup example</h2>
+
+<a name="phpdoc"></a><h2>2.3. PHPDOC reference</h2>
+
+<a name="phpdoc.dtd"></a><h3>2.3.1. Document structure</h3>
+
+The structure of PHPDOC can be represented with the following element
+tree.  Each level in the tree represents the possible contents of the
+tag on the level above.
+
+<dl>
+  <dt><a href="#phpdoc.phpdoc">PHPDOC</a> (1)
+  <dd><dl>
+    <dt><a href="#phpdoc.funcdef">FUNCDEF</a> (*)
+    <dd><dl>
+      <dt><a href="#phpdoc.arg">ARG</a> (*)
+      <dd><a href="#phpdoc.text"><i>text</i></a>
+      <dt><a href="#phpdoc.returns">RETURNS</a> (1?)
+      <dd><a href="#phpdoc.text"><i>text</i></a>
+      <dt><a href="#phpdoc.text"><i>text</i></a>
+    </dl>
+    <dt><a name="phpdoc.text"></a>text - <i>any of these elements:</i>
+    <dd><dl>
+      <dt><a href="#phpdoc.aref">AREF</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except AREF
+      <dt><a href="#phpdoc.fref">FREF</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except FREF
+      <dt><a href="#phpdoc.func">FUNC</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except FUNC
+      <dt><a href="#phpdoc.var">VAR</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except VAR
+      <dt><a href="#phpdoc.lit">LIT</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except LIT
+      <dt><a href="#phpdoc.lit">CLASSREF</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except CLASSREF
+      <dt><a href="#phpdoc.lit">CONFREF</a>
+      <dd><a href="#phpdoc.text"><i>text</i></a> except CONFREF
+    </dl>
+  </dl>
+</dl>
+
+<a name="phpdoc.tags"></a><h3>2.3.2. PHPDOC elements</h3>
+
+This is a complete list of all PHPDOC tags with all their attributes
+and an explaination of their purpose and usage.
+
+<dl>
+
+  <dt><a name="phpdoc.phpdoc"></a><b>PHPDOC</b>
+  <dd>The top-level tag, the start tag must be included, but the
+    end-tag may be omitted.  Attributes: <dl>
+      <dt><b>TITLE</b> (required)
+      <dd>A title of this part of the documentation.
+    </dl>
+    <p>
+
+  <dt><a name="phpdoc.funcdef"></a><b>FUNCDEF</b>
+  <dd>Documents a PHP function.  Attributes: <dl>
+    <dt><b>NAME</b> (required)
+    <dd>The function name.
+    <dt><b>CAT</b> (required)
+    <dd>What category of functions and classes this function belongs to.
+        <br><i>A list of valid categories may be added later.</i>
+    <dt><b>RET</b> (required)
+    <dd>What type this function returns.  See <a
+        href="#phpdoc.phptyp">phpdoc types</a> for possible values.
+    <dt><b>FIRSTIN</b> (optional)
+    <dd>Which PHP version this function first appeared in.
+    </dl>
+    <p>
+
+  <dt><a name="phpdoc.arg"></a><b>ARG</b>
+  <dd>Function argument/parameter.  Attributes: <dl>
+    <dt><b>NAME</b> (required)
+    <dd>The parameter name (only for documentation reference).
+    <dt><b>OPTIONAL</b> (optional) defaults to MANDAT
+    <dd>Can be empty (<tt>&lt;ARG OPTIONAL ...&gt;</tt>) or have the
+      value MANDAT or OPTIONAL.  MANDAT means that this argument is
+      mandatory--it must be supplied.
+    <dt><b>TYPE</b> (required)
+    <dd>The type of this argument.  See <a
+        href="#phpdoc.phptyp">phpdoc types</a> for possible values.
+    <dt><b>FIRSTIN</b> (optional)
+    <dd>Which PHP version this argument was introduced in (if it was
+        introduced later than the function was.)
+    </dl>
+    <p>
+
+  <dt><a name="phpdoc.returns"></a><b>RETURNS</b>
+  <dd>Describes what a function returns.  No attributes. <p>
+ 
+  <dt><a name="phpdoc.aref"></a><b>AREF</b>
+  <dd>Refers to an argument in the current
+      <a href="#phpdoc.funcdef">FUNCDEF</a> or
+      <a href="#phpdoc.method">METHOD</a>.  Attributes: <dl>
+    <dt><b>NAME</b> (required)
+    <dd>Name of the attribute given in the
+        <a href="#phpdoc.arg">ARG</a> tag.
+    </dl>
+    <p>
+
+  <dt><a name="phpdoc.fref"></a><b>FREF</b>
+  <dd>Refers to a function.  Attributes: <dl>
+    <dt><b>NAME</b> (required)
+    <dd>Name of the function referred to.
+    </dl>
+    <p>
+
+</dl>
+
+<a name="phpdoc.types"></a><h3>2.3.3 Variable types</h3>
+
+<dl>
+<dt>Several of PHPDOC's attributes take a <i>PHP type</i> as a
+parameter.  The permitted PHP type identifiers are:
+<dd>
+<table>
+ <tr>
+  <th>Type</th>
+  <th>Description</th>
+ </tr>
+ <tr>
+  <td>int</td>
+  <td>PHP's integer type</td>
+ </tr><tr>
+  <td>float</td>
+  <td>PHP's float type</td>
+ </tr><tr>
+  <td>string</td>
+  <td>PHP's string type</td>
+ </tr><tr>
+  <td>array</td>
+  <td>a numbered array of any PHP types</td>
+ </tr><tr>
+  <td>assoc</td>
+  <td>an associative array of any PHP types</td>
+ </tr><tr>
+  <td>object</td>
+  <td>an object</td>
+ </tr><tr>
+  <td>mixed</td>
+  <td>any PHP type</td>
+ </tr><tr>
+  <td>varargs</td>
+  <td>variable number of arguments, type not specified</td>
+ </tr><tr>
+  <td>void</td>
+  <td>nothing</td>
+ </tr>
+</table>
+</dl>
+
+<hr>
+
+<a name="connecting"><a><h1>3. Connecting stuff</h1>
+
+<a name="connecting.phpdoc"></a><h2>3.1. New PHPDOC files</h2>
+
+The main file for the documentation is <tt>manual.sgml</tt>.  This
+file uses <i>entities</i> (can be compared to a combination of #define
+and #include in C) to include text from other files.  The entities
+that include the PHPDOC files are defined in the <i>preamble</i> of
+<tt>manual.sgml</tt>, which is the section between the "[" character
+on the first (DOCTYPE) line and "]&gt;".
+
+<p> Steps involved in connecting a new PHPDOC file:
+
+<ol>
+ <li> Let us say you have written functions/ldap.phpdoc.  You should
+      then add this to the preamble:
+<pre>
+<b>&lt;!entity ldapref system "functions/ldap.sgml"&gt;</b>
+</pre>
+
+      This tells the SGML parser that when "ldapref" is referenced it
+      should read the file <tt>functions/ldap.sgml</tt>.<p> <em>Note
+      that the file name extension used here is not <tt>.phpdoc</tt>,
+      but <tt>.sgml</tt>.  The Makefile handles the conversion.</em>
+      <p>
+
+ <li> Refer to the <i>ldapref</i> entity where you want to include it.
+      Keep in mind that PHPDOC documents are converted into LINUXDOC
+      sections.  Internal functions should be added to the "internal
+      functions" chapter in <tt>chapters/functions.sgml</tt>.  Add
+      something like this (the bold part is what to add):
+<pre>
+&lt;chapt&gt;Internal functions
+ ...
+ <b>&amp;ldapref;</b>
+ ...
+</pre>
+
+ <li> Then, to make sure the .phpdoc file is converted to .sgml,
+      you have to tell make about it.  Add the <u>.sgml</u> file to
+      the FUNCREF variable in <tt>Makefile.in</tt>.  Example (the bold
+      text is the change):
+<pre>
+FUNCREF=functions/oracle.sgml \
+        <b>functions/ldap.sgml \</b>
+	functions/math.sgml \
+	functions/mysql.sgml \
+	functions/pgsql.sgml \
+	functions/strings.sgml \
+	functions/adabas.sgml
+</pre>
+
+ <li> Finally, regenerate <tt>Makefile</tt>:
+<pre>
+(cd .. ; ./config.status)
+</pre>
+
+</ol>
+
+<a name="connecting.labels"></a><h2>3.2. Label name conventions</h2>
+
+When making or refering to labels in the LINUXDOC files, there are
+some conventions that should kept:
+
+<ul>
+ <li> Internal functions have labels of the form
+      <tt>func:<i>function_name</i></tt>.
+ <li> Arguments to configure (when installing) have labels like the
+      argument names.  For example, the --with-system-regex option has
+      the label <tt>with_system_regex</tt>
+</ul>
+<hr>
+
+<a name="convert"></a><h1>4. Converting from SGML</h1>
+
+<a name="convert.html"></a><h2>4.1. HTML</h2>
+
+You convert all the SGML files to HTML by running "<tt>make html</tt>".
+The current Makefile setup splits the chapters and appendices into
+separate files.  The main file is called <tt>manual.html</tt>, and the
+other files are <tt>manual-<i>n</i>.html</tt>.
+
+<p>If sgml2html shows some error messages like this:
+<pre>
+  sgml2html -l -2 manual.sgml
+  Making manual.html from manual.sgml.
+  Problem with @@ref(id = security)!
+  Problem with @@ref(id = func:include)!
+  Problem with @@ref(id = func:pg_pconnect)!
+  Problem with @@ref(id = func:stripslashes)!
+</pre>
+..it is because of references that point to labels that do not exist.
+See <a href="#connecting.labels">label name conventions</a>.
+
+<a name="convert.text"></a><h2>4.2. Plain text</h2>
+
+You convert all the SGML files to plain text by running "<tt>make
+text</tt>".  The results can be seen in <tt>manual.txt</tt>.
+
+<p> <i>Note: there seems to be a bug in the 0.99.0 sgml2txt filter
+that messes up the section numbering in the table of contents.</i>
+
+<a name="convert.text"></a><h2>4.3 Other formats...</h2>
+
+SGML-Tools supports converting SGML to info, LaTeX, lyx and rtf as
+well.  PHP's documentation should be convertable to any of these
+formats in theory, but I have not tested it good enough to document it
+here yet.
+
+<p><hr>
+<i>Send feedback and questions to
+<a href="mailto:ssb@guardian.no">ssb@guardian.no</a></i>

@@ -1,0 +1,3 @@
+This is absolutely unsupported code. This logging functionality has
+instead been implemented as a set of PHP3 scripts available in the
+examples/ directory of the PHP3 source distribution.

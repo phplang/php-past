@@ -1,0 +1,47 @@
+<?
+
+function test $call (
+  global $id, $name, $value;
+  echo "$call: ";
+  eval("echo $call;");
+  echo "\n";
+);
+
+#extern void php3_dbmnextkey(INTERNAL_FUNCTION_PARAMETERS);
+
+echo dblist();
+
+$name = "testing";
+$id = dbmopen($name, "n");
+echo "opened $name, id $id\n";
+
+test ("dbminsert(\$id, \"test\", \"value\")");
+test ("dbmexists(\$id, \"test\")");
+test ("dbmexists(\$id, \"bogus\")");
+test ("dbmdelete(\$id, \"test\")");
+test ("dbmexists(\$id, \"test\")");
+test ("dbminsert(\$id, \"test\", \"value\")");
+test ("dbmfetch(\$id, \"test\")");
+test ("dbmfetch(\$name, \"test\")");
+test ("dbmfetch(\$id, \"bogus\")");
+test ("dbmreplace(\$id, \"test\", \"newvalue\")");
+test ("dbmfetch(\$id, \"test\")");
+test ("dbmdelete(\$id, \"test\")");
+test ("dbmfetch(\$id, \"test\")");
+
+for ($i = 0; $i < 10; $i++) {
+  dbminsert($id, $i, tempnam(".", "$i"));
+}
+
+test ("\$value = dbmfirstkey(\$id)");
+
+while ($value) {
+  echo "dbmnextkey($id, $value): '" . ($value = dbmnextkey($id, $value)) . "'\n";
+}
+
+dbmclose($id);
+echo "closed $id\n";
+
+echo "done testing $name.\n";
+
+?>

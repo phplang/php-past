@@ -1,0 +1,98 @@
+This has been heavily hacked up from what was released to comp.sources.misc,
+volume43 by Jim Winstead <jimw@php.net> for use in PHP 3.0.
+
+The original source can be found at any decent comp.sources.misc archive.
+For example,
+	ftp://gatekeeper.dec.com/pub/usenet/comp.sources.misc/volume43/dbf/
+
+----------------------
+
+
+DBF
+
+by Brad Eacker
+Music, Intuition, Software, and Computers (MISC)
+
+DBF is a set of tools and library routines to manipulate xbase files.
+
+        dbflst [-vdhr] <file>
+
+is used to list all the records in the file out to the stdout
+
+        dbfget [-vhr] <file> [<record> <record>...]
+
+lists to stdout the specified records
+
+        dbfadd <file> <field> <field> ...
+
+used to add a record to the end of a .dbf file
+
+        dbfdel <file> [<record> <record> ...]
+
+allows you to mark as deleted a record in a .dbf file
+
+        dbfpack <file>
+
+removes deleted records from the specified .dbf file
+
+	tmpl
+
+builds the tmpl.dbf.  This .dbf file is the prototype for all other database
+creations.
+
+	dbfcreat [-v] <file> <target xbase>
+
+is used to create a database from a properly structured database that
+uses the field structure defined in tmpl.dbf
+
+	dbfcr <filename> f_name f_type f_len f_fdc [f_name ... f_fdc] ...
+
+is a shell script that will create a database from a specified list of
+field parameters.  It uses dbfcreat to do the actual build and will put
+together the prototype template from the command args.
+
+	dbfscan <dbf file> <ndx file>
+
+allows you to list the dbf file using the order of the records in the
+index.
+
+This package also includes a basic grammar recognizer for xbase .prg files.
+
+As an added bonus I have put together a minimum SQL recognizer as spec'ed
+in Microsoft's "ODBC 2.0 Programmer's Reference and SDK Guide".
+
+To build this package, make should be able to build it just fine.  It has
+been built on a couple of machine types.  Though you may need to take a
+look at the defines at the top of the makefile to see if you need to
+modify it to build in your environment.
+
+	DBF - xbase manipulation package
+        Copyright (c) Brad Eacker, 1991, 1992, 1993, 1994
+
+        Permission is granted to distribute and use the source,
+        documentation files and/or compiled binaries associated with dbf
+        for non-commercial use. No charges may be made for such
+        distributions.
+
+        This notice and a all documentation must be passed along with
+        all distributed copies.
+
+        No responsibility is taken for any errors or inaccuracies
+        inherent either to the documentation or the code for this
+        program, but, if reported to me, an attempt will be made to fix
+        them.
+
+	Author: Brad Eacker
+		beacker@sgi.com
+
+NO WARRANTY
+	THERE IS NO WARRANTY FOR THIS PROGRAM, TO THE EXTENT PERMITTED
+	BY APPLICABLE LAW.  THIS SET OF PROGRAMS IS PROVIDED "AS IS"
+	WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED.
+
+	IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR DAMAGES,
+	INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
+	DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THESE
+	PROGRAMS.
+
+$Revision: 1.2 $

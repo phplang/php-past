@@ -1,0 +1,21 @@
+PHP3 Dynamically Loadable Libraries
+
+Try:
+
+./setup
+make
+
+Note, you may not want to compile all the libraries here.
+
+To build an individual library instead of all of them, use:
+
+   make calendar.so
+
+You can then put the library somewhere and from within PHP
+use: dl("/path/calendar.so");
+
+A function from within the library can then be called like any
+regular PHP function.  For example:
+
+   echo jdmonthname(1,3);
+
