@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: image.c,v 1.4 1997/02/20 18:51:06 rasmus Exp $ */
+/* $Id: image.c,v 1.5 1997/11/15 08:09:46 rasmus Exp $ */
 /* 
  * Based on Daniel Schmitt's imageinfo.c which carried the following
  * Copyright notice.
@@ -62,16 +62,16 @@ struct gfxinfo {
 /* routine to handle GIF files. If only everything were that easy... ;} */
 struct gfxinfo *php_handle_gif(int infile)
 {
-  struct gfxinfo *result = NULL;
-  unsigned short in_width, in_height;
+    struct gfxinfo *result = NULL;
+	unsigned char a[2];
 
-  result = (struct gfxinfo *)emalloc(1,sizeof(struct gfxinfo));
-  lseek(infile, 6L, 0);
-  read(infile, &in_width, 2);
-  read(infile, &in_height, 2);
-  result->width  = in_width;
-  result->height = in_height;
-  return result;
+	result = (struct gfxinfo *) emalloc(1,sizeof(struct gfxinfo));
+	lseek(infile, 6L, 0);
+	read(infile, a, 2);
+	result->width = (unsigned short)a[0] | (((unsigned short)a[1])<<8);
+	read(infile, a, 2);
+	result->height = (unsigned short)a[0] | (((unsigned short)a[1])<<8);
+	return result;
 }
 
 unsigned long php_read4 (int infile)

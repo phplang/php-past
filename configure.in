@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.20 1997/08/11 09:18:59 ssb Exp $
+dnl $Id: configure.in,v 1.21 1997/11/15 07:45:36 rasmus Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(src/main.c)
@@ -45,4 +45,4 @@ AC_CHECK_FUNC(crypt,
               AC_DEFINE(HAVE_CRYPT), 
               AC_CHECK_LIB(crypt, crypt, AC_DEFINE(HAVE_CRYPT)))
 
-AC_OUTPUT(src/Makefile)
+AC_OUTPUT(src/Makefile src/mod_php.module)

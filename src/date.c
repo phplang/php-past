@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.22 1997/10/15 18:28:06 mitch Exp $ */
+/* $Id: date.c,v 1.25 1998/01/09 18:55:40 rasmus Exp $ */
 #include <stdlib.h>
 #ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
@@ -283,7 +283,7 @@ char *std_date(time_t t) {
 	static char str[80];
 	
 	tm1 = gmtime(&t);
-	sprintf(str,"%s, %02d-%s-%d %02d:%02d:%02d GMT",
+	sprintf(str,"%s, %02d-%s-%02d %02d:%02d:%02d GMT",
 		FullDays[tm1->tm_wday],
 		tm1->tm_mday,
 		Months[tm1->tm_mon],

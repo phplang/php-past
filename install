@@ -2,7 +2,7 @@
 #
 # PHP/FI Install Script
 #
-# $Id: install,v 1.51 1997/11/12 15:22:58 rasmus Exp $
+# $Id: install,v 1.53 1997/11/19 06:50:15 rasmus Exp $
 #
 DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
 DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
@@ -434,6 +434,7 @@ fi
 ./configure
 
 mv src/Makefile src/Makefile.$$
+mv src/mod_php.module src/mod_php.$$
 
 echo "$SED_MSQL"
 # mSQL part of sed  command
@@ -733,6 +734,7 @@ then
 	then
 		echo "Using the included Posix regular expression library"
 		echo ""
+		HSREGEX=yes
 		LIBREGEX=-lregex	
 		LIBREGEXDIR=-L./regex
 		REGEX_INCLUDE=-I./regex
@@ -746,6 +748,7 @@ then
 	else
 		echo "Using your system's Posix regular expression library"
 		echo ""
+		HSREGEX=no
 		LIBREGEX=
 		STATICLIBREGEX=
 		LIBREGEXDIR=
@@ -760,6 +763,7 @@ else
 	echo "you may experience difficulties.  It is strongly advised"
 	echo "that you upgrade to Apache 1.2"
 	echo ""
+	HSREGEX=yes
 	LIBREGEX=-lregex	
 	LIBREGEXDIR=-L./regex
 	REGEX_INCLUDE=-I./regex
@@ -813,6 +817,51 @@ sed "		$SED_MSQL
 		s,@STATICLIBREGEX@,$STATICLIBREGEX,
 " < src/Makefile.$$ > src/Makefile
 rm src/Makefile.$$
+
+sed "	$SED_MSQL
+		$SED_ODBC
+       	$SED_SYB
+		$SED_PG95
+		$SED_MYSQL
+        $SED_FILEPRO
+		$SED_SOLID
+		$SED_ORACLE
+		$SED_APACHE
+		$SED_FCGI
+		$SED_ADA
+		s,@USEDLIBS@,$USEDLIBS,
+		s,@OPT_CFLAGS@,$OPT_CFLAGS,
+		s,@INC_CFLAGS@,$INC_CFLAGS,
+		s,@SYS_CFLAGS@,$SYS_CFLAGS,
+		s,@PHPSENDMAIL@,$PHPSENDMAIL,
+		s,@HGD@,$HGD,
+		s,@HLNK@,$HLNK,
+		s,@PHP_DOCUMENT_ROOT@,$PHP_DOCUMENT_ROOT,
+		s,@ACCESS_CONTROL@,$ACCESS_CONTROL,
+		s,@ACCESS_DIR@,$ACCESS_DIR,
+		s,@LOGGING@,$LOGGING,
+		s,@LOG_DIR@,$LOG_DIR,
+		s,@FILE_UPLOAD@,$FILE_UPLOAD,
+		s,@MODULE_PHP@,$MODULE_PHP,
+		s,@APACHE@,$APACHE,
+		s,@APACHE_DIR@,$APACHE_DIR,
+		s,@APACHE_API@,$APACHE_API,
+		s,@STRONGHOLD@,$STRONGHOLD,
+		s,@PRG@,$PRG,
+		s,@DEBIAN@,$DEBIAN,
+		s,@MODULE_TARGET@,$MODULE_TARGET,
+		s,@SHLIB_TARGET@,$SHLIB_TARGET,
+		s,@PHPLIB_TARGET@,$PHPLIB_TARGET,
+		s,@LIBREGEX@,$LIBREGEX,
+		s,@REGEXMSG1@,$REGEXMSG1,
+		s,@REGEXMSG2@,$REGEXMSG2,
+		s,@LIBREGEXDIR@,$LIBREGEXDIR,
+		s,@REGEX_INCLUDE@,$REGEX_INCLUDE,
+		s,@OURREGEX@,$OURREGEX,
+		s,@STATICLIBREGEX@,$STATICLIBREGEX,
+		s,@HSREGEX@,$HSREGEX,
+" < src/mod_php.$$ > src/mod_php.module
+rm src/mod_php.$$
 
 sed "s,HAVE_MMAP,PHP_HAVE_MMAP," < config.h >config.$$
 mv config.$$ config.h

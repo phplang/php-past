@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: md5.c,v 1.4 1997/10/25 13:32:08 rasmus Exp $ */
+/* $Id: md5.c,v 1.5 1997/11/15 07:45:42 rasmus Exp $ */
 /* 
  * md5.c - Copyright 1997 Lachlan Roche 
  */
@@ -27,7 +27,8 @@
 #include "parse.h"
 
 #if APACHE
-#include <util_md5.h>
+#include "http_config.h"
+#include "util_md5.h"
 #else
 #include "md5.h"
 #endif

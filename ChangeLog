@@ -1,5 +1,18 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+January 9, 1998  Version 2.0.1
+- Fix SVR3 portability problem related to getcwd() function
+- Fix endian problem in getimagesize() function
+- Fix syslog compile problem for some operating systems
+- Fix md5 compile problem
+- Add Apache 1.3 install instructions to README 
+- Add Apache 1.3 automatic module configuration file (mod_php.module)
+- Fix Apache 1.3b2 set_last_info() compile problem
+- Fix phpinfo() core dump
+- Fix date format in cookies - Years 2000-2009 were broken
+- Fix Adabas-D binary and long handling
+- Fix Oracle NULL values processing bug in Ora_GetColumns()
+
 November 12 Version 2.0
 - Add Ora_Bind() function <dizzy@glas.net>
 - Add GetAllHeaders() function <ssb@guardian.no>
@@ -35,7 +48,6 @@ November 12 Version 2.0
 - Get rid of explicit calls to exit() from Sybase driver
 - Add sybsql_checkconnect() function
 - Add GDBM_FIX #define to php.h
-- Move CVS repostitory to inet-dev.bellglobal.com
 - Move PHP home web site to php.iquest.net
 - Fixed SAFE_MODE typos in head.c and var.c
 - Change mailing list instructions to point to php-list@php.iquest.net

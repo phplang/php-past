@@ -23,7 +23,7 @@
  * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
  *
  * $Source: /repository/phpfi/src/syslog.c,v $
- * $Id: syslog.c,v 1.2 1997/08/11 09:42:02 ssb Exp $
+ * $Id: syslog.c,v 1.3 1997/11/15 07:59:20 rasmus Exp $
  *
  */
 
@@ -72,7 +72,10 @@ void php_init_syslog(void)
 	set_int_var("LOG_LPR", LOG_LPR);
 	set_int_var("LOG_NEWS", LOG_NEWS);
 	set_int_var("LOG_UUCP", LOG_UUCP);
+#ifdef LOG_CRON
+/* apparently some systems do not have LOG_CRON */
 	set_int_var("LOG_CRON", LOG_CRON);
+#endif
 #ifdef LOG_AUTHPRIV
 /* AIX doesn't have LOG_AUTHPRIV */
 	set_int_var("LOG_AUTHPRIV", LOG_AUTHPRIV);

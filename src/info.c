@@ -19,10 +19,11 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.39 1997/11/12 23:24:52 lr Exp $ */
+/* $Id: info.c,v 1.43 1997/11/25 21:40:32 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <stdlib.h>
+#include <sys/param.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -41,14 +42,14 @@ extern char **environ;
 
 void Info(void) {
 	struct stat sb;
-	char *path;
+	char *path, *s;
 #if HAVE_PWD_H
 	struct passwd *pw;
 #endif
 #if HAVE_GRP_H
 	struct group *gr;
 #endif
-	char buf[512];
+	char buf[MAXPATHLEN+30];
 	char **envp;
 #if APACHE
 	array_header *env_arr;
@@ -103,7 +104,7 @@ void Info(void) {
 	{
 		char *sn, *pi;
 		sn = getenv("SCRIPT_NAME"); pi = getenv("PATH_INFO");
-		if(!strcmp(sn,pi)) {
+		if(sn && pi && !strcmp(sn,pi)) {
 			pi = NULL;
 		}
 		sprintf(buf,"PHP_SELF=%s%s\n",sn?sn:"",pi?pi:"");
@@ -206,7 +207,11 @@ void Info(void) {
 			sprintf(buf,"<b>Permission Bits:</b> <i>%04lo</i><br>\n",(long)sb.st_mode&07777);
 #endif
 			PUTS(buf);
+#if APACHE
+			sprintf(buf,"<b>Number of Links:</b> <i>%ld</i><br>\n",(long)php_rqst->finfo.st_nlink);
+#else
 			sprintf(buf,"<b>Number of Links:</b> <i>%ld</i><br>\n",(long)sb.st_nlink);
+#endif
 			PUTS(buf);
 #ifdef HAVE_PWD_H
 #if APACHE
@@ -265,11 +270,10 @@ void Info(void) {
 #endif
 	}
 	PUTS("<hr>\n");
-	path = getcwd(NULL,1024);
-	if(path) {
-		sprintf(buf,"<b>Working Directory:</b> <i>%s</i><br>\n",path);
+	s=emalloc(1,MAXPATHLEN+1);
+	if(getcwd(s,MAXPATHLEN)) {
+		sprintf(buf,"<b>Working Directory:</b> <i>%s</i><br>\n",s);
 		PUTS(buf);
-		free(path);
 	}
 	path = GetIncludePath();
 	if (path) {

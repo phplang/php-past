@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: var.c,v 1.96 1997/10/27 02:31:52 shane Exp $ */
+/* $Id: var.c,v 1.97 1997/11/17 00:47:21 lr Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1172,7 +1172,7 @@ VarTree *GetVar(char *name, char *index, int mode) {
 			char *sn, *pi;
 			sn = getenv("SCRIPT_NAME");
 			pi = getenv("PATH_INFO");
-			if(!strcmp(sn,pi)) {
+			if(sn && pi && !strcmp(sn,pi)) {
 				pi = NULL;
 			}
 			sprintf(temp,"%s%s",sn?sn:"",pi?pi:"");

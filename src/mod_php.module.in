@@ -1,0 +1,10 @@
+Name: php_module
+ConfigStart
+	RULE_WANTHSREGEX=@HSREGEX@
+	LIBS="-Lmodules/extra -L../modules/extra -lphp \
+		@LDFLAGS@ @MSQL_LIB@ @MYSQL_LIB@ @SYB_LIB@ \
+		@SOLID_LIB@ @ORACLE_LIB@ @PQ_LIB@ @FCGI_LIB@ \
+		@HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBSYB@ \
+		@LIBPQ@ @LIBMYSQL@ @LIBADA@ @LIBSOLID@ @LIBORACLE@ \
+		@LIBFCGI@ $LIBS
+ConfigEnd

@@ -83,9 +83,15 @@ int send_parsed_php(request_rec *r) {
 #endif
 
 	if (conf->LastModified) {
+#if MODULE_MAGIC_NUMBER < 19970912
 		if(retval = set_last_modified (r, r->finfo.st_mtime)) {
-		  return retval;
+			return retval;
 		}
+#else
+		update_mtime (r, r->finfo.st_mtime);
+		set_last_modified(r);
+		set_etag(r);
+#endif
 	}
 
 	/* Assume output will be HTML.  Individual scripts may change this 

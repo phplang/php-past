@@ -619,8 +619,8 @@ The <a href="#phpinfo">
 phpinfo()</a> function can be used to display all the request headers.<P>
 eg.
 <PRE>    &lt;
-        echo "$req_connection<br>";
-        echo "$req_host<br>";
+        echo "$req_connection&lt;br&gt;";
+        echo "$req_host&lt;br&gt;";
     &gt;</PRE>
 The above simple script might output:
 <PRE>    Keep-Alive
@@ -2408,9 +2408,10 @@ This function is only available if Adabas support has been enabled in PHP.<P>
 <P>Ada_Result will return values from a result identifier produced by
 Ada_Exec. The field name specify what cell in the row to return. Instead of
 naming the field, you may use the field index as an unquoted number. Field
-indices start from 0. If the requested field is a blob, the contents is not
-returned, instead it is sent directly to the client. Note: Any field with a
-length greater than 255 bytes is treated this way.
+indices start from 0. If the requested field is of code type BYTE (binary)
+or is longer than 4096 bytes, the contents is sent directly to the client.
+Hint: [VAR]CHAR BYTE fields can be returned into a php variable by using
+the HEX() db function; e. g. SELECT HEX(SYSKEY) SYSKEY FROM MYTABLE.
 <P>
 This function is only available if Adabas support has been enabled in PHP.<P>
 

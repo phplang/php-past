@@ -19,9 +19,10 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.77 1997/09/18 20:31:13 shane Exp $ */
+/* $Id: file.c,v 1.80 1997/11/25 21:40:32 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
+#include <sys/param.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -41,6 +42,7 @@
 #endif
 #if WINNT|WIN32
 #include "win32/wfile.h"
+#include "win32/param.h"
 #endif
 
 static char *CurrentFilename=NULL;
@@ -317,8 +319,13 @@ int OpenFile(char *filename, int top, long *file_size) {
 #else
 		ss = getenv("PATH_INFO");
 #endif
-		if(!ss) Error("(4)Unable to open: <i>%s</i>",filename?filename:"null");
-		else Error("(5)Unable to open: <i>%s</i>",ss);
+#ifdef PHP_DOCUMENT_ROOT
+		if(!ss) Error("(4)Unable to open: <i>%s</i> - is your DOCUMENT_ROOT of %s set right?",filename?filename:"null",PHP_DOCUMENT_ROOT);
+		else Error("(5)Unable to open: <i>%s</i> - is your DOCUMENT_ROOT of %s set right?",ss,PHP_DOCUMENT_ROOT);
+#else
+		if(!ss) Error("(6)Unable to open: <i>%s</i>",filename?filename:"null");
+		else Error("(7)Unable to open: <i>%s</i>",ss);
+#endif
 	}
 	return(fd);
 }
@@ -1993,10 +2000,9 @@ int CheckUid(char *fn, int mode) {
 		if(ret<0) return(0);
 		duid = sb.st_uid;
 	} else {
-		s = getcwd(NULL,1024);
-		if(!s) return(0);
+		s=emalloc(1,MAXPATHLEN+1);
+		if(!getcwd(s,MAXPATHLEN)) return(0);
 		ret = stat(s,&sb);
-		free(s);
 		if(ret<0) return(0);
 		duid = sb.st_uid;
 	}

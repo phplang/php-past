@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.194 1997/11/12 14:34:30 rasmus Exp $ */
+/* $Id: php.h,v 1.196 1998/01/09 18:57:57 rasmus Exp $ */
 
 /* MS Visual C++ V5 defines WIN32.  Use this to define WINDOWS
  * for any pre-existing modifications for windows.
@@ -365,7 +365,7 @@ extern request_rec *php_rqst;
 
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0"
+#define PHP_VERSION "2.0.1"
 
 #define VAR_INIT_CHAR	'$'
 

@@ -55,7 +55,7 @@ typedef struct {
 	char name[32];
 	char *value;
 	long int vallen;
-	int isblob;
+	int passthru;
 } ResultValue;
 
 typedef struct AdaResult {
@@ -337,7 +337,7 @@ void Ada_exec(void)
 	HDBC        curr_conn=NULL;
 	short       resultcols;
 	SWORD       colnamelen; /* Not used */
-	SDWORD      displaysize;
+	SDWORD      displaysize, coltype;
 	RETCODE     rc;
 
 	/* get args */
@@ -433,23 +433,38 @@ void Ada_exec(void)
 #if DEBUG
 				Debug("%s : %ld\n",result->values[i].name,displaysize);
 #endif
-			/* Using displaysize to determine whether this is blob data or not
-			   This is mega cludge, but I don't know how to to better  */	
-				if(displaysize > 255){ 
-					displaysize = 255;
-					result->values[i].isblob = 1;
-				}else{
-					SDWORD coltype;
-					SQLColAttributes(result->stmt, i+1, SQL_COLUMN_TYPE,
-									 NULL, 0, NULL, &coltype);
-					if(coltype == SQL_VARBINARY)
-						displaysize = displaysize * 2;
-					result->values[i].isblob = 0;
+				/* Decision, whether a column will be output directly or returned into a 
+				 * PHP variable is based on two attributes:
+				 * - Anything longer than 4096 Bytes (SQL_COLUMN_DISPLAY_SIZE)
+				 * - and/or of datatype binary (SQL_BINARY,SQL_VARBINARY,SQL_LONGVARBINARY)
+				 * will be sent direct to the client.
+				 * Hint: SQL_BINARY and SQL_VARBINARY can be returned to PHP with the SQL
+				 * function HEX(), e.g. SELECT HEX(SYSKEY) SYSKEY FROM MYTABLE.
+				 */
+			   	if(displaysize > 4096){
+					displaysize = 4096;
+					result->values[i].passthru = 1;
+				} else {
+					result->values[i].passthru = 0;
 				}
-				
-				result->values[i].value = (char *)emalloc(0, displaysize + 1);
-				SQLBindCol(result->stmt, i+1, SQL_C_CHAR, result->values[i].value,
-						displaysize + 1, &result->values[i].vallen);
+				SQLColAttributes(result->stmt, i+1, SQL_COLUMN_TYPE,
+									NULL, 0, NULL, &coltype);
+
+				switch(coltype){
+					case SQL_BINARY:
+					case SQL_VARBINARY:
+					case SQL_LONGVARBINARY:
+						result->values[i].passthru = 1;
+						result->values[i].value = (char *)emalloc(0,displaysize);
+						SQLBindCol(result->stmt, i+1, SQL_C_BINARY,result->values[i].value,
+									displaysize, &result->values[i].vallen);
+						break;
+					default:
+						result->values[i].value = (char *)emalloc(0,displaysize + 1);
+						SQLBindCol(result->stmt, i+1, SQL_C_CHAR, result->values[i].value,
+									displaysize + 1, &result->values[i].vallen);
+						break;
+				}
 			}
 			
 		j = ada_add_result(result,conn);
@@ -635,11 +650,11 @@ void Ada_result(void)
 	else{
 		if(result->values[field_ind].value != NULL &&
 				result->values[field_ind].vallen != SQL_NO_TOTAL &&
-				result->values[field_ind].isblob == 0){
+				result->values[field_ind].passthru == 0){
 			Push(AddSlashes(result->values[field_ind].value,0), STRING);
 		}else{
 			char buf[4096];
-			SDWORD fieldsize = 256;
+			SDWORD fieldsize = 4096;
 		
 			/* Make sure that the Header is sent */	
 			php_header(0, NULL);
@@ -657,7 +672,7 @@ void Ada_result(void)
 			
 			/* Call SQLGetData until SQL_SUCCESS is returned */
 			while(1){
-				rc = SQLGetData(result->stmt, field_ind + 1, SQL_C_CHAR,
+				rc = SQLGetData(result->stmt, field_ind + 1, SQL_C_BINARY,
 						buf, 4096, &fieldsize);
 
 			   	if(rc == SQL_ERROR){
@@ -764,7 +779,7 @@ void Ada_resultAll(int mode)
 			if(result->values[i].vallen == SQL_NULL_DATA)
 				sprintf(tmp,"<td> </td>");
 			else{
-				if(result->values[i].isblob == 0)
+				if(result->values[i].passthru == 0)
 					sprintf(tmp,"<td>%s</td>",
 						AddSlashes(result->values[i].value,0));
 				else 

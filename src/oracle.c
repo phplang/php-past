@@ -33,7 +33,7 @@
 \****************************************************************************/
 
 /*
- *  $Id: oracle.c,v 1.17 1997/11/03 14:19:19 dizzy Exp $
+ *  $Id: oracle.c,v 1.18 1997/12/19 12:23:04 dizzy Exp $
  *
  * Possible enhancements:
  *
@@ -69,7 +69,12 @@
 #include <stdlib.h>
 
 /* #define DEBUG */
-/* #define TRACE */
+
+/* NULL return values processing policy: 
+   0 - return empty string regardless of var type 
+   1 - return empty string for strings and 0 for numbers */
+
+#define NULL_POLICY 0
 
 /*
  * private functions
@@ -831,9 +836,11 @@ Ora_GetColumn() /* cursor_index, column_index */
 		return;
 	}
 
+
 #ifdef DEBUG
 	Debug("Oracle: column(%d)->dbtype=%d\n", column_ind, column->dbtype);
 #endif
+
 	type = column->dbtype;
 
 #ifdef DEBUG
@@ -858,6 +865,14 @@ Ora_GetColumn() /* cursor_index, column_index */
     }
 	else if (type == FLOAT_TYPE) {
 		char retval[65];
+
+	        if (column->indp == -1) /* Check for NULL */
+	            #if NULL_POLICY
+	                column->flt_buf = 0; /* -Dz- */
+	            #else
+	                { Push("",STRING); return;}
+	            #endif
+	            
 		sprintf(retval, "%64.32f", column->flt_buf);
 #ifdef DEBUG
 		Error("Ora_GetColumn returns float '%s'", retval);
@@ -866,6 +881,14 @@ Ora_GetColumn() /* cursor_index, column_index */
 	}
 	else if (type == INT_TYPE) {
 		char retval[16];
+
+	        if (column->indp == -1) /* Check for NULL */
+	            #if NULL_POLICY
+	                column->int_buf = 0; /* -Dz- */
+	            #else
+	                { Push("",STRING); return;}
+	            #endif
+
 		sprintf(retval, "%d", column->int_buf);
 #ifdef DEBUG
 		Error("Ora_GetColumn returns int '%s'", retval);
@@ -876,6 +899,7 @@ Ora_GetColumn() /* cursor_index, column_index */
 #ifdef DEBUG
 		Error("Ora_GetColumn returns string '%s'", column->buf);
 #endif
+	        if (column->indp == -1)  column->buf = strdup(""); /* -Dz- */
 		Push(AddSlashes(column->buf, 0), STRING);
 	}
 	else {
@@ -1239,6 +1263,7 @@ ora_describe_define(oraCursor *cursor)
 #endif
 
 		/* Determine the data type and length */
+		
         if (column->dbtype == NUMBER_TYPE) {
 			column->dbsize = ORANUMWIDTH;
 			if (column->scale != 0) {

@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.92 1997/11/12 14:34:30 rasmus Exp $
+# $Id: Makefile.in,v 1.93 1997/11/15 07:45:42 rasmus Exp $
 #
 # Makefile for PHP/FI
 # Copyright 1995,1996,1997 Rasmus Lerdorf
@@ -76,7 +76,7 @@ DISTFILES = ChangeLog README COPYING \
 	src/regex/regex2.h src/regex/regexec.c src/regex/regfree.c \
 	src/regex/split.c src/regex/tests src/regex/utils.h \
 	src/mysql.c src/solid.c src/mail.c src/image.c src/illustra.c \
-	scripts/msqllog scripts/mysqllog \
+	src/mod_php.module.in scripts/msqllog scripts/mysqllog \
 	examples/url.readme examples/url_add.html examples/url_cat.html \
 	examples/url_main.html examples/demo_main.html examples/demo_dir.html \
 	examples/demo_echo.html examples/demo_last.html examples/demo_rand.html \
@@ -179,6 +179,9 @@ module_auto_build: @MODULE_PHP@
 
 module_user_build: $(OBJS)
 	-cp mod_php.[ch] libphp.a @APACHE_DIR@
+	@echo ""
+	@echo "The following instructions are not valid for Apache 1.3 and later."
+	@echo "See the README for Apache 1.3 install instructions."
 	@echo ""
 	@echo "You now need to recompile your Apache server."
 	@echo "mod_php.* and libphp.a should have been copied to your"

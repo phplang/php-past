@@ -34,7 +34,7 @@ knows the particulars of the destination system well.
 
 If this is your first exposure to PHP, please be aware that PHP Version 
 2.0 is quickly going to be superceded by Version 3.0.  There are
-dramatic improvements.  Please see http://www.lerdorf.on.ca/php3/
+dramatic improvements.  Please see http://www.php.net/
 for more information, and if at all possible I suggest you start out
 with PHP3 instead of proceeding with PHP2 today and then being forced
 to migrate in a couple of months.
@@ -58,7 +58,7 @@ These may or may not function better for you.
 
 PHP Version 3.0 will have much better Windows support, so if you are
 interested in running PHP on Windows, I suggest you start with version
-3.0 available from http://www.lerdorf.on.ca/php3/
+3.0 available from http://www.php.net/
 
 
 Things You Need To Know Before Installing
@@ -145,6 +145,7 @@ NetBSD 1.2.1
 Irix
 Ultrix
 HP-UX
+OpenStep v4.1 (add -posix to compiler flags)
 
 Step 1.
 
@@ -163,6 +164,10 @@ Step 2.
 
 Step 3.
 
+  (If you are compiling for Apache 1.3 go to your Apache source tree
+   and copy os/unix/os.h to src/main within the Apache tree, then go
+   back to your PHP directory and continue)
+
   type: make
 
   This will create the actual executable program file named php.cgi
@@ -179,7 +184,7 @@ Step 4. (If you are NOT installing the Apache module version)
   and delete such files directly.  Without the setuid bit set these
   files will be owned by the httpd user id.
 
-Step 4. (if you are installing the Apache module version)
+Step 4a. (if you are installing the Apache module version for Apache 1.2 or lower)
 
   Change to your Apache src directory where the mod_php.c ,mod_php.h
   and libphp.a files should have been copied to. If they weren't which 
@@ -192,6 +197,22 @@ Step 4. (if you are installing the Apache module version)
   to the very end of the file. Then type: ./Configure and then 'make' to 
   rebuild your Apache httpd binary. Install this binary.
 
+
+Step 4a. (if you are installing the Apache module version for Apache 1.3 or higher)
+
+
+  Copy libphp.a, mod_php.[ch] and mod_php.module to src/modules/extra in your
+  Apache 1.3 source tree.  Then add the following line to the end of your 
+  Apache Configuration file:
+
+    AddModule modules/extra/mod_php.o
+
+  Then run ./Configure followed by a 'make' to rebuild your Apache httpd binary.
+  Install this binary.
+
+
+Step 4b.
+
   Next you need to edit your Apache conf/srm.conf file and add a line like:
 
     AddType application/x-httpd-php .phtml
@@ -202,6 +223,7 @@ Step 4. (if you are installing the Apache module version)
 
   Now you are ready to restart your httpd server. See the Apache Module
   Notes for more details on configuring the PHP Module.
+
 
 Step 5.
 
