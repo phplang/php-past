@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: md5.c,v 1.3 1997/02/20 15:34:53 rasmus Exp $ */
+/* $Id: md5.c,v 1.4 1997/10/25 13:32:08 rasmus Exp $ */
 /* 
  * md5.c - Copyright 1997 Lachlan Roche 
  */
@@ -49,7 +49,11 @@ void Md5(void) {
 		return;
 	}
 #if APACHE
+#if MODULE_MAGIC_NUMBER > 19970901
+	md5str = ap_md5( php_rqst->pool, s->strval );
+#else
 	md5str = md5( php_rqst->pool, s->strval );
+#endif
 #else
 	len = strlen(s->strval);
 	md5str = emalloc(2,33);

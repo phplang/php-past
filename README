@@ -32,6 +32,12 @@ number of different components, it is not realistic to assume it will
 go smoothly on all systems.  You will probably need someone around who
 knows the particulars of the destination system well.
 
+If this is your first exposure to PHP, please be aware that PHP Version 
+2.0 is quickly going to be superceded by Version 3.0.  There are
+dramatic improvements.  Please see http://www.lerdorf.on.ca/php3/
+for more information, and if at all possible I suggest you start out
+with PHP3 instead of proceeding with PHP2 today and then being forced
+to migrate in a couple of months.
 
 Windows NT Version
 ------------------
@@ -40,11 +46,19 @@ The code compiles almost cleanly using gnu-win32 gcc from Cygnus.
 See http://www.cygnus.com/gnu-win32/
 
 A pre-compiled Windows95/NT binary is available in the file archive at
-http://www.vex.net/php/
+http://php.iquest.net/
 
 You will need the Cygnus GCC DLL file available at:
 ftp://ftp.cygnus.com/pub/gnu-win32/latest/cygwin.dll
 Install this dll somewhere on your path.
+
+You will also find a couple of MSVC 5.0 compiled binaries at
+http://www.caraveo.com/php/
+These may or may not function better for you.
+
+PHP Version 3.0 will have much better Windows support, so if you are
+interested in running PHP on Windows, I suggest you start with version
+3.0 available from http://www.lerdorf.on.ca/php3/
 
 
 Things You Need To Know Before Installing
@@ -92,8 +106,8 @@ Things You Need To Know Before Installing
 FI Notes
 ---------
 
-[This is more of a historical sub-note now.  I use the entire a
- single form now linked directly into the Apache web server as a module]
+[This is more of a historical sub-note now.  PHP and FI are one and
+ the same today.]
  
 FI is a subset of the PHP distribution.  Throughout the documentation
 PHP and FI will be used interchangeably or together.  They refer to
@@ -116,14 +130,18 @@ number and any other details I should know.
 
 Solaris 2.4
 Solaris 2.5[.1]
-SunOS 1.4.2
-SunOS 1.4.3
-SunOS 1.4.4
+Solaris 2.6
+SunOS 4.1.2
+SunOS 4.1.3
+SunOS 4.1.4
 Linux 1.3.x
 Linux 2.0.x
+Linux 2.1.x
 BSDi 2.0
 OSF1 (disable MMAP in config.h after running install)
-FreeBSD
+FreeBSD (all versions)
+NetBSD 1.2
+NetBSD 1.2.1
 Irix
 Ultrix
 HP-UX
@@ -230,36 +248,29 @@ Troubleshooting and Mailing Lists
 
   There is a PHP mailing-list available for general discussion about
   PHP/FI.  If you are having difficulties, this is probably
-  the best place to ask.  To sign up, send a message to:
+  the best place to ask.  To sign up, send an empty message to:
 
-  php-list-request@vex.net
-
-  and in the subject of your message, put:
-
-  subscribe
+  php-list-subscribe@php.iquest.net
 
   Please make sure you have read through doc/doc.html before asking
   questions on the mailing list. 
 
   Online documentation, plus the latest version of the software can
-  be found at http://www.vex.net/php/
+  be found at http://php.iquest.net/
 
   There is a low-traffic mailing list which only contains announcements.
-  To subscribe to it, send a message to:
+  To subscribe to it, send an empty message to:
 
-  php-announce-request@vex.net
+  php-announce-subscribe@php.iquest.net
 
-  and in the subject of your message, put:
-
-  subscribe
-
-  All announcements will also be sent to the php-list@vex.net mailing
+  All announcements will also be sent to the php-list@php.iquest.net mailing
   list, so you need not sign up to both.
 
   If you are interested in helping out with the development of PHP/FI,
-  you can sign up to the php-dev@vex.net list by sending a message to:
+  you can sign up to the php-dev@php.iquest.net list by sending an empty
+  message to:
 
-  php-dev-request@vex.net
+  php-dev-subscribe@php.iquest.net
 
   This list is quite technical and concentrates on code development.
   You will not be popular if you post general beginner questions here.
@@ -311,7 +322,7 @@ Getting Updates
 ---------------
 
   Entire new distributions of the package are made available frequently
-  in the file archive at http://www.vex.net/php/files/
+  in the file archive at http://php.iquest.net/files/
 
   If you don't like re-installing every time you want to update your
   package, or if you are a programmer and want to make sure you always
@@ -324,13 +335,13 @@ Getting Updates
 
   Now type the following:
 
-    cvs -d :pserver:cvsread@vex.net:/u/local/src/repository login
+    cvs -d :pserver:cvsread@www.lerdorf.on.ca:/repository login
 
   When it asks you for a password enter: phpfi
 
   Then type:
 
-    cvs -d :pserver:cvsread@vex.net:/u/local/src/repository checkout phpfi
+    cvs -d :pserver:cvsread@www.lerdorf.on.ca:/repository checkout phpfi
 
   This will create a phpfi directory in your current directory.  It will
   take a bit of time, especially if your network connection is slow.  

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mysql.c,v 1.24 1997/06/16 12:57:39 rasmus Exp $ */
+/* $Id: mysql.c,v 1.25 1997/08/22 22:22:37 rasmus Exp $ */
 /* mSQL is Copyright (c) 1993-1995 David J. Hughes */
 
 /* Note that there is no mySQL code in this file */
@@ -1235,7 +1235,7 @@ void MYsqlListFields(void) {
 	block_alarms();
 #endif
 	result=mysql_list_fields(dbsock,tablename, 0);
-	if(mysql_num_fields(result)<1) {
+	if(!result || mysql_num_fields(result)<1) {
 #if APACHE
 		unblock_alarms();
 #endif

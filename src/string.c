@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: string.c,v 1.25 1997/05/09 23:58:16 rasmus Exp $ */
+/* $Id: string.c,v 1.30 1997/09/18 20:31:16 shane Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -280,7 +280,11 @@ void StrrChr(void) {
 /* args s,m,n */
 void SubStr(void) {
 	Stack *s;
+#if WINNT|WIN32
+	unsigned int m,n;
+#else
 	int m,n;
+#endif
 	char *str;
 
 	s = Pop();
@@ -324,7 +328,7 @@ char *php_urlencode(char *s) {
 		str[y] = s[x];
 		if(str[y]==' ') {
 			str[y]='+';
-		} else if((str[y] < '0' && str[y]!='-' && str[y]!='.') ||
+		} else if((str[y] < '0' && str[y]!='-' && str[y]!='.' && str[y]!='/') ||
 		   (str[y] < 'A' && str[y] >'9') ||
 		   (str[y] > 'Z' && str[y] <'a' && str[y]!='_') ||
 		   (str[y] > 'z')) {
@@ -388,7 +392,7 @@ void QuoteMeta(void) {
 		str[y] = s->strval[x];
 		if(str[y]=='.' || str[y]=='\\' || str[y]=='+' ||
 		   str[y]=='*' || str[y]=='?' || str[y]=='[' ||
-		   str[y]=='^' || str[y]=='$' ) {
+		   str[y]=='^' || str[y]=='$' || str[y]=='(' || str[y]==')') {
             sprintf(&str[y],"\\%c",s->strval[x]);
             y+=1;
         }
@@ -454,8 +458,6 @@ void Sprintf(int argc) {
 		return;
 	}
 	format = estrdup(1,s->strval);	
-	ParseEscapes(format);
-	StripSlashes(format);
 	t = format;
 	num=0;
 	concat = (char *) "";  /* some dummy starting value */
@@ -463,8 +465,6 @@ void Sprintf(int argc) {
 		type = FormatCheck(&t,&beg,&fmt);
 		if(type==0 || type==-1) break;
 		if(beg && *beg) {
-			ParseEscapes(beg);
-			StripSlashes(beg);
 			buf = emalloc(1,strlen(concat)+strlen(beg) + ECHO_BUF);
 			strcpy(buf, concat);
 			strcat(buf, beg); 
@@ -552,4 +552,58 @@ void Chop(void) {
 	while(isspace(*p) && p>=ns) p--;
 	*(p+1)='\0';	
 	Push(ns,STRING);
+}
+
+char *_StrTr(char *string, char *str_from, char *str_to) { 
+	char xlat[256];
+#if WINNT|WIN32
+	unsigned int i, len1, len2;
+#else
+	int i,len1,len2;
+#endif
+	len1=strlen(str_from);
+	len2=strlen(str_to);
+
+	if (len1>len2) {
+		str_from[len2]='\0';
+		len1=len2;
+	}
+   
+	for(i=0;i<256;xlat[i]=i,i++);
+	for(i=0;i<len1;xlat[(unsigned char)str_from[i]]=str_to[i],i++);
+	for(i=0;i<strlen(string);string[i]=xlat[(unsigned char)string[i]],i++);
+
+	return string;
+}
+
+void StrTr(void) { /* strtr(STRING,FROM,TO) */
+	Stack *s;
+	char *string;
+	char *str_from;
+	char *str_to;
+	char temp[1] = { '\0' };
+                
+	s = Pop();
+	if(!s) {
+		Error("Stack error in strtr");
+		return;
+	}
+	if(s->strval) str_to = (char *)estrdup(1,s->strval);
+	else str_to = temp;
+	s = Pop();
+	if(!s) {
+		Error("Stack error in strtr");
+		return;
+	}
+	if(s->strval) str_from = (char *)estrdup(1,s->strval);
+	else str_from = temp;
+	s = Pop();
+	if(!s) {  
+		Error("Stack error in strtr");
+		return;
+	}
+	if(s->strval) string = (char *)estrdup(1,s->strval);
+	else string = temp;
+
+	Push(_StrTr(string , str_from, str_to),STRING);
 }

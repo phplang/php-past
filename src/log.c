@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: log.c,v 1.33 1997/06/04 18:02:31 rasmus Exp $ */
+/* $Id: log.c,v 1.34 1997/08/16 03:51:40 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -174,13 +174,13 @@ void Log(char *filename) {
 	Debug("Trying to open: %s\n",temp);
 #endif
     es = ErrorPrintState(0);
-    ret = _dbmOpen(temp,"w");
+    ret = _dbmOpen(temp,"w",0);
     ErrorPrintState(es);
     if(ret > 0) {
 #if DEBUG
 		Debug("Creating new dbm logging file\n");
 #endif
-        ret = _dbmOpen(temp,"n");
+        ret = _dbmOpen(temp,"n",0);
 		if(ret) {
 			Error("Unable to create %s",temp);
 			return;
@@ -267,7 +267,7 @@ void loadlastinfo(char *dbmfile,char *filename) {
 			sprintf(temp,"%s/%ld/%s.log",dbmLogDir,MyUid,lfn);
 			logfile = temp;	
    			es = ErrorPrintState(0);
-   			ret = _dbmOpen(temp,"r");
+   			ret = _dbmOpen(temp,"r",0);
    			ErrorPrintState(es);
    			if(ret > 0) {
 				total_count = 0;

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: date.c,v 1.20 1997/04/22 15:52:33 rasmus Exp $ */
+/* $Id: date.c,v 1.22 1997/10/15 18:28:06 mitch Exp $ */
 #include <stdlib.h>
 #ifdef TM_IN_SYS_TIME
 #include <sys/time.h>
@@ -107,8 +107,7 @@ void Date(int arg, int type) {
 	while(*s) {
 		switch(*s) {
 			case 'y':
-				y = tm1->tm_year;
-				if(y>=100) y-=100;
+				y = (tm1->tm_year)%100;
 				sprintf(temp,"%02d",y);
 				strcat(out,temp);
 				break;
@@ -152,6 +151,7 @@ void Date(int arg, int type) {
 				h = tm1->tm_hour%12;
 				if(h==0) h=12;
 				sprintf(temp,"%02d",h);
+				if(temp[0]=='0') temp[0]=' ';
 				strcat(out,temp);
 				break;
 			case 'i':
@@ -287,7 +287,7 @@ char *std_date(time_t t) {
 		FullDays[tm1->tm_wday],
 		tm1->tm_mday,
 		Months[tm1->tm_mon],
-		tm1->tm_year,
+		((tm1->tm_year)%100),
 		tm1->tm_hour, tm1->tm_min, tm1->tm_sec);
 	return(str);
 }

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: db.c,v 1.19 1997/06/16 12:57:35 rasmus Exp $ */
+/* $Id: db.c,v 1.22 1997/08/16 03:51:39 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -217,12 +217,12 @@ void dbmOpen(void) {
 	}
 	filename = estrdup(0,s->strval);
 
-	ret = _dbmOpen(filename,mode);
+	ret = _dbmOpen(filename,mode,1);
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
 }
 
-int _dbmOpen(char *filename, char *mode) {
+int _dbmOpen(char *filename, char *mode, int docroot) {
 	char *fn;
 	int ret,lock=0;
 	char *lockfn=NULL;
@@ -295,7 +295,8 @@ int _dbmOpen(char *filename, char *mode) {
 			lock=0;
 			break;
 	}
-	fn = FixFilename(filename,0,&ret,0);
+	if(docroot) fn = FixFilename(filename,0,&ret,0);
+	else fn=filename;	
 #ifdef GDBM 
 	if(lock) {
 		lockfn = emalloc(1,strlen(fn)+10);
@@ -617,7 +618,11 @@ int _dbmInsert(char *filename, char *keystr, char *contentstr) {
 	content.dptr = estrdup(1,contentstr);
 	content.dsize = strlen(contentstr);
 	key.dptr = estrdup(1,keystr);
+#ifdef GDBM_FIX
+	key.dsize = strlen(keystr)+1;
+#else
 	key.dsize = strlen(keystr);
+#endif
 
 	st = (dbmStack *)dbmFind(filename);
 	if(!st) {
@@ -864,7 +869,11 @@ int _dbmReplace(char *filename, char *keystr, char *contentstr) {
 	content.dptr = estrdup(1,contentstr);
 	content.dsize = strlen(contentstr);  
 	key.dptr = estrdup(1,keystr);
+#ifdef GDBM_FIX
+	key.dsize = strlen(keystr)+1;
+#else
 	key.dsize = strlen(keystr);
+#endif
 
 	st = (dbmStack *)dbmFind(filename);
 	if(!st || (st && !st->dbf)) {
@@ -938,7 +947,11 @@ char *_dbmFetch(char *filename, char *keystr) {
 #endif	
 
 	key.dptr = estrdup(1,keystr);
+#ifdef GDBM_FIX
+	key.dsize = strlen(keystr)+1;
+#else
 	key.dsize = strlen(keystr);
+#endif
 
 	st = (dbmStack *)dbmFind(filename);
 	if(!st) {
@@ -1046,7 +1059,11 @@ int _dbmExists(char *filename, char *keystr) {
 #endif
 
 	key.dptr = estrdup(1,keystr);
+#ifdef GDBM_FIX
+	key.dsize = strlen(keystr)+1;
+#else
 	key.dsize = strlen(keystr);
+#endif
 
 	st = (dbmStack *)dbmFind(filename);	
 	dbf = st->dbf;
@@ -1120,7 +1137,11 @@ int _dbmDelete(char *filename, char *keystr) {
 #endif
 
 	key.dptr = estrdup(1,keystr);
+#ifdef GDBM_FIX
+	key.dsize = strlen(keystr)+1;
+#else
 	key.dsize = strlen(keystr);
+#endif
 
 	st = (dbmStack *)dbmFind(filename);	
 	dbf = st->dbf;
@@ -1262,7 +1283,11 @@ char *_dbmNextKey(char *filename, char *keystr) {
 #endif
 
 	key.dptr = estrdup(1,keystr);
+#ifdef GDBM_FIX
+	key.dsize = strlen(keystr)+1;
+#else
 	key.dsize = strlen(keystr);
+#endif
 
 	st = (dbmStack *)dbmFind(filename);	
 	if(!st) {

@@ -30,12 +30,14 @@ The Bookmark Database</i></H1>
         if ($nr > 0);
             echo "<b>Creation Failed!!!</b><br>";
             echo "<b>Bookmark of that name exists at that level<br>";
+			sybsql_exit();
             exit;
         endif;
     endif;
     $qs="insert into bookmarks (type,parent,path,name,url) values ('$type','$parent', '$parent/$name','$name','$url')";
     $rc=sybsql_query($qs);
     echo "<font size=+1>Bookmark added!</font><p>";
+	sybsql_exit();
 >
 <br>
 <br>

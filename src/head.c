@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: head.c,v 1.35 1997/05/26 22:35:44 rasmus Exp $ */
+/* $Id: head.c,v 1.40 1997/10/23 09:39:08 ssb Exp $ */
 #include "php.h"
 #include "parse.h"
 #ifdef TM_IN_SYS_TIME
@@ -45,6 +45,7 @@ void php_init_head(void) {
 
 void NoHeader(void) {
 	PrintHeader=0;
+	SetHeaderCalled();
 }
 
 void Header(void) {
@@ -53,7 +54,7 @@ void Header(void) {
 #if APACHE
 	char *rr=NULL;
 #endif
-#if SAFE_MODE
+#if PHP_SAFE_MODE
 	char *temp=NULL;
 	char temp2[32];
 	long myuid=0L;
@@ -89,7 +90,7 @@ void Header(void) {
 				rr=r+2;
 			else
 				rr=r+1;
-#if SAFE_MODE
+#if PHP_SAFE_MODE
 			if(!strcasecmp(s->strval,"WWW-authenticate")) {
 				myuid=getmyuid();
 				sprintf(temp2,"realm=\"%ld ",myuid);
@@ -360,3 +361,46 @@ void SetCookie(int args) {
 	}
 	PushCookieList(name,value,expires,path,domain,secure);
 }
+
+
+void
+GetAllHeaders()
+{
+#if APACHE
+	array_header *env_arr;
+	table_entry *tenv;
+	int i;
+	VarTree *var;
+
+	var = GetVar("__headertmp__", NULL, 0);
+	if (var) {
+		deletearray(var);
+	}
+	
+	env_arr = table_elts(php_rqst->headers_in);
+	tenv = (table_entry *)env_arr->elts;
+	for (i = 0; i < env_arr->nelts; ++i) {
+		if (!tenv[i].key
+#if PHP_SAFE_MODE
+			|| !strncasecmp(tenv[i].key, "authorization", 13)
+#endif
+			) {
+			continue;
+		}
+		Push(AddSlashes(tenv[i].key, 0), STRING);
+		Push(AddSlashes(tenv[i].val, 0), STRING);
+		SetVar("__headertmp__", 2, 0);
+	}
+	Push("__headertmp__", VAR);
+#else
+	Error("GetAllHeaders() only available in Apache module.");
+	Push("-1", LNUMBER);
+#endif
+}
+
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * End:
+ */

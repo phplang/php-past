@@ -523,8 +523,9 @@ void Solid_result(void) {
 					&foo);
 				Error("Initial SQLGetData failed");
 				Error(msgbuf);
-			} else {
+                       } else if(fieldsize > 0) {
 				realval = emalloc(0, fieldsize + 2);
+                               realval[0] = '\0';
 				if(realval == NULL
 					|| SQLGetData(result->stmt,
 						field_ind + 1, SQL_C_CHAR,
@@ -534,7 +535,8 @@ void Solid_result(void) {
 					Push("<Out of memory>", STRING);
 				} else
 					Push(AddSlashes(realval, 0), STRING);
-			}
+                       } else
+                               Push("", STRING);
 		}
 	}
 	return;
@@ -678,7 +680,7 @@ void Solid_close(void) {
 		lnew = solid_result_top; 
 		while(lnew) {
 			lnext = lnew->next;
-			if(lnew->conn_index == conn_ind) del_solid_result(lnew->index);
+			if(lnew->conn_index == conn_ind) solid_del_result(lnew->index);
 			lnew = lnext;
 		}
 		solid_del_conn(conn);

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: mod_php.h,v 1.11 1997/06/16 14:13:43 rasmus Exp $ */
+/* $Id: mod_php.h,v 1.15 1997/09/13 16:14:29 shane Exp $ */
 
 typedef struct {
 	int ShowInfo;
@@ -30,8 +30,18 @@ typedef struct {
 	char *SQLLogHost;
 	char *AccessDir;
 	char *IncludePath;
+	char *AutoPrependFile;
+	char *AutoAppendFile;
 	int XBitHack;        
 	int MaxDataSpace;
 	int Debug;
 	int engine;
+	int LastModified;
+	char *AdaUser;
+	char *AdaPW;
+	char *AdaDB;
 } php_module_conf;
+
+#if WINNT|WIN32
+#define S_IXUSR _S_IEXEC
+#endif

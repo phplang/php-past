@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: cond.c,v 1.16 1997/01/04 15:16:49 rasmus Exp $ */
+/* $Id: cond.c,v 1.17 1997/07/14 19:12:51 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -466,7 +466,7 @@ void Not(void) {
 }
 
 /* 
- * This returns the conditonal value to be pushed onto the
+ * This returns the conditional value to be pushed onto the
  * stack by conditional expressions
  */
 int CheckCond(Stack *s) {

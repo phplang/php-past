@@ -2,7 +2,7 @@
 #
 # PHP/FI Install Script
 #
-# $Id: install,v 1.46 1997/06/07 21:43:06 rasmus Exp $
+# $Id: install,v 1.51 1997/11/12 15:22:58 rasmus Exp $
 #
 DEF_LOG_DIR=/usr/local/etc/httpd/cgi-data
 DEF_ACC_DIR=/usr/local/etc/httpd/cgi-data
@@ -90,15 +90,30 @@ $ECHO_N "Do you have mysql installed on this system? [yN] $ECHO_C"
 read a
 if [ "$a" = "y" ] || [ "$a" = "Y" ]
 then
-$ECHO_N "Top of your mysql install tree? [/usr/local/mysql] $ECHO_C"
+$ECHO_N "Top of your mysql install tree? [/usr/local] $ECHO_C"
 HLMY=-DHAVE_LIBMYSQL=1
 read INST_TOPY
 if [ "$INST_TOPY." = "." ]
 then
-	INST_TOPY=/usr/local/mysql
+	INST_TOPY=/usr/local
 fi
 else
 	INST_TOPY=
+fi
+
+$ECHO_N "Do you have Adabas installed in this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+$ECHO_N "Top of your Adabas install tree? [/usr/local/adabas] $ECHO_C"
+HLA=-DHAVE_LIBADABAS=1
+read ADAINST_TOP
+if [ "$ADAINST_TOP." = "." ]
+then
+   ADAINST_TOP=/usr/local/adabas
+fi
+else
+   ADAINST_TOP=
 fi
 
 $ECHO_N "Do you have Solid installed in this system? [yN] $ECHO_C"
@@ -130,6 +145,25 @@ fi
 else
    ORACLEINST_TOP=
 fi
+
+$ECHO_N "Do you have filePro installed in this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+HLF=-DHAVE_FILEPRO=1
+fi
+
+HODBC=""
+LIBODBC=""
+$ECHO_N "Do you have ODBC installed in this system? [yN] $ECHO_C"
+read a
+if [ "$a" = "y" ] || [ "$a" = "Y" ]
+then
+HODBC=-DHAVE_ODBC=1
+LIBODBC=-liodbc
+fi
+SED_ODBC="	s,@ODBC_DEF@,$HODBC,
+		s,@ODBC_LIB@,$LIBODBC,"
 
 $ECHO_N "Would you like to compile PHP/FI as an Apache module? [yN] $ECHO_C"
 read a
@@ -481,15 +515,43 @@ if [ -d "$INST_TOPY/include/mysql" ]
 then
     MYSQL_INCDIR=/mysql
 fi
-if [ -d "$INST_TOPY/client/mysql" ]
+if [ -d "$INST_TOPY/lib/mysql" ]
 then
-    MYSQL_LIBDIR=/msql
+    MYSQL_LIBDIR=/mysql
 fi
 SED_MYSQL="      s,@MYSQL_INCLUDE@,-I$INST_TOPY/include$MYSQL_INCDIR,
                 s,@LIBMYSQL@,-lmysqlclient,
 		s,@STATICLIBMYSQL@,$INST_TOPY/client$MYSQL_LIBDIR/libmysqlclient.a,
                 s,@MYSQL_DEF@,$HLMY,
-                s,@MYSQL_LIB@,-L$INST_TOPY/client$MYSQL_LIBDIR,"
+                s,@MYSQL_LIB@,-L$INST_TOPY/lib$MYSQL_LIBDIR,"
+fi
+
+# filePro part of sed  command
+SED_FILEPRO="s,@FILEPRO_DEF@,$HLF,"
+
+# Adabas part of sed command
+
+if [ "$ADAINST_TOP." = "." ]
+then
+SED_ADA="       s,@ADA_INCLUDE@,,
+                s,@LIBADA@,,
+                s,@STATICLIBADA@,,
+                s,@ADA_DEF@,,
+                s,@ADA_LIB@,,"
+else
+if [ -d "$ADAINST_TOP/incl" ]
+then
+    ADA_INCDIR=incl
+fi
+if [ -d "$ADAINST_TOP/lib" ]
+then
+    ADA_LIBDIR=lib
+fi
+SED_ADA="	s,@ADA_INCLUDE@,-I$ADAINST_TOP/$ADA_INCDIR,
+                s,@LIBADA@,$ADAINST_TOP/$ADA_LIBDIR/odbclib.a -L$ADAINST_TOP/$ADA_LIBDIR -lsqlrte -lsqlptc -lncurses,
+               	s,@STATICLIBADA@,$ADAINST_TOP/$ADA_LIBDIR/odbclib.a -L$ADAINST_TOP/$ADA_LIBDIR -lsqlrte -lsqlptc -lncurses,
+                s,@ADA_DEF@,$HLA,
+                s,@ADA_LIB@,-L$ADAINST_TOP/$ADA_LIBDIR -lsqlrte -lsqlptc -lncurses,"
 fi
 
 # Solid part of sed command
@@ -709,13 +771,16 @@ fi
 
 # sed commmand
 sed "		$SED_MSQL
-        $SED_SYB
+		$SED_ODBC
+        	$SED_SYB
 		$SED_PG95
 		$SED_MYSQL
+	        $SED_FILEPRO
 		$SED_SOLID
 		$SED_ORACLE
 		$SED_APACHE
 		$SED_FCGI
+		$SED_ADA
 		s,@USEDLIBS@,$USEDLIBS,
 		s,@OPT_CFLAGS@,$OPT_CFLAGS,
 		s,@INC_CFLAGS@,$INC_CFLAGS,

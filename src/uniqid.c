@@ -22,8 +22,8 @@
 /*
  * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
  *
- * $Source: /u/rasmus/repository/phpfi/src/uniqid.c,v $
- * $Id: uniqid.c,v 1.3 1997/04/15 14:30:57 cvswrite Exp $
+ * $Source: /repository/phpfi/src/uniqid.c,v $
+ * $Id: uniqid.c,v 1.4 1997/09/13 15:59:36 shane Exp $
  *
  */
 
@@ -38,7 +38,13 @@
 #include "parse.h"
 
 #include <stdio.h>
+#ifdef HAVE_GETTIMEOFDAY
+#if WINNT|WIN32
+#include "win32/time.h"
+#else
 #include <sys/time.h>
+#endif
+#endif
 
 void UniqId(void)
 {

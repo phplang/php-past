@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: calc.c,v 1.19 1997/05/05 12:14:42 rasmus Exp $ */
+/* $Id: calc.c,v 1.21 1997/08/24 05:03:12 rasmus Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include "php.h"
@@ -339,6 +339,56 @@ void BitNot(void) {
 	}
 }
 
+/* Shift right */
+void shr(void) {
+	Stack *s;
+	char temp[32];
+	long i,num,bits;
+
+	s=Pop();
+	if(!s) {
+		Error("Stack error in shr");
+		return;
+	}
+	bits=s->intval;
+
+	s=Pop();
+	if(!s) {
+		Error("Stack error in shr");
+		return;
+	}
+	num = s->intval;
+ 
+	i = num >> bits;
+	sprintf(temp,"%ld",i);
+	Push(temp,LNUMBER);
+}
+
+/* Shift left */
+void shl(void) {
+	Stack *s;
+	char temp[32];
+	long i,num,bits;
+
+	s=Pop();
+	if(!s) {
+		Error("Stack error in shl");
+		return;
+	}
+	bits=s->intval;
+
+	s=Pop();
+	if(!s) {
+		Error("Stack error in shl");
+		return;
+	}
+	num = s->intval;
+ 
+	i = num << bits;
+	sprintf(temp,"%ld",i);
+	Push(temp,LNUMBER);
+}
+
 /* Binary to Decimal conversion */
 void BinDec(void) {
 	Stack *s;
@@ -656,3 +706,30 @@ void Sqrt(void) {
 	sprintf(temp,"%f",sqrt(s->douval));	
 	Push(temp,DNUMBER);
 }
+
+void Ceil(void) {
+	Stack *s;
+	char temp[64];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in ceil");
+		return;
+	}
+	sprintf(temp,"%f",ceil(s->douval));
+	Push(temp,DNUMBER);
+}
+
+void Floor(void) {
+	Stack *s;
+	char temp[64];
+
+	s = Pop();
+	if(!s) {
+		Error("Stack error in floor");
+		return;
+	}
+	sprintf(temp,"%f",floor(s->douval));
+	Push(temp,DNUMBER);
+}
+

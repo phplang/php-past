@@ -22,8 +22,8 @@
 /*
  * Contributed by Stig Bakken - Guardian Networks AS <ssb@guardian.no>
  *
- * $Source: /u/rasmus/repository/phpfi/src/syslog.c,v $
- * $Id: syslog.c,v 1.1 1997/02/18 01:54:28 cvswrite Exp $
+ * $Source: /repository/phpfi/src/syslog.c,v $
+ * $Id: syslog.c,v 1.2 1997/08/11 09:42:02 ssb Exp $
  *
  */
 
@@ -73,7 +73,10 @@ void php_init_syslog(void)
 	set_int_var("LOG_NEWS", LOG_NEWS);
 	set_int_var("LOG_UUCP", LOG_UUCP);
 	set_int_var("LOG_CRON", LOG_CRON);
+#ifdef LOG_AUTHPRIV
+/* AIX doesn't have LOG_AUTHPRIV */
 	set_int_var("LOG_AUTHPRIV", LOG_AUTHPRIV);
+#endif
 	set_int_var("LOG_LOCAL0", LOG_LOCAL0);
 	set_int_var("LOG_LOCAL1", LOG_LOCAL1);
 	set_int_var("LOG_LOCAL2", LOG_LOCAL2);
@@ -87,7 +90,10 @@ void php_init_syslog(void)
 	set_int_var("LOG_ODELAY", LOG_ODELAY);
 	set_int_var("LOG_NDELAY", LOG_NDELAY);
 	set_int_var("LOG_NOWAIT", LOG_NOWAIT);
+#ifdef LOG_PERROR
+/* AIX doesn't have LOG_PERROR */
 	set_int_var("LOG_PERROR", LOG_PERROR);
+#endif
 #endif
 }
 

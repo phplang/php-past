@@ -23,7 +23,7 @@
  * Contributed by Paul Panotzki - Bunyip Information Systems
  *                                                         
  */
-/* $Id: fsock.c,v 1.12 1997/05/11 17:30:32 rasmus Exp $ */
+/* $Id: fsock.c,v 1.14 1997/09/18 20:31:15 shane Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -34,9 +34,13 @@
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
+#if WINNT|WIN32
+#include <winsock.h>
+#else
 #include <netinet/in.h>
 #include <netdb.h>
-#if WINNT
+#endif
+#if WINNT|WIN32
 #undef AF_UNIX
 #endif
 #if defined(AF_UNIX)
@@ -51,8 +55,15 @@ void FSockOpen(void) {
 	Stack *s;
 	char temp[8];
 	FILE *fp;
-	int id, portno, socketd;
+	int id, socketd;
+#ifdef WIN32
+	unsigned short portno;
+	struct hostent FAR *hostp;
+	struct hostent FAR * FAR PASCAL gethostbyname();
+#else
+	int portno;
 	struct hostent *hostp, *gethostbyname();
+#endif
 
 	s = Pop();
 	if(!s) {
@@ -66,7 +77,12 @@ void FSockOpen(void) {
 	}
 #endif
 
+#if WINNT|WIN32
+	/* don't know if this is a good thing */
+	portno = (unsigned short) s->intval;
+#else
 	portno = s->intval;
+#endif
 
 	s = Pop();
 	if(!s) {

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: sort.c,v 1.8 1997/05/06 22:41:34 rasmus Exp $ */
+/* $Id: sort.c,v 1.9 1997/06/18 04:57:31 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #include "parse.h"
@@ -33,6 +33,10 @@ int comp_string(Array *a, Array *b) {
 	return(strcmp(a->ptr,b->ptr));
 }
 
+int rcomp_string(Array *a, Array *b) {
+	return(-1*strcmp(a->ptr,b->ptr));
+}
+
 int comp_real(Array *a, Array *b) {
 	double f, s;
 	
@@ -40,6 +44,15 @@ int comp_real(Array *a, Array *b) {
 	s = atof(b->ptr);
 	if(f==s) return(0);
 	return(f>s?1:-1);	
+}
+
+int rcomp_real(Array *a, Array *b) {
+	double f, s;
+	
+	f = atof(a->ptr);
+	s = atof(b->ptr);
+	if(f==s) return(0);
+	return(f>s?-1:1);	
 }
 
 int comp_long(Array *a, Array *b) {
@@ -51,14 +64,25 @@ int comp_long(Array *a, Array *b) {
 	return(f>s?1:-1);
 }
 
+int rcomp_long(Array *a, Array *b) {
+	long f, s;
+
+	f = atol(a->ptr);
+	s = atol(b->ptr);
+	if(f==s) return(0);
+	return(f>s?-1:1);
+}
+
 /*
  * Sort has two modes.  Associative (mode=1) and non-associative (mode=0)
  * In associative mode, the index-value pairings are maintained and the array
  * is sorted such that it can be stepped through using the next()/prev() functions.
  * In non-associated mode (mode=0) the indices stay as in the original order and 
  * the values are shuffled around.
+ *
+ * dir specifies ascending/descending sort order
  */
-void Sort(int mode) {
+void Sort(int mode, int dir) {
 	Stack *s;
 	VarTree *var;
 	Array *array;
@@ -98,13 +122,22 @@ void Sort(int mode) {
 
 	switch(type) {
 	case STRING:
-		(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_string);
+		if(dir)
+			(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))rcomp_string);
+		else
+			(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_string);
 		break;
 	case LNUMBER:
-		(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_long);
+		if(dir)
+			(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))rcomp_long);
+		else
+			(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_long);
 		break;
 	case DNUMBER:
-		(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_real);
+		if(dir)
+			(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))rcomp_real);
+		else
+			(void)qsort(array,count,sizeof(Array),(int (*)(const void *, const void *))comp_real);
 		break;
 	}
 	var = s->var;

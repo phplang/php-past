@@ -24,27 +24,71 @@
 *                                                                            *
 * Oracle functions for PHP.                                                  *
 *                                                                            *
-*  $Id: oracle.h,v 1.2 1997/06/12 06:20:36 cvswrite Exp $                                                                      *
+* © Copyright (C) Guardian Networks AS 1997, Dmitry Povarov 1997             *
 *                                                                            *
-* © Copyright (C) Guardian Networks AS 1997                                  *
 * Authors: Stig Sæther Bakken <ssb@guardian.no>                              *
-*                                                                            *
+*          Mitch Golden <mitch@spiralmedia.com>                              *
+*          Dmitry "Dizzy" Povarov <dizzy@glas.net>                           *
 *                                                                            *
 \****************************************************************************/
 
+/* $Id */
+
 #if HAVE_LIBOCIC
+
+/* The maximum number of Oracle connections in a single document */
+#define MAX_CONNECTIONS 15
+
+/* The maximum number of open Oracle cursors */
+#define MAX_CURSORS 50
 
 /* oparse flags */
 #define  DEFER_PARSE        1
 #define  NATIVE             1
 #define  VERSION_7          2
 
-#define HDA_SIZE 256
+/* Note that we have to be careful in the case of someone logging in 
+   using SQLnet.  In that case, they can use things like
+   username: scott@machine
+   password: tiger
+   or even
+   username: scott/tiger@machine
+   password: (nothing) */
 
-#define ORAUIDLEN 32
-#define ORAPWLEN 32
-#define ORANAMELEN 33
-#define ORABUFLEN 256
+#define ORAUIDLEN 100
+#define ORAPWLEN  100
+
+/* Maximum length of the ORACLE_SID */
+#define ORASIDLEN 32
+
+/* Longest allowed column name length */
+#define ORANAMELEN 32
+
+/* This is the maximum size of a varchar2.  When and if we add support for
+   longer types, we'll have to increase this */
+#define ORABUFLEN 2000
+
+/* size to allocate for an oracle number */
+#define ORANUMWIDTH 38
+
+/* This should have been in ocidem.h! */
+#define STRING_TRUNCATED		1406
+
+/* ----------------------------------------------------------------------*/
+/* This stuff is cloned straight out of ocidem.h.  Keep it up to date,
+   please! */
+
+/*
+** Size of HDA area:
+** 512 for 64 bit arquitectures
+** 256 for 32 bit arquitectures
+*/
+
+#if (defined(__osf__) && defined(__alpha)) || defined(CRAY) || defined(KSR)
+# define HDA_SIZE 512
+#else
+# define HDA_SIZE 256
+#endif
 
 /* Some Oracle error codes */
 #define VAR_NOT_IN_LIST			1007
@@ -68,62 +112,7 @@
 
 #define FC_OOPEN			14
 
-/* stubs */
-#define ora_free_cursor(x)
-#define ora_free_conn(x)
-
-
-
-typedef struct oraConnection {
-	int ind;
-	Lda_Def lda;
-	ub1 hda[HDA_SIZE];
-	char userid[ORAUIDLEN];
-	char password[ORAPWLEN];
-	struct oraConnection *prev;
-	struct oraConnection *next;
-} oraConnection;
-
-typedef struct oraColumn {
-	sb4 dbsize;
-	sb2 dbtype;
-	text cbuf[ORANAMELEN];
-	sb4 cbufl;
-	sb4 dsize;
-	sb2 prec;
-	sb2 scale;
-	sb2 nullok;
-	float flt_buf;
-	sword int_buf;
-	ub1 *buf;
-	sb2 indp;
-	ub2 col_retlen, col_retcode;
-	struct oraColumn *next;
-} oraColumn;
-
-typedef struct oraCursor {
-	int ind;
-	Cda_Def cda;
-	struct oraCursor *prev;
-	struct oraCursor *next;
-	text *currentQuery;
-	oraColumn *column_top;
-	oraColumn *curr_column;
-	oraColumn **columns;
-	int ncols;
-} oraCursor;
-
-static oraConnection *ora_add_conn();
-static oraConnection *ora_get_conn(int);
-static void ora_del_conn(int);
-static oraCursor *ora_add_cursor();
-static oraCursor *ora_get_cursor(int);
-static void ora_del_cursor(int);
-static char *ora_error(Cda_Def *);
-static int ora_describe_define(oraCursor *);
-static void ora_closeall();
-
-static const text *ora_func_tab[] =  {(text *) "unused",
+static const text * ora_func_tab[] =  {(text *) "unused",
 /*  1, 2  */       (text *) "unused", (text *) "OSQL",
 /*  3, 4  */       (text *) "unused", (text *) "OEXEC/OEXN",
 /*  5, 6  */       (text *) "unused", (text *) "OBIND",
@@ -156,6 +145,76 @@ static const text *ora_func_tab[] =  {(text *) "unused",
 /* 59, 60 */       (text *) "unused", (text *) "ODESCR",
 /* 61, 62 */       (text *) "unused", (text *) "OBNDRA"
 };
+
+/* ----------------------------------------------------------------------*/
+
+/* Our structure definitions */
+
+typedef struct oraConnection {
+	Lda_Def lda;
+	ub1 hda[HDA_SIZE];
+	short ind;      /* index of connection in array, or -1 if not allocated */
+	short inuse;    /* is this connection currently in use on this page? */
+	short waserror; /* was the last thing done an error on this connection? */
+	char userid[ORAUIDLEN+1];  /* login information */
+	char password[ORAPWLEN+1];
+	char sid[ORASIDLEN+1];
+} oraConnection;
+
+typedef struct oraColumn {
+	sb4 dbsize;
+	sb2 dbtype;
+	text cbuf[ORANAMELEN+1];
+	sb4 cbufl;
+	sb4 dsize;
+	sb2 prec;
+	sb2 scale;
+	sb2 nullok;
+	float flt_buf;
+	sword int_buf;
+	ub1 *buf;
+	sb2 indp;
+	ub2 col_retlen, col_retcode;
+	struct oraColumn *next;
+} oraColumn;
+
+typedef struct oraBindVar {     /*-== Variables Binding =--*/
+        int     type;           /* Variable type           */
+        int     len;            /* Allocated space length  */
+        text*   sql_name;       /* Variable name in PL/SQL */
+        char*   php_name;       /* Variable name in PHP    */
+        void*   space;          /* Space to store variable */
+        struct oraBindVar* next; /* Next list element or NULL */
+} oraBindVar;
+
+typedef struct oraCursor {
+	Cda_Def cda;
+	text *currentQuery;
+	oraColumn *column_top;
+	oraColumn *curr_column;
+	oraColumn **columns;
+	int ncols;
+	short ind;
+	short conn_ind;
+	struct oraBindVar* ora_bind_top; /* Top of binding list */
+} oraCursor;
+
+
+static void	   ora_no_bindings(); /* Remove all bindings */
+static oraBindVar* ora_new_bind(); /* Declare new binding descriptor     */
+static oraBindVar* ora_get_bind(); /* Get binding descriptor             */
+static int         ora_del_bind(); /* Erase binding descriptor           */
+static int         ora_bind_in();  /* Copy data from PHP to bind holders */
+static int         ora_bind_out(); /* Copy data from bind holders to PHP */
+static oraConnection *ora_add_conn();
+static oraConnection *ora_get_conn(int);
+static void ora_del_conn(int);
+static oraCursor *ora_add_cursor();
+static oraCursor *ora_get_cursor(int);
+static void ora_del_cursor(int);
+static char *ora_error(Cda_Def *);
+static int ora_describe_define(oraCursor *);
+static void ora_closeall();
 
 #endif
 

@@ -19,7 +19,49 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: php.h,v 1.171 1997/06/16 12:57:41 rasmus Exp $ */
+/* $Id: php.h,v 1.194 1997/11/12 14:34:30 rasmus Exp $ */
+
+/* MS Visual C++ V5 defines WIN32.  Use this to define WINDOWS
+ * for any pre-existing modifications for windows.
+ * I have used code from the apacheNT port, and from the Downhill
+ * Project.
+ *
+ * Compilation of the win32 version has only been tested with VC5
+ * and with the configuration as is in configure.h.w32 and php.h
+ * 
+ */
+#if WINNT|WIN32
+#define WINDOWS 1
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <io.h>
+#include <malloc.h>
+#include <direct.h>
+#include <stdlib.h>
+typedef int uid_t;
+typedef int gid_t;
+typedef int pid_t;
+typedef int mode_t;
+typedef char * caddr_t;
+#define strcasecmp(s1, s2) stricmp(s1, s2)
+#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#define lstat(x, y) stat(x, y)
+#define		_IFIFO	0010000	/* fifo */
+#define		_IFBLK	0060000	/* block special */
+#define		_IFLNK	0120000	/* symbolic link */
+#define S_IFIFO		_IFIFO
+#define S_IFBLK		_IFBLK
+#define	S_IFLNK		_IFLNK
+#define pclose		_pclose
+#define popen		_popen
+#define chdir		_chdir
+#define mkdir(a,b)	_mkdir(a)
+#define rmdir		_rmdir
+#define sleep		_sleep
+#define getcwd		_getcwd
+#endif
+
+
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
@@ -40,11 +82,21 @@
 #include "fcgi_stdio.h"
 #endif
 #if APACHE
+#if WINNT|WIN32
+/* apacheNT wants to define these, so lets let it */
+#if HAVE_MMAP
+#undef HAVE_MMAP
+#endif
+#ifdef sleep
+#undef sleep
+#endif
+#endif
 #include "httpd.h"
 #include "mod_php.h"
 
 extern request_rec *php_rqst;
 #endif
+
 
 /* 
  * This should be set to the same as the UserDir httpd setting from
@@ -79,7 +131,7 @@ extern request_rec *php_rqst;
  * this file.
  */
 #ifdef WINDOWS
-#define DEBUG_FILE	"php.err"
+#define DEBUG_FILE	"/windows/php.err"
 #else
 #define DEBUG_FILE	"/tmp/php.err"
 #endif
@@ -199,6 +251,20 @@ extern request_rec *php_rqst;
 */
 
 /*
+ * Set PHP_LOOPLIMIT to ensure that your programs don't go into an
+ * infinite loop.  Unfortunately, if your PHP script goes into a loop
+ * the apache server will simply hang there gobbling up CPU time, until
+ * the machine reboots or someone kills the process.
+ * If PHP_LOOPLIMIT is defined, only PHP_LOOPLIMIT while statements can
+ * evaluate true.  After that number is reached, each while generates an
+ * error message and behaves as though the expression was false.
+ * The figure 100000 was chosen because it took about 15 CPU seconds to run
+ * on a Pentium 166 with an empty loop, and this is already too long for
+ * most production web environments.
+ */
+#define PHP_LOOPLIMIT 100000
+
+/*
  * Max size of a single line of input in the HTML files
  */
 #define LINEBUFSIZE	4096
@@ -282,9 +348,24 @@ extern request_rec *php_rqst;
  */
 /* #define PHP_MYSQL_GETLOGIN 1 */
 
+/* 
+ * GDBM_FIX
+ *
+ * Some people have reported problems getting gdbm to work correctly.  If
+ * you are seeing a gdbm compatibility problem, try defining this and
+ * let me know if it fixes your problem.  If it does, please tell me
+ * which version of gdbm you are using
+ */
+/* #define GDBM_FIX 1 */
+
+/*
+ * Redefine PHP's Error() function so that it doesn't conflict with mod_perl
+ */
+#define Error PHPError
+
 /*-- Do not touch anything after this point unless you are very brave --*/
 
-#define PHP_VERSION "2.0b12"
+#define PHP_VERSION "2.0"
 
 #define VAR_INIT_CHAR	'$'
 
@@ -578,6 +659,8 @@ void PopCounters(void);
 void SetHeaderCalled(void);
 long GetSeekPos(void);
 void PHPFlush(void);
+void PreParseFile(void);
+void PostParseFile(void);
 
 /* date.c */
 void Date(int, int);
@@ -624,6 +707,10 @@ void mathLog(void);
 void mathLog10(void);
 void Abs(void);
 void Pow(void);
+void shl(void);
+void shr(void);
+void Ceil(void);
+void Floor(void);
 
 /* stack.c */
 void Push(char *, int);
@@ -635,7 +722,7 @@ void php_init_stack(void);
 void php_init_symbol_tree(void);
 void SetVar(char *, int, int);
 VarTree *GetVar(char *, char *, int);
-void IsSet(char *);
+void IsSet(char *, int);
 char *SubVar(char *);
 void Count(void);
 void ArrayMax(void);
@@ -655,8 +742,9 @@ void PopStackFrame(void);
 void Global(void);
 void copyarray(VarTree *, VarTree *, VarTree *, int);
 void deletearray(VarTree *);
-void UnSet(char *);
+void UnSet(char *, int);
 void Pos(void);
+void GetAllHeaders(void);
 
 /* echo.c */
 void Echo(char *, int);
@@ -710,7 +798,7 @@ char *Estrdup(char *, int, char *);
 /* db.c */
 void ListSupportedDBs(void);
 void dbmOpen(void);
-int _dbmOpen(char *, char *);
+int _dbmOpen(char *, char *, int);
 void dbmClose(void);
 int _dbmClose(char *);
 void dbmCloseAll(void);
@@ -764,6 +852,8 @@ void UcFirst(void);
 void Sprintf(int);
 void Chr(void);
 void Chop(void);
+char *_StrTr(char *,char *,char *);
+void StrTr(void);
 
 /* msql.c */
 void Msql(void);
@@ -801,6 +891,8 @@ void SybsqlNumFields(void);
 void SybsqlFieldName(void);
 void SybsqlResultAll(void);
 void SybsqlGetField(void);
+void SybsqlExit(void);
+void SybsqlCheckConnect(void);
 
 /* pg95.c */
 void PGcloseAll(void);
@@ -842,8 +934,14 @@ void Exec(char *, char *, int);
 void EscapeShellCmd(void);
 
 /* file.c */
+/* Note: WIN32 Defines for OpenFile, Sleep and ReadFile
+ * are required to avoid conflict with vc5 libraries
+ */
 #ifdef WINDOWS
 int _OpenFile(char *, int, long *);
+#ifdef WIN32
+#define OpenFile _OpenFile
+#endif
 #else
 int OpenFile(char *, int, long *);
 #endif
@@ -853,6 +951,8 @@ long GetCurrentFileSize(void);
 void SetCurrentFileSize(long);
 char *GetIncludePath(void);
 void SetIncludePath(char *);
+char *GetAutoPrependFile();
+char *GetAutoAppendFile();
 char *FixFilename(char *, int, int *, int);
 char *getfilename(char *, int);
 void ClearStatCache(void);
@@ -866,6 +966,9 @@ void Unlink(void);
 void Rename(void);
 #ifdef WINDOWS
 void _Sleep(void);
+#ifdef WIN32
+#define Sleep _Sleep
+#endif
 #else
 void Sleep(void);
 #endif
@@ -901,9 +1004,17 @@ void FpCloseAll(void);
 #if APACHE
 void Virtual(void);
 #endif
+#ifdef WIN32
+void _ReadFile(void);
+#define ReadFile _ReadFile
+#else
 void ReadFile(void);
+#endif
 void FileUmask(int);
 int CheckUid(char *, int);
+char *GetAutoPrependFile(void);
+char *GetAutoAppendFile(void);
+void FPassThru(void);
 
 /* crypt.c */
 void Crypt(int);
@@ -916,6 +1027,7 @@ void SetCookie(int);
 void PushCookieList(char *, char *, time_t, char *, char *, int);
 CookieList *PopCookieList(void);
 void NoHeader(void);
+void GetAllHeaders(void);
 
 /* info.c */
 void Info(void);
@@ -1015,7 +1127,7 @@ void php_init_log(void);
 #endif
 
 /* sort.c */
-void Sort(int);
+void Sort(int,int);
 
 /* dir.c */
 void OpenDir(void);
@@ -1128,6 +1240,21 @@ void MYsqlInsertId(void);
 void MYsqlAffectedRows(void);
 void mysqlSetCurrent();
 
+/* adabasd.c */
+void Ada_exec(void);
+void Ada_close(void);
+void Ada_result(void);
+void Ada_resultAll(int);
+void Ada_numRows(void);
+void Ada_connect(void);
+void Ada_fieldNum(void);
+void Ada_fetchRow(int);
+void Ada_numFields(void);
+void Ada_Field(int);
+void Ada_freeResult(void);
+void Ada_closeAll(void);
+void php_init_adabas(char *,char *,char *);
+
 /* solid.c */
 void Solid_exec(void);
 void Solid_close(void);
@@ -1170,4 +1297,37 @@ void Ora_Logoff(void);
 void Ora_Logon(void);
 void Ora_Open(void);
 void Ora_Parse(int);
-void Ora_Rollback();
+void Ora_Rollback(void);
+void Ora_Bind(void);
+void php_init_oracle(void);
+void OraCloseAll(void);
+
+/* filepro.c */
+void filePro(void);
+void filePro_rowcount(void);
+void filePro_fieldcount(void);
+void filePro_fieldtype(void);
+void filePro_fieldname(void);
+void filePro_fieldwidth(void);
+void filePro_retrieve(void);
+
+/* illustra.c */
+void MIconnect(void);
+void MIdbname(void);
+void MIclose(void);
+void MIexec(void);
+void MIresult(void);
+void MInumRows(void);
+void MIfieldName(void);
+void MIfieldNum(void);
+void MInumFields(void);
+
+/* odbc.c */
+void ODBCfetch(void);
+void ODBCexecdirect(void);
+void ODBCgetdata(void);
+void ODBCfree(void);
+void ODBCconnect(void);
+void ODBCdisconnect(void);
+void ODBCrowcount(void);
+void php_init_odbc(void);

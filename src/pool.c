@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: pool.c,v 1.23 1997/06/16 14:14:24 rasmus Exp $ */
+/* $Id: pool.c,v 1.24 1997/07/18 01:28:04 rasmus Exp $ */
 /*
  * Memory Pool Management with hooks for Apache sub-pool handling
  * for Apache module
@@ -411,7 +411,7 @@ void *php_palloc (struct pool *a, int reqsize) {
 	char *first_avail = blok->h.first_avail;
 	char *new_first_avail;
 
-	if (size <= 0) size = 1;
+	if (size <= 0) size = PHP_ALIGN;
 	new_first_avail = first_avail + size;
   
 	if(new_first_avail <= blok->h.endp) {

@@ -18,7 +18,7 @@ PHP/FI Regression Test Menu
 5) Array Tests
 6) DBM Tests
 7) mSQL Tests
-8) Postgres95 Tests
+8) PostgreSQL Tests
 0) Run All Tests
 q) Quit
 EOF

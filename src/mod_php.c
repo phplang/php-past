@@ -28,7 +28,11 @@
 #include "util_script.h"
 #include "mod_php.h"
 
+#if WINNT|WIN32
+module MODULE_VAR_EXPORT php_module;
+#else
 module php_module;
+#endif
 int saved_umask;
    
 #ifdef PHP_XBITHACK
@@ -78,6 +82,12 @@ int send_parsed_php(request_rec *r) {
 	if ((retval = setup_client_block(r,REQUEST_CHUNKED_ERROR))) return retval;
 #endif
 
+	if (conf->LastModified) {
+		if(retval = set_last_modified (r, r->finfo.st_mtime)) {
+		  return retval;
+		}
+	}
+
 	/* Assume output will be HTML.  Individual scripts may change this 
 	   further down the line */
 	r->content_type = "text/html";		
@@ -113,8 +123,14 @@ void *php_create_conf(pool *p, char *dummy) {
 	new->MaxDataSpace=8192;
 	new->XBitHack=DEFAULT_PHP_XBITHACK;
 	new->IncludePath=NULL;
+	new->AutoPrependFile=NULL;
+	new->AutoAppendFile=NULL;
 	new->Debug = 0;
 	new->engine = 1;
+	new->LastModified = 0;
+	new->AdaUser = NULL;
+	new->AdaPW = NULL;
+	new->AdaDB = NULL;
 	return new;
 }
 
@@ -140,6 +156,9 @@ char *phpflaghandler(cmd_parms *cmd, php_module_conf *conf, int val) {
 		break;
 	case 4:
 		conf->engine = val;
+		break;
+	case 5:
+		conf->LastModified = val;
 		break;
 	}			
 	return NULL;
@@ -173,6 +192,21 @@ char *phptake1handler(cmd_parms *cmd, php_module_conf *conf, char *arg) {
 		break;
 	case 6:
 		conf->IncludePath = pstrdup(cmd->pool,arg);
+		break;
+	case 7:
+		conf->AutoPrependFile = pstrdup(cmd->pool,arg);
+		break;
+	case 8:
+		conf->AutoAppendFile = pstrdup(cmd->pool,arg);
+		break;
+	case 9:
+		conf->AdaDB = pstrdup(cmd->pool,arg);
+		break;
+	case 10:
+		conf->AdaUser = pstrdup(cmd->pool,arg);
+		break;
+	case 11:
+		conf->AdaPW = pstrdup(cmd->pool,arg);
 		break;
 	}
 	return NULL;
@@ -209,6 +243,12 @@ command_rec php_commands[] = {
 	{ "phpXBitHack", phpflaghandler, (void *)2, OR_OPTIONS, FLAG, "on|off" },
 	{ "phpIncludePath",phptake1handler,(void *)6,OR_OPTIONS,TAKE1,"colon-separated path" },
 	{ "phpEngine",phpflaghandler,(void *)4,RSRC_CONF,FLAG,"on|off" },
+	{ "phpLastModified", phpflaghandler, (void *)5, OR_OPTIONS, FLAG, "on|off" },
+	{ "phpAutoPrependFile", phptake1handler,(void *)7,OR_OPTIONS,TAKE1,"file name" },
+	{ "phpAutoAppendFile", phptake1handler,(void *)8,OR_OPTIONS,TAKE1,"file name" },
+	{ "phpAdaDefDB",phptake1handler,(void *)9,OR_OPTIONS,TAKE1,"database" },
+	{ "phpAdaDefUser",phptake1handler,(void *)10,OR_OPTIONS,TAKE1,"user" },
+	{ "phpAdaDefPW",phptake1handler,(void *)11,OR_OPTIONS,TAKE1,"password" },
 	{ NULL }
 };
 

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: parse.raw,v 1.56 1997/04/22 04:03:23 rasmus Exp $ */
+/* $Id: parse.raw,v 1.61 1997/08/25 10:16:03 kara Exp $ */
 %{
 #include <stdio.h>
 #include <stdlib.h>
@@ -152,10 +152,17 @@ void php_init_yacc(void) {
 %token MYSQL_FIELDFLAGS
 %token PHPSORT
 %token PHPASORT
+%token PHPRSORT
+%token PHPARSORT
 %token UMASK
 %token MYSQL_CONNECT
 %token ORA_PARSE
 %token PHPMAIL
+%token ADA_RESULTALL
+%token ADA_FETCHROW
+%token ADA_FIELDNAME
+%token ADA_FIELDTYPE
+%token ADA_FIELDLEN
 
 /* Precedence */
 %left '+' '-'
@@ -231,7 +238,9 @@ primitive:
 			Else();
 		}
 	|   {
-			inElseIf=1;
+			if(GetCurrentActive()>0) {
+				inElseIf=1;
+			}
 		}
 	  ELSEIF '(' cond ')' eocb
 		{
@@ -530,9 +539,25 @@ func:
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
 		}
+	| '@' INTFUNC0 '(' ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) {
+				errPrintState = ErrorPrintState(0);
+				IntFunc((char *)$2);
+				ErrorPrintState(errPrintState);
+			}
+		}
 	| INTFUNC1 '(' expr ')'
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) IntFunc((char *)$1);
+		}
+	| '@' INTFUNC1 '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) {
+				errPrintState = ErrorPrintState(0);
+				IntFunc((char *)$2);
+				ErrorPrintState(errPrintState);
+			}
 		}
 	| INTFUNC2 '(' expr ',' expr ')'
 		{
@@ -612,7 +637,11 @@ func:
 		}
 	| ISSET '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) IsSet((char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) IsSet((char *)$3,0);
+		}
+	| ISSET '(' ARRAY expr ']' ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) IsSet((char *)$3,1);
 		}
 	| STRTOK '(' expr ')' 
 		{
@@ -871,7 +900,11 @@ func:
 		}
 	| UNSET '(' VAR ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) UnSet((char *)$3);
+			if(GetCurrentState(NULL) || inCase || inElseIf) UnSet((char *)$3,0);
+		}
+	| UNSET '(' ARRAY expr ']' ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) UnSet((char *)$3,1);
 		}
 	| SETCOOKIE '(' expr ',' expr ',' expr ',' expr ',' expr ',' expr ')'
 		{
@@ -904,11 +937,19 @@ func:
 		}
 	| PHPSORT '(' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(0);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(0,0);
 		}
 	| PHPASORT '(' expr ')'
 		{
-			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(1);
+			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(1,0);
+		}
+	| PHPRSORT '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(0,1);
+		}
+	| PHPARSORT '(' expr ')'
+		{
+			if(GetCurrentState(NULL) || inCase || inElseIf) Sort(1,1);
 		}
 	| UMASK '(' ')'
 		{
@@ -946,6 +987,35 @@ func:
 		{
 			if(GetCurrentState(NULL) || inCase || inElseIf) Mail(1);
 		}
+	| ADA_RESULTALL '(' expr ')'
+              	{
+                      	 if(GetCurrentState(NULL) || inCase || inElseIf) Ada_resultAll(0);
+               	}
+       	| ADA_RESULTALL '(' expr ',' expr ')'
+               	{
+                      	 if(GetCurrentState(NULL) || inCase || inElseIf) Ada_resultAll(1);
+               	}
+       	| ADA_FIELDNAME '(' expr ',' expr ')'
+                {
+                         if(GetCurrentState(NULL) || inCase || inElseIf) Ada_Field(1);
+                }
+        | ADA_FIELDTYPE '(' expr ',' expr ')'
+                {
+                         if(GetCurrentState(NULL) || inCase || inElseIf) Ada_Field(2);
+                }
+        | ADA_FIELDLEN '(' expr ',' expr ')'
+                {
+                         if(GetCurrentState(NULL) || inCase || inElseIf) Ada_Field(3);
+                }
+        | ADA_FETCHROW '(' expr ')'
+                {
+                         if(GetCurrentState(NULL) || inCase || inElseIf) Ada_fetchRow(0);
+                }
+        | ADA_FETCHROW '(' expr ',' expr ')'
+                {
+                         if(GetCurrentState(NULL) || inCase || inElseIf) Ada_fetchRow(1);
+                }
+
 
 val:
 	  LNUMBER

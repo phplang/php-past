@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: exec.c,v 1.22 1997/05/17 13:32:25 rasmus Exp $ */
+/* $Id: exec.c,v 1.25 1997/09/14 14:38:25 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <ctype.h>
@@ -117,7 +117,7 @@ void Exec(char *name, char *retname, int type) {
 			else if(type==2) {
 				l = strlen(buf);
 				t = l;
-				while(isspace(buf[--l])); 
+				while(l && isspace(buf[--l])); 
 				if(l<t) buf[l+1]='\0';	
 				Push(AddSlashes(buf,0),STRING);
 				SetVar(name,1,0);	
@@ -164,8 +164,9 @@ void EscapeShellCmd(void) {
 		Error("Stack error in EscapeShellCmd");
 		return;
 	}	
+	if(!s->strval || (s->strval && !strlen(s->strval))) return;
     l=strlen(s->strval);
-	cmd = emalloc(1,2*l);
+	cmd = emalloc(1,2*l+1);
 	strcpy(cmd,s->strval);
     for(x=0;cmd[x];x++) {
         if(php_ind("&;`'\"|*?~<>^()[]{}$\\\x0A\xFF",cmd[x]) != -1){

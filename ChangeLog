@@ -1,5 +1,61 @@
 PHP/FI CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+November 12 Version 2.0
+- Add Ora_Bind() function <dizzy@glas.net>
+- Add GetAllHeaders() function <ssb@guardian.no>
+- Fix security holes in examples/{m,my}log.html <ssb@guardian.no>
+- Add FPassThru function <ssb@guardian.no>
+- Fix compile problem in snmp support <ssb@guardian.no>
+- Fix syslog support in configure <ssb@guardian.no>
+- Fix some Oracle bugs, add support for NULL columns <mitch@spiralmedia.com>
+  and <ssb@guardian.no>
+- Add support for persistent Oracle connections <mitch@spiralmedia.com>
+- Fix array count/unset interactive bug
+- Add RSort() and ARSort() functions to sort in descending order
+- CGI version ~user bug fix
+- Add phpLastModified Apache directive <pvanhaes@be.oracle.com>
+- Fix typo in solid.c
+- Fix \ bug in Sprintf()
+- Add FilePro support <chadr@brttech.com>
+- Add phpAutoPrependFile/phpAutoAppendFile Apache directives <ssb@guardian.no>
+- Add StrTR() function <miko@ns.dcit.cz>
+- Add initial Illustra support <simon@oyster.co.uk>
+- Make isset() and unset() work correctly for array elements
+- Fix NULL blob bug in Solid code <sopwith@redhat.com>
+- Sybase connections were not being closed <scbiondi@webdesigngroup.com>
+- UrlEncode shouldn't be encoding '/' - fixed
+- Fix blank-line handling in command line -q mode <tbrown@baremetal.com>
+- Fix elseif parser bug
+- Fix possible 64-bit architecture alignment problem <doussot@via.ecp.fr>
+- Push null string onto stack if GetEnv fails <eden@queer.org.au>
+- Add shl() and shr() bit shifting functions <elanda@comstar.net>
+- Fix buffer underrun in Exec() code <scott@ceweekly.com>
+- Fix Oracle DateType field length bug <OF@netuse.de>
+- Reverse dbm content-size fix from 2.0b12 for GDBM <W.Janssen@uci.kun.nl>
+- Get rid of explicit calls to exit() from Sybase driver
+- Add sybsql_checkconnect() function
+- Add GDBM_FIX #define to php.h
+- Move CVS repostitory to inet-dev.bellglobal.com
+- Move PHP home web site to php.iquest.net
+- Fixed SAFE_MODE typos in head.c and var.c
+- Change mailing list instructions to point to php-list@php.iquest.net
+- A post'ed "0" should be treated as an integer, not a string - fixed
+- Date("i") should print " 1" not "01" - fixed
+- Fix critical bug in the internal FixFilename() function 
+  <Meno.Abels@Technical.Adviser.com>
+- Fix Oracle example in documentation <m.ramsch@ieee.org> 
+- Fix dbm logging + DOCUMENT_ROOT bug
+- Add first cut at ODBC support <brian@tool.net>
+- Fix mysql_listfields() core dump <gareth@marvin.netcom.co.uk>
+- Add Ceil() and Floor() functions
+- Fix $req_* request variables with -'s in them (map to _)
+- Add Adabas D support <kara@bibo.met.fu-berlin.de>
+- Fixed blob handling for Adabas <kara@bibo.met.fu-berlin.de>
+- Change QuoteMeta to escape ()'s
+- Make Parser understand <?...?> syntax for forward compatibility with PHP3
+- Fix md5()-Apache 1.3 compatibility problem
+- CVS repository moved to www.lerdorf.on.ca
+
 June 16 Version 2.0b12
 - Fix spinning httpd problem <terrym@iquest.net>
 - Was munmap'ing 1 too few bytes - fixed

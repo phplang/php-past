@@ -19,14 +19,21 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dir.c,v 1.9 1997/04/15 14:30:44 cvswrite Exp $ */
+/* $Id: dir.c,v 1.11 1997/10/27 02:31:51 shane Exp $ */
 #include "php.h"
+#ifdef HAVE_DIRENT_H
 #include <dirent.h>
+#endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <errno.h>
 #include "parse.h"
+
+#if WINNT|WIN32
+#define NEEDRDH 1
+#include "win32/readdir.h"
+#endif
 
 static DIR *dirp=NULL;
 

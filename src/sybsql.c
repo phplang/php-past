@@ -23,8 +23,8 @@
  *  Sybase SQL - WWW interface
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -46,7 +46,9 @@
 #include <syberror.h>
 #endif
 #include "parse.h"
+#ifdef HAVE_UNISTD_H
 #include <unistd.h> /* getlogin() */
+#endif
 #include <ctype.h>
 #include <stdarg.h> /* var args */
 
@@ -132,8 +134,8 @@ void php_init_sybsql(void)
  *  SybsqlConnect() -   connect to the sybase server
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -195,6 +197,7 @@ void SybsqlConnect(void)
 
     *rbuf='\0';
 
+
     dbproc=MdbInit(
             NULL,   /* app name */
             NULL,   /* user */
@@ -236,8 +239,8 @@ void SybsqlConnect(void)
  *  MdbInit - actually connects to the sybase server
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -459,12 +462,21 @@ static DBPROCESS *MdbInit(
     if (dp == (DBPROCESS *) NULL)
     {
         Error("Failed in dbopen()..");
+      dbloginfree(login);
         return ((DBPROCESS *) NULL);
     }
 
     /*
     ** use the database if supplied
     */
+
+    /*
+    **  SCB  7/2/1997
+    **  I think this will do the trick
+    **  to get rid of login stuff after the dbopen succeeded..
+    */
+    dbloginfree(login);
+
     if (database != (char *) NULL)
     {
         if (dbuse(dp,loc_database) == FAIL)
@@ -502,7 +514,7 @@ static int MdberrHandler (DBPROCESS *dbproc,int severity,int dberr,
     int oserr,char *dberrstr,char *oserrstr)
 {
     Error("DBlib error (Severity %d):\n\t%s\n", severity,dberrstr);
-    exit (1);
+    Exit(0); 
 }
       
 
@@ -513,8 +525,8 @@ static int MdberrHandler (DBPROCESS *dbproc,int severity,int dberr,
  *  SybsqlDbuse - use a requested database
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -608,8 +620,8 @@ void SybsqlDbuse(void)
  *  SybsqlQuery - submits query to sybase server
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -705,20 +717,28 @@ static void CheckConnection(void)
     if (dbproc == (DBPROCESS *) NULL)
     {
         Error("No connecton to sybase server");
-        exit(1);        
+		Exit(1);
     }
 return;
 }
 #endif
 
-
+/* public version */
+void SybsqlCheckConnect(void) {
+#ifdef HAVE_SYBASE
+    if (dbproc == (DBPROCESS *) NULL)
+		Push("0",LNUMBER);
+	else
+		Push("1",LNUMBER);
+#endif
+}
 
 /*
  *  SubmitQuery - submits sql query to sybase server
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -787,8 +807,8 @@ return (n);
  *  SybsqlIsRow - indicates if currect sql command returned any rows
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -863,8 +883,8 @@ void SybsqlIsRow(void)
  *  SybsqlPrintArow - print the requested fields of the current row
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -936,8 +956,8 @@ void SybsqlPrintArow(void)
  *  SybsqlNextRow - reads the next result row
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1022,8 +1042,8 @@ void SybsqlNextRow(void)
  *  SubstSybCol - substitutes a field with value at this field
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1106,8 +1126,7 @@ static char *SubstSybCol(char *str)
                 ** spaces are allowed between @ and digits, someone 
                 ** might do this mistakenly
                 */
-                while (iswhite(*cp1))
-                    *cp1++;
+                while (iswhite(*cp1)) cp1++;
 
                 /*
                 ** now this thing must be a digit or exit
@@ -1115,7 +1134,7 @@ static char *SubstSybCol(char *str)
                 if (!isdigit(*cp1))
                 {
                     Error("Bad Column number: %c",*cp1);
-                    exit (1);
+                    Exit(0);
                 }
 
                 var1=cp1;
@@ -1146,7 +1165,7 @@ static char *SubstSybCol(char *str)
                 {
                     Error("Column no %d is bigger than max no of cols:%d",
                         offset,count);
-                    exit(1);
+                    Exit(0);
                 }
 
                 /*
@@ -1180,8 +1199,8 @@ return (buf);
  *  col2char - converts any column data to an array of char
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1275,8 +1294,8 @@ static char *col2char(int j)
  *  aprintf - formatted print to newly allocated space
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1342,8 +1361,8 @@ static char *aprintf(char *format,...)
  *  SybsqlNumRows - number of rows in a result
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1433,8 +1452,8 @@ void SybsqlNumRows(void)
  *  SybsqlPrintAllRows - print specified fields of all rows
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1484,8 +1503,8 @@ void SybsqlPrintAllRows(void)
  *  SybsqlResult - prints specific fields of the current row
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1571,8 +1590,8 @@ void SybsqlResult(void)
  *  SybsqlSeek - sets a row to the current row
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1683,8 +1702,8 @@ void SybsqlSeek(void)
  *  SybsqlNumFields - number of fields in a result
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1745,8 +1764,8 @@ void SybsqlNumFields(void)
  *  SybsqlFieldName - name of a column
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1838,8 +1857,8 @@ void SybsqlFieldName(void)
  *  SybsqlResultAll - prints all rows and columns
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -1971,8 +1990,8 @@ void SybsqlResultAll(void)
  *  SybsqlGetField() -   gets the value of a specific field
  *
  *  RCS:
- *      $Revision: 1.4 $
- *      $Date: 1997/04/15 14:30:55 $
+ *      $Revision: 1.12 $
+ *      $Date: 1997/10/25 16:17:30 $
  *
  *  Description:
  *
@@ -2047,5 +2066,15 @@ void SybsqlGetField(void)
 
 #else
     Error("No sybase support");
+#endif
+}
+
+void SybsqlExit (void)
+{
+#ifdef HAVE_SYBASE
+	if(dbproc) {
+		dbclose(dbproc);
+		dbproc=NULL;
+	}
 #endif
 }

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: error.c,v 1.24 1997/06/16 14:02:23 rasmus Exp $ */
+/* $Id: error.c,v 1.25 1997/08/13 23:01:40 rasmus Exp $ */
 #include "php.h"
 #include "parse.h"
 #ifdef HAVE_UNISTD_H
@@ -139,7 +139,7 @@ void Error(char *fmt,...) {
 				break;
 			default:
 #if APACHE
-				rputc(*s,php_rqst);
+				PUTC(*s);
 #else
 				fputc(*s,stdout);
 #endif

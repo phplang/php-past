@@ -19,15 +19,19 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: dns.c,v 1.8 1997/05/11 17:30:31 rasmus Exp $ */
+/* $Id: dns.c,v 1.9 1997/09/13 16:14:26 shane Exp $ */
 #include "php.h"
 #include "parse.h"
 #ifdef HAVE_SYS_SOCKET_H
 #include <sys/socket.h>
 #endif
+#if WINNT|WIN32
+#include <winsock.h>
+#else
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
+#endif
 
 void GetHostByAddr(void) {
 	Stack *s;

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: conf.c,v 1.17 1997/04/13 04:51:36 rasmus Exp $ */
+/* $Id: conf.c,v 1.18 1997/08/16 03:51:38 rasmus Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -86,10 +86,10 @@ void Configuration(int argc, char **argv) {
 	} else sprintf(temp,"%s/0-cfg",ACCESS_DIR);
 
 	es = ErrorPrintState(0);		
-	ret = _dbmOpen(temp,"r");
+	ret = _dbmOpen(temp,"r",0);
 	ErrorPrintState(es);		
 	if(ret > 0) {
-		ret = _dbmOpen(temp,"n");
+		ret = _dbmOpen(temp,"n",0);
 #if DEBUG
 		Debug("Creating new configuration file [%s]\n",temp);
 #endif
@@ -121,7 +121,7 @@ void Configuration(int argc, char **argv) {
 		_dbmInsert(temp,"cfg-ban-URL"," ");
 		_dbmInsert(temp,"cfg-passwd-URL"," ");
 		_dbmClose(temp);
-		ret = _dbmOpen(temp,"r");
+		ret = _dbmOpen(temp,"r",0);
 		if(ret) return;
 	}
 

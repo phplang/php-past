@@ -22,7 +22,7 @@
 /*
  * Contributed by Paul Panotzki - Bunyip Information Systems
  */
-/* $Id: microtime.c,v 1.10 1997/01/04 15:16:59 rasmus Exp $ */
+/* $Id: microtime.c,v 1.11 1997/09/13 15:57:19 shane Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -35,7 +35,11 @@
 
 #include <stdio.h>
 #ifdef HAVE_GETTIMEOFDAY
+#if WINNT|WIN32
+#include "win32/time.h"
+#else
 #include <sys/time.h>
+#endif
 #endif
 
 #define NUL  '\0'

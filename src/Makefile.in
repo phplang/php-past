@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.83 1997/06/16 22:10:15 rasmus Exp $
+# $Id: Makefile.in,v 1.92 1997/11/12 14:34:30 rasmus Exp $
 #
 # Makefile for PHP/FI
 # Copyright 1995,1996,1997 Rasmus Lerdorf
@@ -35,8 +35,8 @@ AR = ar rc
 RANLIB = @RANLIB@
 CC = @CC@
 YACC = @YACC@ -d -l
-LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBSYB@ @LIBPQ@ @LIBMYSQL@ @LIBSOLID@ @LIBORACLE@ @LIBFCGI@ @LIBREGEX@
-STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBSYB@ @STATICLIBPQ@ @STATICLIBMYSQL@ @STATICLIBSOLID@ @STATICLIBORACLE@ @STATICLIBFCGI@ @STATICLIBREGEX@
+LIBS = -L. @HLNK@ @LIBS@ @best_dbm@ @LIBMSQL@ @LIBSYB@ @LIBPQ@ @LIBMYSQL@ @LIBADA@ @LIBSOLID@ @LIBORACLE@ @LIBFCGI@ @LIBREGEX@
+STATICLIBS = @best_dbm@ @LIBS@ @STATICLIBMSQL@ @STATICLIBSYB@ @STATICLIBPQ@ @STATICLIBMYSQL@ @STATICLIBADA@ @STATICLIBSOLID@ @STATICLIBORACLE@ @STATICLIBFCGI@ @STATICLIBREGEX@
 USEDLIBS = @USEDLIBS@
 OPT_CFLAGS = @OPT_CFLAGS@
 INC_CFLAGS = @INC_CFLAGS@
@@ -44,7 +44,7 @@ SYS_CFLAGS = @SYS_CFLAGS@
 CFLAGS = $(OPT_CFLAGS) $(INC_CFLAGS) $(SYS_CFLAGS)
 LDFLAGS = @LDFLAGS@ @MSQL_LIB@ @MYSQL_LIB@ @SYB_LIB@ @SOLID_LIB@ @ORACLE_LIB@ @PQ_LIB@ @FCGI_LIB@ @LIBREGEXDIR@
 #DEBUG=-g -Wall -DDEBUG
-CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @SOLID_INCLUDE@ @SOLID_DEF@ @ORACLE_INCLUDE@ @ORACLE_DEF@ @MYSQL_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @STRONGHOLD@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\" @PHP_DOCUMENT_ROOT@ $(DEBUG) 
+CPPFLAGS = @REGEX_INCLUDE@ -I. @CPPFLAGS@ @MSQL_INCLUDE@ @ODBC_DEF@ @MSQL_DEF@ @SYB_DEF@ @SYB_INCLUDE@ @MYSQL_INCLUDE@ @ADA_INCLUDE@ @ADA_DEF@ @SOLID_INCLUDE@ @SOLID_DEF@ @ORACLE_INCLUDE@ @ORACLE_DEF@ @MYSQL_DEF@ @FILEPRO_DEF@ @PQ_INCLUDE@ @PQ_DEF@ @FCGI_INCLUDE@ @FCGI_DEF@ @APACHE_INCLUDE@ @STRONGHOLD@ @ACCESS_CONTROL@ @ACCESS_DIR@ @LOGGING@ @LOG_DIR@ @HGD@ @FILE_UPLOAD@ @APACHE@ @APACHE_API@ @PHPSENDMAIL@ -DSENDMAIL=\""@SENDMAIL@ -t"\" @PHP_DOCUMENT_ROOT@ $(DEBUG) 
 
 PHP_PROGS: @OURREGEX@ @PRG@ @MODULE_TARGET@
 
@@ -62,7 +62,8 @@ DISTFILES = ChangeLog README COPYING \
 	src/uniqid.c src/soundex.c src/syslog.c src/oracle.c src/oracle.h \
 	src/file.c src/crypt.c src/head.c src/info.c src/post.c src/type.c \
 	src/conf.c src/acc.c src/local.c src/dns.c src/log.c src/sort.c src/dir.c \
-	src/rand.c src/gd.c src/snmp.c \
+	src/rand.c src/gd.c src/snmp.c src/filepro.c src/adabasd.c \
+	src/rand.c src/gd.c src/snmp.c src/filepro.c src/odbc.c src/adabasd.c \
 	examples/log.html examples/log.readme examples/clock.html \
 	examples/pgurl.readme examples/pgurl_add.phtml examples/pgurl_cat.phtml \
 	examples/pgurl_main.phtml \
@@ -74,7 +75,7 @@ DISTFILES = ChangeLog README COPYING \
 	src/regex/regex.3 src/regex/regex.7 src/regex/regex.h \
 	src/regex/regex2.h src/regex/regexec.c src/regex/regfree.c \
 	src/regex/split.c src/regex/tests src/regex/utils.h \
-	src/mysql.c src/solid.c src/mail.c src/image.c \
+	src/mysql.c src/solid.c src/mail.c src/image.c src/illustra.c \
 	scripts/msqllog scripts/mysqllog \
 	examples/url.readme examples/url_add.html examples/url_cat.html \
 	examples/url_main.html examples/demo_main.html examples/demo_dir.html \
@@ -118,7 +119,7 @@ DISTFILES = ChangeLog README COPYING \
 	test/ary/001.tst test/ary/002.tst test/ary/003.tst test/ary/004.tst \
 	test/ary/005.tst test/ary/006.tst test/ary/007.tst test/ary/008.tst \
 	test/ary/009.tst test/ary/010.tst test/ary/011.tst test/ary/012.tst \
-	test/ary/013.tst test/ary/014.tst
+	test/ary/013.tst test/ary/014.tst test/ary/015.tst
 
 install: all 
 	test/dbm/*.tst test/lang/*.tst
@@ -129,7 +130,7 @@ OBJS= parse.o lex.o main.o error.o date.o stack.o calc.o var.o \
 	  type.o conf.o acc.o local.o dns.o log.o sort.o dir.o rand.o \
 	  gd.o mime.o fsock.o microtime.o pg95.o pool.o \
 	  uniqid.o soundex.o syslog.o mysql.o solid.o mail.o image.o md5.o \
-	  snmp.o oracle.o
+	  snmp.o oracle.o filepro.o illustra.o odbc.o adabasd.o
 
 all: $(PHP_PROGS) @MODULE_TARGET@
 
@@ -184,10 +185,10 @@ module_user_build: $(OBJS)
 	@echo "Apache src directory, if they weren't, do so manually."
 	@echo "Then edit your Configuration file for Apache, look for"
 	@echo "the EXTRA_CFLAGS line and add "
-	@echo "-DSERVER_SUBVERSION=\\\"PHP/FI-2.0b12\\\", then on"
+	@echo "-DSERVER_SUBVERSION=\\\"PHP/FI-2.0\\\", then on"
 	@echo "the \"EXTRA_LIBS\" (not \"EXTRA_LFLAGS\"!) line, add:"
 	@echo ""
-	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @MYSQL_LIB@ @LIBMSQL@ @SYB_LIB@ @LIBSYB@ @LIBMYSQL@ @SOLID_LIB@ @LIBSOLID@ @ORACLE_LIB@ @LIBORACLE@ @PQ_LIB@ @LIBPQ@ -lm"
+	@echo "-L. -lphp @HLNK@ @best_dbm@ @MSQL_LIB@ @MYSQL_LIB@ @LIBMSQL@ @SYB_LIB@ @LIBSYB@ @LIBMYSQL@ @LIBADA@ @SOLID_LIB@ @LIBSOLID@ @ORACLE_LIB@ @LIBORACLE@ @PQ_LIB@ @LIBPQ@ @ODBC_LIB@ -lm"
 	@echo ""
 	@echo "If you have the GD library, you will need to add -lgd to the above."
 	@echo "Make sure you add -lgd before -lm on the above line."
@@ -279,12 +280,14 @@ log.o: log.c php.h
 sort.o: sort.c php.h parse.h
 dir.o: dir.c php.h parse.h
 rand.o: rand.c php.h parse.h
+filepro.o: filepro.c php.h parse.h
 error.o: error.c php.h
 gd.o: gd.c parse.h php.h
 fsock.o: fsock.c php.h parse.h
 microtime.o: microtime.c php.h parse.h
 pg95.o: pg95.c php.h parse.h
 mysql.o: mysql.c php.h parse.h
+adabasd.o: adabasd.c parse.h php.h
 solid.o: solid.c php.h parse.h
 mail.o: mail.c php.h parse.h
 md5.o: md5.c md5.h global.h php.h parse.h
@@ -294,4 +297,6 @@ sybsql.o: sybsql.c php.h parse.h
 image.o: image.c php.h parse.h
 syslog.o: syslog.c php.h parse.h
 oracle.o: oracle.c oracle.h php.h parse.h
+illustra.o: illustra.c php.h parse.h
+odbc.o:	odbc.c php.h parse.h
 install: all 

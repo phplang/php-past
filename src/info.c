@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: info.c,v 1.33 1997/05/26 22:35:45 rasmus Exp $ */
+/* $Id: info.c,v 1.39 1997/11/12 23:24:52 lr Exp $ */
 #include "php.h"
 #include "parse.h"
 #include <stdlib.h>
@@ -42,8 +42,12 @@ extern char **environ;
 void Info(void) {
 	struct stat sb;
 	char *path;
+#if HAVE_PWD_H
 	struct passwd *pw;
+#endif
+#if HAVE_GRP_H
 	struct group *gr;
+#endif
 	char buf[512];
 	char **envp;
 #if APACHE
@@ -53,11 +57,13 @@ void Info(void) {
 	VarTree *var;
 #endif	
 #ifndef WINNT
+#ifndef WIN32
 	FILE *fp;
+#endif
 #endif
 
 	php_header(0,NULL);
-	sprintf(buf,"<html><head><title>PHP/FI</title></head><body><h1>PHP/FI Version %s</h1>by Rasmus Lerdorf (<a href=\"mailto:rasmus@lerdorf.on.ca\">rasmus@lerdorf.on.ca</a>)<p>The PHP/FI Web Site is at <a href=\"http://www.vex.net/php/\">http://www.vex.net/php/</a><p>\n",PHP_VERSION);
+	sprintf(buf,"<html><head><title>PHP/FI</title></head><body><h1>PHP/FI Version %s</h1>by Rasmus Lerdorf (<a href=\"mailto:rasmus@lerdorf.on.ca\">rasmus@lerdorf.on.ca</a>)<p>The PHP/FI Web Site is at <a href=\"http://php.iquest.net/\">http://php.iquest.net/</a><p>\n",PHP_VERSION);
 	PUTS(buf);
 	PUTS("This program is free software; you can redistribute it and/or modify\n");
 	PUTS("it under the terms of the GNU General Public License as published by\n");
@@ -70,8 +76,12 @@ void Info(void) {
 	PUTS("You should have received a copy of the GNU General Public License\n");
 	PUTS("along with this program; if not, write to the Free Software\n");
 	PUTS("Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.<p>\n");
-#ifdef WINNT
+#ifdef WINDOWS
+#ifdef WIN32
+	PUTS("<hr><b><i>Windows95/NT Version compiled with MS VC++ V5</i></b>\n");
+#else
 	PUTS("<hr><b><i>Windows95/NT Version compiled with cygnus-2.7.2-970404</i></b>\n");
+#endif
 #else
 	PUTS("<hr><b><i>Unix version:</i></b> ");
 	fp = popen("uname -a","r");
@@ -93,6 +103,9 @@ void Info(void) {
 	{
 		char *sn, *pi;
 		sn = getenv("SCRIPT_NAME"); pi = getenv("PATH_INFO");
+		if(!strcmp(sn,pi)) {
+			pi = NULL;
+		}
 		sprintf(buf,"PHP_SELF=%s%s\n",sn?sn:"",pi?pi:"");
 		PUTS(buf);	
 	}
@@ -291,9 +304,18 @@ void Info(void) {
 #ifdef HAVE_LIBSOLID
 	PUTS("<B>Solid support enabled</b><br>\n");
 #endif
+#ifdef ILLUSTRA
+	PUTS("<B>Illustra/Universal Server support enabled</b><br>\n");
+#endif
 #ifdef HAVE_SYBASE
 	PUTS("<B>Sybase support enabled</b><br>\n");
 #endif
+#ifdef HAVE_ODBC
+	PUTS("<B>ODBC support enabled</B><br>\n");
+#endif
+#ifdef HAVE_LIBADABAS
+	PUTS("<B>Adabas D support enabled</B><br>\n");
+#endif /*HAVE_LIBADABAS*/
 #ifdef GDBM
 	PUTS("<b>GDBM support enabled</b><br>\n");
 #else

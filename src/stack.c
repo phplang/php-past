@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: stack.c,v 1.33 1997/05/08 12:59:25 rasmus Exp $ */
+/* $Id: stack.c,v 1.34 1997/06/17 15:27:39 rasmus Exp $ */
 /* Expression Stack */
 #include <stdlib.h>
 #include <string.h>
@@ -113,6 +113,9 @@ void Push(char *value, int type) {
 				SetVar(name,0,-2);
 				t = GetVar(value,NULL,0);
 			} else {
+#if DEBUG
+				Debug("Calling SetVar with (%s,0,-2)\n",value);
+#endif
 				SetVar(value,0,-2);
 				t = GetVar(value,NULL,0);
 			}

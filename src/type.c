@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: type.c,v 1.4 1997/01/04 15:17:09 rasmus Exp $ */
+/* $Id: type.c,v 1.5 1997/08/09 01:42:51 rasmus Exp $ */
 #include <stdio.h>
 #include "php.h"
 #include "parse.h"
@@ -34,7 +34,7 @@ int CheckType(char *str) {
 	int type=LNUMBER;
 
 	s = str;
-	if(*s=='0' && *(s+1)!='.') return(STRING);
+	if(*s=='0' && *(s+1) && *(s+1)!='.') return(STRING);
 	if(*s=='+' || *s=='-' || (*s>='0' && *s <='9') || *s=='.' ) {
 		if(*s=='.') type=DNUMBER;
 		s++;

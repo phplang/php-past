@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: while.c,v 1.17 1997/01/04 15:17:12 rasmus Exp $ */
+/* $Id: while.c,v 1.18 1997/10/25 20:54:51 mitch Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,10 +28,12 @@
 
 static WhileStack *top=NULL;
 static WhileMark *mark=NULL;
+static long WhileCount;
 
 void php_init_while(void) {
 	top = NULL;
 	mark=NULL;
+	WhileCount=0;
 }
 
 void ShowWhileStack(void) {
@@ -112,6 +114,13 @@ void While(long sp) {
 			return;
 		}
 		c = CheckCond(s);
+#ifdef PHP_LOOPLIMIT
+		WhileCount++;
+		if(c!=0 && WhileCount>PHP_LOOPLIMIT) {
+			Error("Program in infinite loop (exceeded PHP_LOOPLIMIT), aborting");
+			c = 0;
+		}
+#endif
 		top->state = c;
 		if(NewWhileIteration(sp)) {
 			CondPush(c,-4);

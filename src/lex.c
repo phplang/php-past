@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: lex.c,v 1.169 1997/06/04 18:02:28 rasmus Exp $ */
+/* $Id: lex.c,v 1.190 1997/10/25 14:32:30 ssb Exp $ */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -90,7 +90,7 @@ typedef struct _cmd_table_t {
  * command.
  */
 #define PHP_MAX_CMD_LEN 21
-#define PHP_MAX_CMD_NUM 36
+#define PHP_MAX_CMD_NUM 39
 
 static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	{ { NULL,0,NULL } },        /* 0 */
@@ -115,6 +115,8 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "pow", INTFUNC2,Pow },
 	  { "pos", INTFUNC1,Pos },
 	  { "md5", INTFUNC1,Md5 },
+	  { "shl", INTFUNC2,shl },
+	  { "shr", INTFUNC2,shr },
 	  { NULL,0,NULL } }, 
 
 	{ { "echo",PHPECHO,NULL },     /* 4 */
@@ -137,6 +139,7 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "link",INTFUNC2,Link },
 	  { "mail",PHPMAIL,NULL },
 	  { "chop",INTFUNC1,Chop },
+	  { "ceil",INTFUNC1,Ceil },
 	  { NULL,0,NULL } }, 
 
 	{ { "endif",ENDIF,NULL },   /* 5 */
@@ -168,6 +171,9 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "asort",PHPASORT,NULL },
 	  { "umask",UMASK,NULL },
 	  { "logas", INTFUNC1,LogAs },
+	  { "rsort",PHPRSORT,NULL },
+	  { "strtr",INTFUNC3,StrTr },
+	  { "floor",INTFUNC1,Floor },
 	  { NULL,0,NULL } }, 
 
 	{ { "elseif",ELSEIF,NULL }, /* 6 */
@@ -205,6 +211,7 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "fgetss",INTFUNC2,Fgetss },
 	  { "uniqid",INTFUNC1,UniqId },
 	  { "syslog",INTFUNC2,Syslog },
+	  { "arsort",PHPARSORT,NULL },
 	  { NULL,0,NULL } }, 
 
 	{ { "default", DEFAULT,NULL }, /* 7 */
@@ -233,6 +240,13 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 #if PHP_SNMP_SUPPORT
 	  { "snmpget", INTFUNC3,phpsnmpget },
 #endif
+#if HAVE_FILEPRO
+	  { "filepro", INTFUNC1,filePro},
+#endif
+	  { "mi_exec", INTFUNC2,MIexec },
+#if HAVE_ODBC	
+	  { "sqlfree", INTFUNC1,ODBCfree },
+#endif	
 	  { NULL,0,NULL } },
 
 	{ { "endwhile",ENDWHILE,NULL }, /* 8 */
@@ -255,10 +269,18 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "readfile",INTFUNC1,ReadFile },	  
 	  { "ora_open",INTFUNC1,Ora_Open },
 	  { "ora_exec",INTFUNC1,Ora_Exec },
+	  { "ora_bind",INTFUNC4,Ora_Bind },
 #if PHP_SNMP_SUPPORT
 	  { "snmpwalk", INTFUNC3,phpsnmpwalk },
 #endif
 	  { "filetype", FILETYPE,NULL },
+	  { "mi_close",INTFUNC1,MIclose },
+#if HAVE_LIBADABAS
+	  { "ada_exec", INTFUNC2,Ada_exec },
+#endif
+#ifdef HAVE_ODBC
+	  { "sqlfetch", INTFUNC1,ODBCfetch },
+#endif	  	 
 	  { NULL,0,NULL } },
 
 	{ { "endswitch", ENDSWITCH,NULL }, /* 9 */
@@ -296,6 +318,12 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "ora_parse", ORA_PARSE,NULL },
 	  { "ora_fetch", INTFUNC1,Ora_Fetch },
 	  { "checkdate", INTFUNC3,CheckDate },
+	  { "mi_result", INTFUNC4,MIresult },
+	  { "mi_dbname", INTFUNC1,MIdbname },
+	  { "fpassthru", INTFUNC1,FPassThru },
+#if HAVE_LIBADABAS
+	  { "ada_close", INTFUNC1,Ada_close },
+#endif
 	  { NULL,0,NULL } },
 
 	{ { "clearstack", INTFUNC0,ClearStack }, /* 10 */
@@ -320,6 +348,15 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "initsyslog", INTFUNC0,php_init_syslog },
 	  { "ora_logoff", INTFUNC1,Ora_Logoff },
 	  { "ora_commit", INTFUNC1,Ora_Commit },
+	  { "mi_connect", INTFUNC3,MIconnect },
+	  { "mi_numrows", INTFUNC2,MInumRows },
+#if HAVE_LIBADABAS
+	  { "ada_result", INTFUNC2,Ada_result },
+#endif
+#ifdef HAVE_ODBC
+	  { "sqlgetdata", INTFUNC3,ODBCgetdata },
+	  { "sqlconnect", INTFUNC3,ODBCconnect },
+#endif	  
 	  { NULL,0,NULL } },
 
 	{ { "msql_result", INTFUNC3,MsqlResult }, /* 11 */
@@ -335,8 +372,17 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "pg_fieldnum", INTFUNC2,PGfieldNum },
 	  { "mysql_close", INTFUNC0,MYsqlClose },
 	  { "solid_close", INTFUNC1,Solid_close },
-      { "sybsql_seek",INTFUNC1,SybsqlSeek},
+	  { "sybsql_seek",INTFUNC1,SybsqlSeek},
+	  { "sybsql_exit",INTFUNC0,SybsqlExit},
+	  { "mi_fieldnum", INTFUNC3,MIfieldNum },
 	  { "phpshowpool",INTFUNC0,ShowPool },
+#if HAVE_LIBADABAS
+	  { "ada_numrows", INTFUNC1,Ada_numRows },
+	  { "ada_connect", INTFUNC3,Ada_connect },
+#endif
+#ifdef HAVE_ODBC
+	  { "sqlrowcount",INTFUNC1,ODBCrowcount },
+#endif	  
 	  { NULL,0,NULL } },
 
 	{ { "getlastemail", INTFUNC0,GetLastEmail }, /* 12 */
@@ -356,12 +402,19 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "mysql_dbname", INTFUNC2,MYsqlDBName },
 	  { "mysql_dropdb", INTFUNC1,MYsqlDropDB },
 	  { "solid_result", INTFUNC2,Solid_result },
-      { "sybsql_dbuse", INTFUNC1,SybsqlDbuse },
-      { "sybsql_query", INTFUNC1,SybsqlQuery },
-      { "sybsql_isrow", INTFUNC0,SybsqlIsRow }, 
+	  { "sybsql_dbuse", INTFUNC1,SybsqlDbuse },
+	  { "sybsql_query", INTFUNC1,SybsqlQuery },
+	  { "sybsql_isrow", INTFUNC0,SybsqlIsRow }, 
 	  { "getimagesize", INTFUNC1,GetImageSize },
 	  { "ora_commiton", INTFUNC1,Ora_CommitOn },
 	  { "ora_rollback", INTFUNC1,Ora_Rollback },
+	  { "mi_fieldname", INTFUNC3,MIfieldName },
+	  { "mi_numfields", INTFUNC2,MInumFields },
+#if HAVE_LIBADABAS
+	  { "ada_fieldnum", INTFUNC2,Ada_fieldNum },
+	  { "ada_fetchrow", ADA_FETCHROW,NULL },
+	  { "ada_fieldlen", ADA_FIELDLEN,NULL },
+#endif
 	  { NULL,0,NULL } }, 
 
 	{ { "gethostbyaddr", INTFUNC1,GetHostByAddr }, /* 13 */
@@ -379,9 +432,20 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "mysql_listdbs", INTFUNC0,MYsqlListDBs },
 	  { "solid_numrows", INTFUNC1,Solid_numRows },
 	  { "solid_connect", INTFUNC3,Solid_connect },
-      { "sybsql_result", INTFUNC1,SybsqlResult}, 
+	  { "sybsql_result", INTFUNC1,SybsqlResult}, 
 	  { "ora_commitoff", INTFUNC1,Ora_CommitOff },
 	  { "ora_getcolumn", INTFUNC2,Ora_GetColumn },
+	  { "getallheaders", INTFUNC0,GetAllHeaders },
+#if HAVE_LIBADABAS
+	  { "ada_numfields", INTFUNC1,Ada_numFields },
+	  { "ada_fieldname", ADA_FIELDNAME,NULL },
+	  { "ada_fieldtype", ADA_FIELDTYPE,NULL },
+	  { "ada_resultall", ADA_RESULTALL,NULL },
+#endif
+#ifdef HAVE_ODBC
+	  { "sqlexecdirect", INTFUNC2,ODBCexecdirect },
+	  { "sqldisconnect", INTFUNC1,ODBCdisconnect },
+#endif	   	  
 	  { NULL,0,NULL } },
 
 	{ { "getlastbrowser", INTFUNC0,GetLastBrowser }, /* 14 */
@@ -398,10 +462,13 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "solid_fieldnum", INTFUNC2,Solid_fieldNum },
 	  { "solid_fetchrow", INTFUNC1,Solid_fetchRow },
 	  { "msql_listindex", INTFUNC3,MsqlListIndex },
-      { "sybsql_connect", INTFUNC0,SybsqlConnect }, 
-      { "sybsql_nextrow", INTFUNC0,SybsqlNextRow },
-      { "sybsql_numrows", INTFUNC0,SybsqlNumRows},
-      { "clearstatcache", INTFUNC0,ClearStatCache},
+	  { "sybsql_connect", INTFUNC0,SybsqlConnect }, 
+	  { "sybsql_nextrow", INTFUNC0,SybsqlNextRow },
+	  { "sybsql_numrows", INTFUNC0,SybsqlNumRows},
+	  { "clearstatcache", INTFUNC0,ClearStatCache},
+#if HAVE_LIBADABAS
+	  { "ada_freeresult", INTFUNC1,Ada_freeResult },
+#endif
 	  { NULL,0,NULL } },
 
 	{ { "msql_freeresult", INTFUNC1,MsqlFreeResult }, /* 15 */
@@ -417,7 +484,7 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "mysql_insert_id", INTFUNC0,MYsqlInsertId },	  
 	  { "solid_numfields", INTFUNC1,Solid_numFields },
 	  { "solid_fieldname", INTFUNC2,Solid_fieldName },
-      { "sybsql_getfield", INTFUNC1,SybsqlGetField},
+	  { "sybsql_getfield", INTFUNC1,SybsqlGetField},
 	  { NULL,0,NULL } },
 
 	{ { "htmlspecialchars", INTFUNC1,HtmlSpecialChars }, /* 16 */
@@ -427,21 +494,34 @@ static cmd_table_t cmd_table[PHP_MAX_CMD_LEN+1][PHP_MAX_CMD_NUM+1] = {
 	  { "mysql_listtables", INTFUNC1,MYsqlListTables },
 	  { "mysql_listfields", INTFUNC2,MYsqlListFields },
 	  { "solid_freeresult", INTFUNC1,Solid_freeResult },
-      { "sybsql_numfields", INTFUNC0,SybsqlNumFields},
-      { "sybsql_fieldname", INTFUNC1,SybsqlFieldName},
+	  { "sybsql_numfields", INTFUNC0,SybsqlNumFields},
+	  { "sybsql_fieldname", INTFUNC1,SybsqlFieldName},
+#if HAVE_FILEPRO
+	  { "filepro_rowcount", INTFUNC0,filePro_rowcount},
+	  { "filepro_retrieve", INTFUNC2,filePro_retrieve},
+#endif
 	  { NULL,0,NULL } }, /* 16 */
 
 	{ { "imagefilltoborder", INTFUNC5,ImageFillToBorder }, /* 17 */
 	  { "seterrorreporting", INTFUNC1,SetErrorReporting }, 
-      { "sybsql_result_all", INTFUNC0,SybsqlResultAll },
+	  { "sybsql_result_all", INTFUNC0,SybsqlResultAll },
+#if HAVE_FILEPRO
+	  { "filepro_fieldtype", INTFUNC1,filePro_fieldtype},
+	  { "filepro_fieldname", INTFUNC1,filePro_fieldname},
+#endif
 	  { NULL,0,NULL } }, 
 
 	{ { "imagecolorallocate", INTFUNC4,ImageColorAllocate }, /* 18 */
 	  { "imagefilledpolygon", IMAGEFILLEDPOLYGON,NULL },
 	  { "imagecreatefromgif", INTFUNC1,ImageCreateFromGif },
+#if HAVE_FILEPRO
+	  { "filepro_fieldcount", INTFUNC0,filePro_fieldcount},
+	  { "filepro_fieldwidth", INTFUNC1,filePro_fieldwidth},
+#endif
 	  { NULL,0,NULL } },
 	  
 	{ { "mysql_affected_rows", INTFUNC0, MYsqlAffectedRows }, /* 19 */
+	  { "sybsql_checkconnect", INTFUNC0, SybsqlCheckConnect }, /* 19 */
 	  { NULL,0,NULL } },
 
 	{ { "imagefilledrectangle", INTFUNC6,ImageFilledRectangle }, /* 20 */
@@ -569,7 +649,7 @@ void Include(void) {
 			char *lim = NULL;
 			int len;
 			struct stat fs;
-			maxpath = path + strlen(path);
+			maxpath = path + sizeof(char)*strlen(path);
 #if DEBUG
 			Debug(" IncludePath=%s\n", incpath);
 #endif
@@ -682,7 +762,7 @@ int outputchar(char ch) {
 		php_header(0,NULL);
 #if APACHE
 		if(!pa) return(0);   /* HEAD request should not output anything */
-		if(rputc(ch,php_rqst)==EOF) {
+		if(PUTC(ch)==EOF) {
 			/* browser has probably gone away */
 			return(-1);
 		}
@@ -966,6 +1046,7 @@ int yylex(YYSTYPE *lvalp) {
 				break;
 			}
 			if(c=='>') { state=20; break; }
+			if(c=='?') break;
 			if(c=='<') { state=21; break; }
 			if(c==' ' || c=='\t' || c=='\n' || c==10 || c==13) break;
 			if(c=='\'') { 
@@ -1425,6 +1506,25 @@ void ParserInit(int fd, long file_size, int nh, char *fbuf) {
 	yylex_linenumber = 0;
 }	
 
+void PreParseFile(void) {
+	char *prepend;
+
+	if ((prepend = GetAutoPrependFile())) {
+		Push(prepend, STRING);
+		Include();
+	}
+}
+
+void PostParseFile(void) {
+	char *append;
+
+	if ((append = GetAutoAppendFile())) {
+		Push(append, STRING);
+		Include();
+	}
+}
+
+
 /* Iterate a while loop */
 void WhileAgain(long seekpos, int offset, int lineno) {
 	pa_pos = seekpos+offset;
@@ -1495,6 +1595,12 @@ void Exit(int footer) {
 	dbmCloseAll();
 	FpCloseAll();
 	Solid_closeAll();
+	SybsqlExit();
+	Ada_closeAll();
+	OraCloseAll();
+#ifdef HAVE_ODBC
+	ODBCcloseAll();
+#endif
 #if DEBUG
 	php_pool_show();
 	CloseDebug();
@@ -1715,3 +1821,9 @@ void PHPFlush(void) {
 	fflush(stdout);
 #endif
 }
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * End:
+ */

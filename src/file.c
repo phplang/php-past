@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: file.c,v 1.68 1997/06/03 10:31:13 rasmus Exp $ */
+/* $Id: file.c,v 1.77 1997/09/18 20:31:13 shane Exp $ */
 #include "php.h"
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -39,15 +39,24 @@
 #include "http_protocol.h"
 #include "http_request.h"
 #endif
+#if WINNT|WIN32
+#include "win32/wfile.h"
+#endif
 
 static char *CurrentFilename=NULL;
 static char *CurrentStatFile=NULL;
+#if WINNT|WIN32
+static unsigned int CurrentStatLength=0;
+#else
 static int CurrentStatLength=0;
+#endif
 static char *CurrentPI=NULL;
 static long CurrentFileSize=0L;
 static struct stat gsb;
 static int fgetss_state=0;
 static char *IncludePath = NULL;
+static char *AutoPrependFile = NULL;
+static char *AutoAppendFile = NULL;
 
 static FpStack *fp_top = NULL;
 
@@ -64,9 +73,9 @@ void php_init_file(void) {
 	fp_top = NULL;
 	fgetss_state=0;
 #if APACHE
-	if (conf->IncludePath) {
-	    IncludePath = conf->IncludePath;
-	}
+	IncludePath = conf->IncludePath;
+	AutoPrependFile = conf->AutoPrependFile;
+	AutoAppendFile = conf->AutoAppendFile;
 #endif
 	if (IncludePath == NULL) {
 		char *path;
@@ -77,6 +86,18 @@ void php_init_file(void) {
 	}
 	if (IncludePath == NULL) {
 	    IncludePath = estrdup(0, INCLUDEPATH);
+	}
+	if (AutoPrependFile == NULL) {
+	    char *file;
+	    if ((file = getenv("PHP_AUTO_PREPEND_FILE"))) {
+			AutoPrependFile = estrdup(0, file);
+	    }
+	}
+	if (AutoAppendFile == NULL) {
+	    char *file;
+	    if ((file = getenv("PHP_AUTO_APPEND_FILE"))) {
+		AutoAppendFile = estrdup(0, file);
+	    }
 	}
 }
 
@@ -117,7 +138,11 @@ int OpenFile(char *filename, int top, long *file_size) {
 #if APACHE
 		fn = php_rqst->filename;
 #else
-		fn = getenv("PATH_TRANSLATED");
+#if WIN32
+		fn = getenv("PATH_TRANSLATED"); 
+#else
+		fn = pi;
+#endif
 #endif
 		if(!fn || (fn && !*fn)) { Info(); return(-1); }
 #else
@@ -249,7 +274,7 @@ int OpenFile(char *filename, int top, long *file_size) {
 #endif
 			fd = open(fn3,O_RDONLY);
 			if(fd==-1) {
-				Error("Unable to open <i>%s</i>",fn3);
+				Error("(1)Unable to open <i>%s</i>",fn3);
 				return(-1);
 			}
 		} else if(!fn2) {
@@ -258,7 +283,7 @@ int OpenFile(char *filename, int top, long *file_size) {
 #endif
 			fd = open(fn,O_RDONLY);
 			if(fd==-1) {
-				Error("Unable to open <i>%s</i>",fn);
+				Error("(2)Unable to open <i>%s</i>",fn);
 				return(-1);
 			}
 		} else {
@@ -267,7 +292,7 @@ int OpenFile(char *filename, int top, long *file_size) {
 #endif
 			fd = open(fn2,O_RDONLY);
 			if(fd==-1) {
-				Error("Unable to open <i>%s</i>",fn2);
+				Error("(3)Unable to open <i>%s</i>",fn2);
 				return(-1);
 			}
 		}
@@ -292,8 +317,8 @@ int OpenFile(char *filename, int top, long *file_size) {
 #else
 		ss = getenv("PATH_INFO");
 #endif
-		if(!ss) Error("Unable to open: <i>%s</i>",filename?filename:"null");
-		else Error("Unable to open: <i>%s</i>",ss);
+		if(!ss) Error("(4)Unable to open: <i>%s</i>",filename?filename:"null");
+		else Error("(5)Unable to open: <i>%s</i>",ss);
 	}
 	return(fd);
 }
@@ -332,7 +357,7 @@ char *FixFilename(char *filename, int cd, int *ret, int careful) {
 #else
 		path[0] = '\0';
 #endif
-		strncpy(fn,filename,sizeof(path));
+		strncpy(fn,filename,sizeof(fn));
 		fn[sizeof(fn)-1]='\0';
 	}
 	if(fn && *fn=='~') {
@@ -1459,6 +1484,14 @@ void SetIncludePath(char *path) {
 		IncludePath = NULL;
 }
 
+char *GetAutoPrependFile(void) {
+    return(AutoPrependFile);
+}
+
+char *GetAutoAppendFile(void) {
+    return(AutoAppendFile);
+}
+
 #if APACHE
 void SetCurrentPD(char *pd) {
 	char *s;
@@ -1529,6 +1562,7 @@ void ChMod(void) {
 }	
 
 void ChOwn(void) {
+#ifndef WIN32
 	Stack *s;
 	int ret;
 	char temp[8];
@@ -1563,9 +1597,13 @@ void ChOwn(void) {
 	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
+#else
+	Error("ChOwn not available under win32!");
+#endif
 }	
 
 void ChGrp(void) {
+#ifndef WIN32
 	Stack *s;
 	int ret;
 	char temp[8];
@@ -1600,6 +1638,9 @@ void ChGrp(void) {
 	}
 	sprintf(temp,"%d",ret);
 	Push(temp,LNUMBER);
+#else
+	Error("ChGrp not available under win32!");
+#endif
 }
 
 void MkDir(void) {
@@ -1702,7 +1743,7 @@ void PHPFile(void) {
 
 void set_path_dir(char *pi) {
 #ifndef APACHE
-	char *buf = emalloc(0,sizeof(char) * (strlen(pi)+12));
+	char *buf = malloc(sizeof(char) * (strlen(pi)+12));
 #endif
 #ifdef PHP_ROOT_DIR
 	char *env = emalloc(0,sizeof(char) * (strlen(pi) + strlen(PHP_ROOT_DIR) + 2));
@@ -1805,7 +1846,7 @@ void Virtual(void) {
  */
 void ReadFile(void) {
 	Stack *s;
-	char buf[8092],temp[8];
+	char buf[8192],temp[8];
 	FILE *fp;
 	int b,i, size;
 
@@ -1878,6 +1919,41 @@ void FileUmask(int args) {
 }
 
 /*
+ * Read to EOF on a file descriptor and write the output to stdout.
+ */
+void FPassThru(void) {
+	Stack *s;
+	FILE *fp;
+	char buf[8192], temp[8];
+	int id, size, b, i;
+
+	s = Pop();
+	if (!s) {
+		Error("Stack error in FPassThru");
+		Push("-1", LNUMBER);
+		return;
+	}
+	id = s->intval;
+	fp = FpFind(id);
+	if (!fp) {
+		Error("Unable to find file identifier %d",id);
+		Push("-1", LNUMBER);
+		return;
+	}
+	
+	size = 0;
+	php_header(0,NULL);
+	while((b = fread(buf, 1, sizeof(buf), fp)) > 0) {
+		for(i = 0; i < b; i++)
+			PUTC(buf [i]);
+		size += b ;
+	}
+	fclose(fp);
+	sprintf(temp,"%d",size);	
+	Push(temp,LNUMBER);
+}
+
+/*
  * CheckUid
  *
  * This function has three modes:
@@ -1927,3 +2003,9 @@ int CheckUid(char *fn, int mode) {
 	if(duid == getmyuid()) return(1);
 	else return(0);
 }
+
+/*
+ * Local variables:
+ * tab-width: 4
+ * End:
+ */

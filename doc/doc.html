@@ -43,6 +43,8 @@ when it is bad, it is better than nothing.
 	<LI><A HREF="#solid_support">Solid Support</A>
 	<LI><A HREF="#sybase_support">Sybase Support</A>
 	<LI><A HREF="#oracle_support">Oracle Support</A>
+	<LI><A HREF="#illustra_support">Illustra Support</A>
+	<LI><A HREF="#adabas_support">Adabas Support</A>
 	<LI><A HREF="#regexp">Regular Expressions</A>
 	<LI><A HREF="#escapes">Escape Characters</A>
 	<LI><A HREF="#octal">Octal notation of Unix file permissions</A>
@@ -111,6 +113,15 @@ components of a web page in a single html file.  By including support
 for various databases, it also makes it trivial to develop database
 enabled web pages.  Many people find the embedded nature much easier
 to deal with than trying to create separate HTML and CGI files.<P>
+
+<P>
+PHP Version 3.0 is yet another rewrite.  If you are just starting out
+with PHP, I suggest that you start with Version 3.0 instead of
+continuing with 2.0 at this point.  PHP3 is quickly going to replace
+PHP/FI 2.0 and all development efforts are now focused on PHP3.  Any
+remaining bugs in PHP/FI 2.0 are unlikely to be fixed unless they 
+are straightforward.  More information on PHP3 can be found at
+<a href="http://www.lerdorf.on.ca/php3/">http://www.lerdorf.on.ca/php3</a>.
 
 <P>
 Throughout this documentation any references to PHP, FI or PHP/FI
@@ -374,10 +385,10 @@ One large caveat at the time of this writing (Apr.20/96) is that the current
 official Apache release (1.0.5) has a severe limitation which prevents
 cgi redirected requests from having any post-method data associated with
 them.  I have tracked this down and fixed it in my version of Apache, and there
-is an official patch available in the <A HREF="http://www.vex.net/php/files">
-File Archives</A> on the <A HREF="http://www.vex.net/php">PHP Home Page</A>.<P>
+is an official patch available in the <A HREF="http://php.iquest.net/files/">
+File Archives</A> on the <A HREF="http://php.iquest.net/">PHP Home Page</A>.<P>
 <P>A second rather large caveat with Apache 1.0.x is that it does not align
-double types correctly on most architectures.  You find find yourself getting
+double types correctly on most architectures.  You may find yourself getting
 strange bus errors from your httpd when using mod_php, either upgrade to 
 Apache 1.1 or edit the <i>alloc.c</i> Apache source file.  In this file you will
 find the following piece of code:<P>
@@ -406,6 +417,8 @@ The correct block of code is:<P>
     FILE *fp;
     double d;
   };</PRE>
+<P>These problems have all been fixed in later versions of Apache.
+
 <P>Check the Apache documentation on how to add a module.  Generally you
 add the module name to a file called <EM>Configuration</EM>.
 The line to be added if you want to use the mod_actions module is:<P>
@@ -451,8 +464,8 @@ automatically parsed by php if your index file is called index.phtml.<P>
 You can automatically redirect requests for files with a given
 extension to be handled by PHP/FI by using the Netscape Server
 CGI Redirection module.  This module is available in the
-<A HREF="http://www.vex.net/php/files">File Archives</A> on the
-<A HREF="http://www.vex.net/php">PHP/FI Home Page</A>.  The README
+<A HREF="http://php.iquest.net/php/files/">File Archives</A> on the
+<A HREF="http://php.iquest.net/">PHP/FI Home Page</A>.  The README
 in the package explicitly explains how to configure it for use with
 PHP/FI.<P>
 
@@ -462,7 +475,7 @@ PHP/FI.<P>
 NCSA does not currently support modules, so in order to do cgi
 redirection with this server you need to modify your server source
 code.  A patch to do this with NCSA 1.5 is available in the
-<A HREF="http://www.vex.net/php/files">PHP/FI file archives</A>.
+<A HREF="http://php.iquest.net/files/">PHP/FI file archives</A>.
 </DL>
 <HR><P>
 <H2><A NAME="security">Security Issues</A></H2>
@@ -599,7 +612,10 @@ from using mod_php to try to steal passwords.<P>
 <P>
 When running PHP as an Apache module, you may access the request header
 variables sent by the remote browser by prepending <B>$req_</B> to the
-beginning of the header value you would like to use.  The <a href="#phpinfo">
+beginning of the header value you would like to use.  If the request name
+contains a <b>-</b> character such as User-Agent, then you need to map the
+- to _ (an underscore).  ie. reference it as $req_User_Agent.
+The <a href="#phpinfo">
 phpinfo()</a> function can be used to display all the request headers.<P>
 eg.
 <PRE>    &lt;
@@ -609,7 +625,7 @@ eg.
 The above simple script might output:
 <PRE>    Keep-Alive
     www.host.com</PRE>
-				
+	
 <HR>
 <H2><A NAME="module">Apache Module Notes</A></H2>
 <P>
@@ -683,6 +699,28 @@ but it may also limit people from writing complex scripts.  The default is 8K.<P
 <DD>A colon-separated list of directories where php will look for
 files in when running <A HREF="#include">include()</A>.  The default
 is to look only in the current directory. 
+<P>
+<DT><STRONG>phpAutoPrependFile <EM>file name</EM></STRONG> <DD>Before
+the actual PHP/FI file is parsed, you may give a file name here that
+is parsed before the "main file", using PHP's Include() function
+(which means phpIncludePath applies for the file name).  Keep in mind
+that you can make it difficult for yourself to use the Header()
+function in the main file if you write HTML from an auto-prepended
+file.
+<P>
+<DT><STRONG>phpAutoAppendFile <EM>file name</EM></STRONG>
+<DD>The name of a file parsed (using PHP's Include() function)after
+the actual PHP/FI file has been parsed, similar to phpAutoPrependFile.
+<P>
+<DT><STRONG>phpAdaDefDB <EM>database</EM></STRONG>
+<DD>Default Adabas database to use. No default value
+<P>
+<DT><STRONG>phpAdaUser <EM>username</EM></STRONG>
+<DD>Default Adabas database user. No default value
+<P>
+<DT><STRONG>phpAdaPW <EM>password</EM></STRONG>
+<DD>Default Adabas database password. No default value
+<P>
 <DT><STRONG>phpEngine <EM>on</EM>|<EM>off</EM></STRONG>
 <DD>Turn the PHP parsing engine on or off.  The default is <em>on</em> and
 this directive is only useful for sites that wish to allow directives from the AllowOverride Options
@@ -691,6 +729,15 @@ The common way to handle per-virtual host php installs is to enable the PHP mime
 directive on a per virtual host basis and then put &quote;phpEngine off&quot; in the non-PHP virtual
 host blocks.  If a non PHP customer tries to circumvent things by placing the PHP mime type in
 their .htaccess, the phpEngine off setting restricts the PHP parser from functioning.
+<DT><STRONG>phpLastModified <EM>on</EM>|<EM>off</EM></STRONG>
+<DD>Since php pages are dynamic, they are processed and sent to the browser each
+time you access them.
+But sometimes, when you use php for basic includes, the parsed page does not
+change as long as the source doesn't. It that case, you may want to avoid page
+regeneration/reloading.
+If phpLastModified is turned on Apache will send the Last-Modified tag to the browser, so that
+the page will only be reloaded when it changes.
+(not that if you are using page logging, multiple accesses will not be logged!)
 </DL>
 <P>
 All of these directives are optional.  If a directive is not specified anywhere,
@@ -723,7 +770,7 @@ process which is already running.  The php.fcgi binary will still work as a norm
 CGI binary, so you could just create a symbolic link from php.cgi to php.fcgi.<P>
 <P>If you are not using Apache, the above steps will be similar, but not identical.
 CGI Redirection mechanisms are available for NCSA and Netscape servers at the
-<A HREF="http://www.vex.net/php/files">PHP/FI File Archive</A>.<P>
+<A HREF="http://php.iquest.net/files/">PHP/FI File Archive</A>.<P>
 <HR>
 <H2><A NAME="access">Access Control</A></H2>
 <P>
@@ -935,17 +982,17 @@ Any component of the GET data (the data following a '?' in the URL) which is
 of the form, <EM>word=something</EM> will define the variable <EM>$word</EM> to
 contain the value <EM>something</EM>.  Even if the data is not of this form,
 it can be accessed with the $argv built-in array.  For example, in a URL like:<P>
-<PRE>    /cgi-bin/php.cgi/file.html?abc+def+EMAIL_ADDR=rasmus@vex.net&amp;var=value</PRE>
+<PRE>    /cgi-bin/php.cgi/file.html?abc+def+EMAIL_ADDR=rasmus@lerdorf.on.ca&amp;var=value</PRE>
 The relevant components of the PHP symbol table will be:<P>
 <PRE>    $argc       = 4
     $argv[0]    = abc
     $argv[1]    = def
-    $argv[2]    = EMAIL_ADDR=rasmus@vex.net&amp;var=value
-    $EMAIL_ADDR = rasmus@vex.net
+    $argv[2]    = EMAIL_ADDR=rasmus@lerdorf.on.ca&amp;var=value
+    $EMAIL_ADDR = rasmus@lerdorf.on.ca
     $var        = value</PRE>
 <P>
 Notice how the EMAIL_ADDR part of the data shows up both as $argv[2] where it is
-unparsed, and the $EMAIL_ADDR variable is created to contain <EM>rasmus@vex.net</EM>.<P>
+unparsed, and the $EMAIL_ADDR variable is created to contain <EM>rasmus@lerdorf.on.ca</EM>.<P>
 <P>
 The $EMAIL_ADDR variable was used as an example in the above because it
 is a useful variable if you are using the logging features of PHP.  By adding:<P>
@@ -1253,7 +1300,6 @@ PHP/FI supports has a rich set of mysql support functions:
 <DT><A HREF="#mysql_listtables">mysql_ListTables()</A>
 <DT><A HREF="#mysql_numfields">mysql_NumFields()</A>
 <DT><A HREF="#mysql_numrows">mysql_NumRows()</A>
-<DT><A HREF="#mysql_regcase">mysql_RegCase()</A>
 <DT><A HREF="#mysql_result">mysql_Result()</A>
 <DT><A HREF="#mysql_tablename">mysql_TableName()</A>
 </DL>
@@ -1329,8 +1375,10 @@ system in order to compile PHP/FI with sybase support.
 <p>
 The following PHP/FI functions are available for Sybase. <P>
 <DL>
+<DT><A HREF="#sybsql_checkconnect">SybSQL_CheckConnect()</A>
 <DT><A HREF="#sybsql_connect">SybSQL_Connect()</A>
 <DT><A HREF="#sybsql_DBuse">SybSQL_DBuse()</A>
+<DT><A HREF="#sybsql_Exit">SybSQL_Exit()</A>
 <DT><A HREF="#sybsql_fieldname">SybSQL_Fieldname()</A>
 <DT><A HREF="#sybsql_getfield">SybSQL_GetField()</A>
 <DT><A HREF="#sybsql_isrow">SybSQL_IsRow()</A>
@@ -1353,6 +1401,7 @@ Oracle support.
 <P>
 The following PHP/FI functions are available for Oracle: <P>
 <DL>
+<DT><A HREF="#ora_bind">Ora_Bind()</A>
 <DT><A HREF="#ora_close">Ora_Close()</A>
 <DT><A HREF="#ora_commit">Ora_Commit()</A>
 <DT><A HREF="#ora_commitoff">Ora_CommitOff()</A>
@@ -1369,48 +1418,180 @@ The following PHP/FI functions are available for Oracle: <P>
 An example PHP/FI Oracle application:
 <PRE>
 &lt;?
-PutEnv("ORACLE_SID", "database");
+PutEnv(&quot;ORACLE_HOME=path_to_your_oracle_home&quot;
+PutEnv(&quot;ORACLE_SID=database&quot;
 
-$conn = Ora_Logon("username", "password");
+/* Establish a connection between PHP and Oracle. */
+$conn = Ora_Logon(&quot;username&quot; &quot;password&quot;
 
-if ($conn < 0) {
-    echo("Could not connect to Oracle.\n");
+if ($conn &lt; 0) {
+    echo(&quot;Could not connect to Oracle.\n&quot;
     exit;
 }
 
+/* Open a cursor in Oracle. */
 $cursor = Ora_Open($conn);
 
 if ($cursor &lt; 0) {
-    echo("Could not open a cursor.\n");
+    echo(&quot;Could not open a cursor.\n&quot;
     Ora_Logoff($conn);
     exit;
 }
 
-Ora_CommitOff($cursor);
+/* Turn off autocommit. */
+Ora_CommitOff($conn);
 
-if (Ora_Parse($cursor, "SELECT * FROM students") &lt; 0) {
-    echo("Parse failed!\n");
+/* This is the SQL query. */
+$query = &quot;SELECT * FROM some_table&quot;
+
+if (Ora_Parse($cursor, $query) &lt; 0) {
+    echo(&quot;Parse failed!\n&quot;
     Ora_Logoff($conn);
     exit;
 }
 
+/* Execute the SQL statement associated with $cursor and
+   prepare storage for select-list items. */
 $ncols = Ora_Exec($cursor);
-$err = Ora_Fetch($cursor);
-while ($err == 1) {
+
+echo &quot;lt;P&gt;\n&quot;
+echo &quot;lt;TABLE BORDER=1 CELLSPACING=0&gt;\n&quot;
+
+/*  Retrieve all rows from the database one after another. */
+while (Ora_Fetch($cursor) == 1) {
     $i = 0;
-    while ($i &lt; $ncol) {
-        $col = Ora_GetColumn($cursor, $i);
-        echo("got: $col (" + GetType($col) + ")\n");
-        $i++;
+    echo &quot;lt;TR&gt;\n&quot;
+    while ($i &lt; $ncols) {
+     /* Get data for a single column of currently fetched row. */
+     $col = Ora_GetColumn($cursor, $i);
+        echo(&quot;lt;TD&gt;$col&lt;/TD&gt;\n&quot;
+     $i++;
     }
-    $err = Ora_Fetch($cursor);
+    echo(&quot;lt;/TR&gt;\n&quot;
 }
 
+echo &quot;&lt;/TABLE&gt;\n&quot;;
+
+/* Close the Oracle connection. */
 Ora_Close($cursor);
+ 
+/* Disconnect the logon data area. */
 Ora_Logoff($conn);
 &gt;
 </PRE>
 <P>
+<HR>
+<H2><A NAME="illustra_support">Informix Illustra Support</A></H2>
+<P>
+Illustra is a commercial database sold by Informix. It has several features that
+are not fully supported by this interface (yet). The main claim to fame for 
+Illustra is that it is an object-relational database capable of being extended 
+in an object-orientated fashion. For example, it is possible to have an Image
+as a base type within the database. More information can be obtained from
+<A HREF="http://www.illustra.com/">The illustra home page</A>.<P>
+<P>
+The following PHP functions are available for Illustra:<P>
+<DL>
+<DT><A HREF="#mi_connect">mi_Connect()</A>
+<DT><A HREF="#mi_close">mi_Close()</A>
+<DT><A HREF="#mi_dbname">mi_DBname()</A>
+<DT><A HREF="#mi_exec">mi_Exec()</A>
+<DT><A HREF="#mi_result">mi_Result()</A>
+<DT><A HREF="#mi_numrows">mi_NumRows()</A>
+<DT><A HREF="#mi_numfields">mi_NumFields()</A>
+<DT><A HREF="#mi_fieldnum">mi_FieldNum()</A>
+<DT><A HREF="#mi_fieldname">mi_FieldName()</A>
+</DL>
+<P>
+<STRONG>Note:</STRONG> Type operations are not yet supported.
+<P>
+<P>
+Here is a sample script that connects to the illustra database on localhost
+called 'mydb' and retrieves the names and ages of people in a table:<P>
+<P>
+<PRE>
+&lt;?
+   $conn = mi_Connect("mydb", "username", "password");
+   if ($conn&lt;0) {
+      echo "An error occured on connection.\n";
+      exit;
+   }
+
+   $result = mi_Exec($conn, "select * from table1");
+   if ($result &lt; 0) {
+      echo "An error occured.\n";
+      exit;
+   }
+
+   $num = mi_NumRows($result);
+   $i = 0;
+
+   while ($i &lt; $num) {
+      echo "name: ";
+      echo mi_Result($result, $i, "name");
+      echo "  age: ";
+      echo mi_Result($result, $i, "age");
+      echo "&lt;BR&gt;";
+      $i++;
+   }
+
+   mi_Close($conn);
+&gt;
+</PRE><P>
+<HR>
+<H2><A NAME="adabas_support">Adabas Support</A></H2>
+<P>
+Adabas D is an advanced RDBMS that is available on many platforms. A special version, 
+the so called Personal Edition is available for Linux and Win32 at no cost.
+It is resticted to 5 simulataneous users and 100 MB of data.
+For more information on Adabas D refer to 
+<A HREF="http://www.softwareag.com">http://www.softwareag.com</A>.
+<P>
+The following PHP functions are available for accessing Adabas databases:<P>
+<DL>
+<DT><A HREF="#ada_connect">Ada_Connect()</A>
+<DT><A HREF="#ada_close">Ada_Close()</A>
+<DT><A HREF="#ada_exec">Ada_Exec()</A>
+<DT><A HREF="#ada_result">Ada_Result()</A>
+<DT><A HREF="#ada_resultall">Ada_ResultAll()</A>
+<DT><A HREF="#ada_freeresult">Ada_FreeResult()</A>
+<DT><A HREF="#ada_numrows">Ada_NumRows()</A>
+<DT><A HREF="#ada_numfields">Ada_NumFields()</A>
+<DT><A HREF="#ada_numrows">Ada_NumRows()</A>
+<DT><A HREF="#ada_numfields">Ada_NumFields()</A>
+<DT><A HREF="#ada_fieldnum">Ada_FieldNum()</A>
+<DT><A HREF="#ada_fieldname">Ada_FieldName()</A>
+<DT><A HREF="#ada_fieldtype">Ada_FieldType()</A>
+</DL>
+Here is the same script that was shown in the Postgres and Solid sections, adapted for
+Adabas D.
+<P>
+<PRE>
+&lt;?
+   $conn = Ada_Connect("node:db", "username", "password");
+   if (!$conn) {
+      echo "An error occured.\n";
+      exit;
+   }
+
+   $result = Ada_Exec($conn, "select * from table1");
+   if (!$result) {
+      echo "An error occured.\n";
+      exit;
+   }
+
+   while (Ada_FetchRow($result)) {
+      echo "name: ";
+      echo Ada_Result($result, "name");
+      echo "  age: ";
+      echo Ada_Result($result, "age");
+      echo "&lt;BR&gt;";
+   }
+
+   Ada_FreeResult($result);
+   Ada_Close($conn);
+&gt;
+</PRE><P>
 
 <HR>
 <H2><A NAME="regexp">Regular Expressions</A></H2>
@@ -1879,7 +2060,7 @@ are the valid operators:<P>
 Both bracketing and order of operations is supported, so the following
 is valid:<P>
 <P>
-<PRE>	&lt;?$a = (2"+1")*3+6/3&gt;</PRE><P>
+<PRE>	&lt;?$a = (2+1)*3+6/3&gt;</PRE><P>
 <P>
 The C-like incremental operators <TT>+=</TT> and <TT>-=</TT> are
 supported. ie.<P>
@@ -2121,6 +2302,128 @@ This assigns the return value of the <EM>time()</EM> function to the
 <DD>
 <P>Abs returns the absolute value of arg.<P>
 
+<DT><A NAME="ada_close"><FONT SIZE="+1">Ada_Close(connection_id)</FONT></A>
+<DD>
+<P>Ada_Close will close down the connection to the Adabas server associated
+with the given connection identifier.<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_connect"><FONT SIZE="+1">$connection = Ada_Connect(data source name, username, password)</FONT></A>
+<DD>
+<P>Ada_Connect opens a connection to a Adabas server. Each of the arguments
+should be a quoted string. The first parameter (data source name) is a string 
+in the form "servername:databasename". The servername (but not the colon) can be omitted if you want to
+access a local database. This function returns a connection_id. This identifier is needed by other
+Adabas functions. You can have multiple connections open at once. This function
+will return <STRONG>0</STRONG> on error.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_exec"><FONT SIZE="+1">$result = Ada_Exec(connection_id, query_string)</FONT></A>
+<DD>
+<P>Ada_Exec will send an SQL statement to the Adabas server specified by
+the connection_id. The connection_id must be a valid identifier
+that was returned by Ada_Connect or the special value <STRONG>0</STRONG>. 
+If connection_id is 0, ada_exec tries to establish or to use a connection 
+with the parameters given with the <A HREF="#directives">configuration directives</A> 
+<EM>phpAdaDefDB, phpAdaUser</EM> and <EM>phpAdaPW</EM>.<BR>
+The return value of this function
+is an identifier to be used to access the results by other Adabas functions.
+This function will return <STRONG>0</STRONG> on error. It will return
+<STRONG>1</STRONG> when the command executed correctly but is not expected to
+return data (insert or update commands, for example). Note that selects which
+return no data will still return a valid result greater than 1.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_fetchrow"><FONT SIZE="+1">Ada_FetchRow(result_id [,row_number])</FONT></A>
+<DD>
+<P>Ada_FetchRow fetches a row of the data that was returned by Ada_Exec.
+After Ada_FetchRow is called, the fields of that row can be access with
+Ada_Result. If no rownumber is given, Ada_FetchRow will try to fetch the next
+row in the result set. Every time Ada_FetchRow is called a new row can be accessed by
+Ada_Result. If Ada_FetchRow was succesful (there was a row),
+<STRONG>1</STRONG> is returned, if there are no more rows, Ada_FetchRow will
+return <STRONG>0</STRONG>. The return value of Ada_FetchRow can be used as
+the condition of a while loop. Calls to Ada_FetchRow() with and without rownumber
+can be mixed. To step through the result more than once, you can call Ada_FetchRow() 
+with rownumber 1 and then continue with Ada_FetchRow() without rownumber to review the 
+result.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_fieldname"><FONT SIZE="+1">Ada_FieldName(result_id, field_number)</FONT></A>
+<DD>
+<P>Ada_FieldName will return the name of the field occupying the given column
+number in the given Adabas result identifier. Field numbering starts from 0.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_fieldnum"><FONT SIZE="+1">Ada_FieldNum(result_id, field_name)</FONT></A>
+<DD>
+<P>Ada_FieldNum will return the number of the column slot that corresponds to
+the named field in the given Adabas result identifier. Field numbering starts at
+0. This function will return <STRONG>-1</STRONG> on error.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_fieldtype"><FONT SIZE="+1">Ada_FieldType(result_id, field_name|field_number)</FONT></A>
+<DD>
+<P>Ada_FieldType will return the SQL type of the field referecend by name or number 
+in the given Adabas result identifier. Note: Field numbering starts from 0.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_freeresult"><FONT SIZE="+1">Ada_FreeResult(result_id)</FONT></A>
+<DD>
+<P>Ada_FreeResult only needs to be called if you are worried about using too
+much memory while your script is running. All result memory will automatically
+be freed when the script is finished. But, if you are sure you are not going to
+need the result data anymore in a script, you may call Ada_FreeResult with
+the result identifier as an argument and the associated result memory will be
+freed.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_numfields"><FONT SIZE="+1">Ada_NumFields(result_id)</FONT></A>
+<DD>
+<P>Ada_NumFields will return the number of fields (columns) in a Adabas
+result. The argument is a valid result identifier returned by Ada_Exec.
+This function will return <STRONG>-1</STRONG> on error.<P>
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_numrows"><FONT SIZE="+1">Ada_NumRows(result_id)</FONT></A>
+<DD>
+<P>Ada_NumRows will return the number of rows in a Adabas result. The argument
+is a valid result identifier returned by Ada_Exec. This function will return
+<STRONG>-1</STRONG> on error. For INSERT, UPDATE, DELETE statements Ada_NumRows() 
+returns the number of rows affected. For a SELECT clause this is the number of 
+rows available.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_result"><FONT SIZE="+1">Ada_Result(result_id, field name | index)</FONT></A>
+<DD>
+<P>Ada_Result will return values from a result identifier produced by
+Ada_Exec. The field name specify what cell in the row to return. Instead of
+naming the field, you may use the field index as an unquoted number. Field
+indices start from 0. If the requested field is a blob, the contents is not
+returned, instead it is sent directly to the client. Note: Any field with a
+length greater than 255 bytes is treated this way.
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
+<DT><A NAME="ada_resultall"><FONT SIZE="+1">Ada_ResultAll(result_id [,format])</FONT></A>
+<DD>
+<P>Ada_ResultAll will print all rows from a result identifier produced by
+Ada_Exec. The result is printed in HTML table format. With the optional formatstring
+additional overall table formatting can be done (e. g. bgcolor= will set background 
+color, &gt;caption&gt; &lt;/caption to set caption). Note: The contents of &quot;format&quot; will 
+be inserted into the HTML table tag like this &lt;table format &gt;...
+<P>
+This function is only available if Adabas support has been enabled in PHP.<P>
+
 <DT><A NAME="addslashes"><FONT SIZE="+1">AddSlashes(arg)</FONT></A>
 <DD>
 <P>Escapes any $ \ or ' (if MAGIC_QUOTES is set) with a backslash.  See 
@@ -2128,7 +2431,8 @@ also <a href="#stripslashes">StripSlashes()</a>.<P>
 
 <DT><A NAME="asort"><FONT SIZE="+1">ASort(array)</FONT></A>
 <DD>
-<P>Sort is used to sort a PHP associative array in ascending order.  Unlike the
+<P>Sort is used to sort a PHP associative array in ascending order.  Use ARSort()
+for descending order. Unlike the
 <a href="#sort">Sort()</a> function, ASort() maintains index-value pairings. 
 It understands the three variable types and will sort alphabetically if the array
 contains strings, and numerically if the array contains numbers.  In
@@ -2144,6 +2448,14 @@ represented by the binary_string argument.
 The largest number that can be converted is
 31 bits long or 4294967295 in decimal.  See also the
 <A HREF="#decbin">DecBin()</A> function.<P>
+
+<DT><A NAME="ceil"><FONT SIZE="+1">Ceil(value)</FONT></A>
+<DD>
+<P>Ceil() rounds a floating point value up to the next integer.
+The return value is of type double (floating point) such that
+it can be used properly in complex equations.  To get an integer
+type back, use: <tt>$new = IntVal(Ceil($value));</tt><br>
+See also <a href="#floor">Floor()</a>.<P>
 
 <DT><A NAME="chdir"><FONT SIZE="+1">ChDir(dir)</FONT></A>
 <DD>
@@ -2182,7 +2494,7 @@ PHP parser.  This dificiency is that PHP only has a single expression stack.
 When inside a user-defined function this expression stack is never cleared
 because its contents may be needed within a complex expression in the
 context from which the user-defined function was called.  This means that
-if you have a while loop with a lot of iterations inside an user-defined 
+if you have a while loop with a lot of iterations inside a user-defined 
 function, you may be chewing up a lot of stack space.  You may even be
 hitting the max data space limit.  You can put a call to ClearStack() inside
 your while loop to prevent this memory consumption, but the trade-off is that
@@ -2379,7 +2691,7 @@ the formatted string to a variable instead of displaying it, use the
 <DT>%d %i</DT>
 <DD>Print a signed decimal number.</DD>
 <DT>%o</DT>
-<DD>Print an ocal number.</DD>
+<DD>Print an octal number.</DD>
 <DT>%u</DT>
 <DD>Print an unsigned decimal number.</DD>
 <DT>%x %X</DT>
@@ -2648,6 +2960,14 @@ should be called before the call to the file* function.<P>
 regular file, fifo special, character special, block special and symbolic
 link, respectively.<P>
 
+<DT><A NAME="floor"><FONT SIZE="+1">Floor(value)</FONT></A>
+<DD>
+<P>Floor() rounds a floating point value down to the previous integer.
+The return value is of type double (floating point) such that
+it can be used properly in complex equations.  To get an integer
+type back, use: <tt>$new = IntVal(Floor($value));</tt><br>
+See also <a href="#ceil">Ceil()</a>.<P>
+
 <DT><A NAME="flush"><FONT SIZE="+1">Flush()</FONT></A>
 <DD>
 <P>The Flush() function is used to Flush the output buffer.  For the Apache module,
@@ -2678,6 +2998,15 @@ write.  Note that the string argument may contain the special escape characters,
 <STRONG>\n</STRONG>, <STRONG>\r</STRONG> and <STRONG>\t</STRONG> to output newlines, carriage returns
 and tabs
 respectively.  See also <A HREF="#fgets">fgets()</A>.<P>
+
+<DT><A NAME="fpassthru"><FONT SIZE="+1">FPassThru(fp)</FONT></A>
+<DD>
+<P>FPassThru() outputs all remaining data on <I>fp</I> directly.  It
+is different from <A HREF="#readfile">ReadFile()</A> in that it can
+also handle files opened with <A HREF="#fsockopen">fsockopen()</A>.
+It differs from <A HREF="#passthru">PassThru()</A> in that it does not
+handle commands, but opened files.  FPassThru() returns the number of
+bytes read and written.<P>
 
 <DT><A NAME="fseek"><FONT SIZE="+1">fseek(fp,pos)</FONT></A>
 <DD>
@@ -3118,7 +3447,7 @@ as actually received on the argument filename.<P>
 <P>Mail automatically mails the message specified in the message argument
 to the receiver specified in the to argument.  Multiple recipients can
 be specified by spaces between them in the to argument.<P>
-eg. <PRE>   mail(&quot;rasmus@vex.net&quot;, 
+eg. <PRE>   mail(&quot;rasmus@lerdorf.on.ca&quot;, 
         &quot;My Subject&quot;, 
         &quot;Line 1\nLine 2\nLine 3&quot;);</PRE>
 
@@ -3138,6 +3467,91 @@ array if it were sorted.<P>
 <DT><A NAME="md5"><FONT SIZE="+1">Md5(message)</FONT></A>
 <DD>
 <P>Md5 returns the MD5 hash of a string value.<P>
+
+<DT><A NAME="mi_close"><FONT SIZE="+1">mi_Close(connection_id)</FONT></A>
+<DD>
+<P>mi_Close will close down the connection to an Illustra database
+associated with the given connection identifier.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_connect"><FONT SIZE="+1">$connection = mi_Connect(database, username, password)</FONT></A>
+<DD>
+<P>mi_Connect opens a connection to an Illustra database.  Each
+of the arguments should be a quoted string.
+This function returns a connection_id.  This identifier is needed by other
+Illustra functions.  You can have multiple connections open at once.
+The host to connect to is governed by the MI_PARAMS file on the machine 
+running the PHP executable. No support as yet for remote invocation
+This function will return <STRONG>-1</STRONG> on error.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_dbname"><FONT SIZE="+1">mi_DBname(connection_id)</FONT></A>
+<DD>
+<P>mi_DBname will return the name of the database that the given
+Illustra connection identifier is connected to.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_exec"><FONT SIZE="+1">$result = mi_Exec(connection_id, query_string)</FONT></A>
+<DD>
+<P>mi_Exec will send an SQL statement to the Illustra database specified by
+the connection_id.  The connection_id must be a valid identifier
+that was returned by mi_Connect.  The return value of this function
+is an identifier to be used to access the results from other
+Illustra functions.  This function will return <STRONG>-1</STRONG> on error.
+
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_fieldname"><FONT SIZE="+1">mi_FieldName(connection_id, result_id, field_number)</FONT></A>
+<DD>
+<P>mi_FieldName will return the name of the field occupying the
+given column number with the given Illustra result and connection identifiers.
+Field numbering starts from 0.<P>This function will return <STRONG>-1</STRONG>
+on error.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_fieldnum"><FONT SIZE="+1">mi_FieldNum(connection_id, result_id, field_name)</FONT></A>
+<DD>
+<P>mi_FieldNum will return the number of the column slot that
+corresponds to the named field in the given Illustra result identifier.  Field
+numbering starts at 0. This function
+will return <STRONG>-1</STRONG> on error.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_numfields"><FONT SIZE="+1">mi_NumFields(connection_id, result_id)</FONT></A>
+<DD>
+<P>mi_NumFields will return the number of fields (columns) in
+an Illustra result.  The argument is a valid result identifier returned
+by mi_Exec. This function will return <STRONG>-1</STRONG> on error.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_numrows"><FONT SIZE="+1">mi_NumRows(connection_id, result_id)</FONT></A>
+<DD>
+<P>mi_NumRows will return the number of rows in an Illustra result.  The argument
+is a valid result identifier returned by mi_Exec. This function will return
+<STRONG>-1</STRONG> on error.<P>
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
+<DT><A NAME="mi_result"><FONT SIZE="+1">mi_Result(connection_id, result_id, row_number, field name/index)</FONT></A>
+<DD>
+<P>mi_Result will return values from a result identifier
+produced by mi_Exec.  The row_number and field name specify what
+cell in the table of results to return. Row numbering starts from
+0.  Instead of naming the field, you may use the field index as
+an unquoted number.  Field indices start from 0.<P>
+<P>
+All values returned from the database are in String form, since no type-detection
+is available at the present.
+<P>
+This function is only available if Illustra support has been enabled in PHP.<P>
+
 
 <DT><A NAME="microtime"><FONT SIZE="+1">Microtime()</FONT></A>
 <DD>
@@ -3607,6 +4021,55 @@ OpenLog() initializes the system for further Syslog() calls.  See the
 openlog(3) UNIX man page for more details.  See also <a
 href="#initsyslog">InitSyslog()</a>, <a href="#syslog">Syslog()</a> and <a
 href="#closelog">CloseLog()</a>.
+<P>
+
+<DT><A NAME="ora_bind"><FONT SIZE="+1">Ora_Bind(cursor_ind, 
+php_variable_name, sql_variable_name, size)</FONT></A><BR>
+<DD>Ora_Bind() performs binding of PHP variables with Oracle ones.<BR><BR>
+Function parameters are:<BR>
+<DT><DD><VAR>cursor_id</VAR> - oracle cursor id for _parsed_ SQL query or PL/SQL block;<BR>
+<VAR>php_variable_name</VAR> - variable name in PHP script without leading '$'<BR>
+<VAR>sql_variable_name</VAR> - variable name in SQL with leading colon<BR>
+<VAR>size</VAR> - maximal number of bytes to be taken into account at binding<BR><BR>
+</DT>
+<B>Notes:</B> <BR>
+1) PHP variable <B>SHOULD</B> be initialised with at least <B>size</B> bytes
+length string even it is return-only variable.<BR>
+2) Ora_Bind() <B>SHOULD</B> be used after Ora_Parse and before Ora_Exec.
+In case of re-parsing the SQL sentence, all used variables have
+to be re-bound.<BR><BR>
+Ora_Bind() returns 0 upon success, -1 upon failure.<BR>
+<P>
+There is an example of Ora_Bind() usage:<BR>
+<PRE>
+
+        /* This is the PHP variable to be bound */
+        $rc  = "12345";
+
+        /* This is the SQL query. */
+        $query = "SELECT * FROM my_table where my_index = :indiana";
+        
+        ........
+
+        if (Ora_Parse($cursor, $query) < 0) {
+            echo("Parse failed!\n"
+            Ora_Logoff($conn);
+            exit;
+        } 
+
+        if (Ora_Bind($cursor, "rc", ":indiana", strlen($rc)) < 0) {
+            echo("Binding failed!\n"
+            Ora_Logoff($conn);
+            exit;
+        } 
+
+        /* Execute the SQL statement associated with $cursor and
+        prepare storage for select-list items. */
+        $ncols = Ora_Exec($cursor);
+        
+        ......
+
+</PRE>
 <P>
 
 <DT><A NAME="ora_close"><FONT SIZE="+1">Ora_Close(conn_ind)</FONT></A>
@@ -4112,6 +4575,14 @@ non-zero, the footers will be enabled, if zero, disabled.<P>
 is one of, &quot;integer&quot;, &quot;double&quot; or &quot;string&quot;.
 See also the <A HREF="#gettype">GetType()</A> function.<P>
 
+<DT><A NAME="shl"><FONT SIZE="+1">shl(n,b)</FONT></A>
+<DD>
+<P>Shift the value <b>n</b> left <b>b</b> bits.<P>
+
+<DT><A NAME="shr"><FONT SIZE="+1">shr(n,b)</FONT></A>
+<DD>
+<P>Shift the value <b>n</b> right <b>b</b> bits.<P>
+
 <DT><A NAME="sin"><FONT SIZE="+1">Sin(arg)</FONT></A>
 <DD>
 <P>Sin returns the sine of arg in radians.  See also <A HREF="#cos">Cos()</A>
@@ -4238,7 +4709,8 @@ This function is only available if Solid support has been enabled in PHP.<P>
 
 <DT><A NAME="sort"><FONT SIZE="+1">Sort(array)</FONT></A>
 <DD>
-<P>Sort is used to sort a PHP array in ascending order.  It understands
+<P>Sort is used to sort a PHP array in ascending order.  To sort in descending order, use
+the RSort() function.  It understands
 the three variable types and will sort alphabetically if the array
 contains strings, and numerically if the array contains numbers.  In
 the case of an array which contains a mixture of types, the first type
@@ -4305,6 +4777,16 @@ where the given sub-string is found.  For example, in the string,
 &quot;This is an example string&quot; above, the call:
 <TT>&lt;?echo strchr($string,&quot;an &quot;)&gt;</TT> would
 return the string: <TT>&quot;an example string&quot;</TT>.<P>
+
+<DT><A NAME="strtr"><FONT SIZE="+1">strtr(input,set1,set2)</FONT></A>
+<DD>strtr() translates each character of &quot;string&quot; that is in 
+&quot;set1&quot; to the corresponding character in &quot;set2&quot;.  
+Characters not in set1 are passed through unchanged.  When a character 
+appears more than once in &quot;set1&quot;  and the  corresponding 
+characters  in  &quot;set2&quot;  are  not  all  the same, only
+the final one is used. When one of &quot;set1&quot; or &quot;set2&quot; 
+is longer, longer &quot;set?&quot; is truncated to length of shorter 
+&quot;set?&quot;.<P>
 
 <DT><A NAME="stripslashes"><FONT SIZE="+1">StripSlashes(arg)</FONT></A>
 <DD>
@@ -4376,6 +4858,9 @@ by the start argument.  The first position in a string is position 0.  And the
 length argument specifies the number of characters to return from the start
 position.<P>
 
+<DT><A NAME="sybsql_checkconnect"><FONT SIZE="+1">sybSQL_CheckConnect()</FONT></A>
+<DD><P>This function returns 1 if the connection to the database has been established and 0 otherwise.<P>
+
 <DT><A NAME="sybsql_dbuse"><FONT SIZE="+1">sybSQL_DBuse(database)</FONT></A>
 <DD><P>This function issues a Sybase Transact-SQL <b>use</b> command for the 
 specified database. The only argument to the function is the name of the
@@ -4410,6 +4895,12 @@ with PHP/FI
 <code><a href="#include">include</a></code> statement.
 <p>
 The function returns 1 on success and 0 on failure.<P>
+
+<DT><A NAME="sybsql_fieldname"><FONT SIZE="+1">sybSQL_Exit()</FONT></A>
+<DD><P>
+This function forces a Sybase connection to be shut down.  If not called, the 
+connection will automatically be closed when the PHP page has been fully parsed, 
+so calling this function is optional.<P>
 
 <DT><A NAME="sybsql_fieldname"><FONT SIZE="+1">sybSQL_Fieldname(index)</FONT></A>
 <DD><P>
@@ -4606,8 +5097,7 @@ See the <a href="#rmdir">RmDir()</a> function for removing directories.<P>
 <DT><A NAME="unset"><FONT SIZE="+1">UnSet($var)</FONT></A>
 <DD>
 <P>UnSet undefines the given variable.  In the case of an array, the entire
-array is cleared.  Note that individual array elements can not be undefined
-with this command.<P>
+array is cleared.  Individual array elements may also be unset.<P>
 
 <DT><A NAME="urldecode"><FONT SIZE="+1">UrlDecode(arg)</FONT></A>
 <DD>

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: var.c,v 1.83 1997/06/07 23:19:58 rasmus Exp $ */
+/* $Id: var.c,v 1.96 1997/10/27 02:31:52 shane Exp $ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -195,6 +195,9 @@ void SetVar(char *name, int mode, int inc) {
 						t->douval = b.douval;
 						t->intval = b.intval;
 						/* check if we need a new bit of memory to store value */
+#if DEBUG
+						Debug("inc=%d, data_len=%d\n",inc,data_len);
+#endif
 						if(data_len) {
 							if(t->strval) {
 								if(data_len >= t->allocated) {
@@ -216,7 +219,9 @@ void SetVar(char *name, int mode, int inc) {
 							}
 						}
 						t->type = b.type;
-						if(t->deleted) t->count++;
+						if(inc!=-2) {
+							if(t->deleted) t->count++;
+						}
 						t->deleted = 0; 
 						if (var && whole_array && var->iname) {
 							if(t->iname) {
@@ -573,7 +578,8 @@ void SetVar(char *name, int mode, int inc) {
 								if(t->strval) *(t->strval)='\0';
 								else {
 									t->strval = estrdup(0,"");
-									t->allocated = 1;
+									if(inc==-2) t->allocated = 0;
+									else t->allocated=1;
 								}
 							}
 							break;
@@ -589,7 +595,10 @@ void SetVar(char *name, int mode, int inc) {
 					ntt=NULL;
 					count=0;
 					while(tt) {
-						if(!tt->deleted) {
+						if(!tt->deleted && tt->allocated) {
+#if DEBUG
+							Debug("inc counter from %d\n", count);
+#endif
 							count++;
 							if(count==1) {
 								rt=tt;
@@ -599,11 +608,11 @@ void SetVar(char *name, int mode, int inc) {
 						ptt=tt;
 						tt=tt->next;
 					}
-					if(var && whole_array && var->next && (ptt->deleted || strcmp(rt->iname,"0")) && array_cnt) {
-						if(ptt->deleted) tt=ptt;
+					if(var && whole_array && var->next && ((ptt->deleted||!ptt->allocated) || strcmp(rt->iname,"0")) && array_cnt) {
+						if(ptt->deleted || !ptt->allocated) tt=ptt;
 						else tt = GetVar(name,var->iname,0);
 						if(tt) {
-							if(strlen(var->strval)>tt->allocated) {
+							if(strlen(var->strval)>(unsigned int)tt->allocated) {
 								tt->strval = estrdup(0,var->strval);
 								tt->allocated = strlen(var->strval) + 1;
 							} else {
@@ -624,14 +633,17 @@ void SetVar(char *name, int mode, int inc) {
 						} else {
 							in_num=count;
 						}
-						sprintf(temp,"%d",in_num);
-						tt = GetVar(name,temp,0);
-						while(tt) {
-							sprintf(temp,"%d",++in_num);
+						if(!ftt || (ftt && ftt->allocated)) {
+							sprintf(temp,"%d",in_num);
 							tt = GetVar(name,temp,0);
+							while(tt) {
+								sprintf(temp,"%d",++in_num);
+								tt = GetVar(name,temp,0);
+							}
 						}
-						if(ftt==t && t->deleted) {
+						if(ftt==t && (t->deleted || !t->allocated)) {
 							tt=t;
+							tt->count=0;
 						} else if(!ftt->next) {
 							tt = emalloc(0,sizeof(VarTree));
 							ntt = tt;
@@ -648,7 +660,7 @@ void SetVar(char *name, int mode, int inc) {
 							tt->strval = estrdup(0,b.strval);
 							tt->allocated = b.allocated;
 						} else {
-							if(strlen(b.strval)+1 > tt->allocated) {
+							if(strlen(b.strval)+1 > (unsigned int)tt->allocated) {
 								tt->strval = estrdup(0,b.strval);
 								tt->allocated = b.allocated;
 							} else {
@@ -671,6 +683,9 @@ void SetVar(char *name, int mode, int inc) {
 							else tt->prev = (VarTree *)-1;
 						}
 						t->count++;
+#if DEBUG
+						Debug("Count is now %d\n",t->count);
+#endif
 						if(t!=tt)
 							tt->count = t->count-1;
 						t->lastnode = tt;
@@ -1157,6 +1172,9 @@ VarTree *GetVar(char *name, char *index, int mode) {
 			char *sn, *pi;
 			sn = getenv("SCRIPT_NAME");
 			pi = getenv("PATH_INFO");
+			if(!strcmp(sn,pi)) {
+				pi = NULL;
+			}
 			sprintf(temp,"%s%s",sn?sn:"",pi?pi:"");
 			s = temp;
 		}
@@ -1263,8 +1281,8 @@ VarTree *GetVar(char *name, char *index, int mode) {
 	}
 #if APACHE
 	/* Ok, it could be a request header */
-#if SAFE_MODE
-	if(!strncasecmp(name,"req_authorization")) {
+#if PHP_SAFE_MODE
+	if(!strncasecmp(name,"req_authorization", 17)) {
 		Error("The PHP module is running in SAFE MODE.  You may not access $req_authorization in this mode.");
 		return(NULL);
 	}
@@ -1274,7 +1292,13 @@ VarTree *GetVar(char *name, char *index, int mode) {
 		tenv = (table_entry *)env_arr->elts;
 		for(i = 0; i < env_arr->nelts; ++i) {
 			if(!tenv[i].key) continue;
-			if(!strcasecmp(name+4,tenv[i].key)) {
+			strncpy(temp,tenv[i].key,127);
+			s = temp;
+			while(*s) {  /* Map - to _ */
+				if(*s=='-') *s='_';
+				s++;
+			}	
+			if(!strcasecmp(name+4,temp)) {
 				env = emalloc(2,sizeof(VarTree));
 				env->strval = NULL;
 				env->iname = NULL;
@@ -1299,10 +1323,23 @@ VarTree *GetVar(char *name, char *index, int mode) {
 }
 
 /* Returns true (1) if variable is defined */
-void IsSet(char *name) {
+void IsSet(char *name, int index) {
 	VarTree *t;
+	Stack *s=NULL;
 
-	t = GetVar(name,NULL,0);
+	if(index) {
+		s = Pop();
+		if(!s) {
+			Error("Stack Error in IsSet");
+			return;
+		}
+#if DEBUG
+		Debug("Looking up %s[%s]\n",name,s->strval);
+#endif
+		t = GetVar(name,s->strval,0);
+	} else {
+		t = GetVar(name,NULL,0);
+	}
 	if(!t || (t && !t->allocated)) {
 		Push("0",LNUMBER);
 	} else {
@@ -1410,7 +1447,6 @@ char *SubVar(char *string) {
 			strcpy(sret,allocated);
 			allocated=sret;
 			ret = sret + strlen(sret);
-			s = sret + strlen(sret);
 		}
 		if(*s==VAR_INIT_CHAR) {
 			if(s>string && *(s-1)=='\\') {
@@ -1518,7 +1554,7 @@ void Count(void) {
 			t = t->prev;
 		}
 	}
-	if(t && t->allocated) sprintf(temp,"%d",t->count);	
+	if(t && t->allocated && !t->deleted) sprintf(temp,"%d",t->count);	
 	else strcpy(temp,"0");
 	Push(temp,LNUMBER);
 }
@@ -1664,6 +1700,7 @@ void ArrayMin(void) {
 void PutEnv(void) {
 	Stack *s;
 	int ret;
+	char *env;
 
 	s = Pop();
 	if(!s) {
@@ -1671,7 +1708,12 @@ void PutEnv(void) {
 		return;
 	}
 	if(s->strval && *(s->strval)) {
-		ret = putenv(estrdup(0,s->strval));
+		/* You can't do putenv on memory that is going to go away! */
+		/* The memory must be allocated as long as the process is around! */
+		/* (Yes this is a memory leak, but really, that's how PutEnv works.) */
+		env = malloc(strlen(s->strval)+1);
+		strcpy(env, s->strval);
+		ret = putenv(env);
 		if(ret) {
 			Error("putenv failed");
 		}
@@ -1702,6 +1744,7 @@ void GetEnv(void) {
 	if(s->strval && *(s->strval)) {
 		ret = getenv(s->strval);
 		if(!ret) {
+			Push("",STRING);
 			Error("getenv failed");
 		} else {
 			Push(ret,STRING);
@@ -1886,7 +1929,7 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 		if(renum==2) {
 			new = GetVar(d->name,s->iname,0);
 			if(new) {
-				if(strlen(s->strval)>new->allocated) {
+				if(strlen(s->strval)>(unsigned int)new->allocated) {
 					new->strval = estrdup(0,s->strval);
 					new->allocated = strlen(s->strval) + 1;
 				} else {
@@ -1916,12 +1959,12 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 			lstrval = new->allocated-1;
 			liname = strlen(new->iname);
 		}
-		if(lname==0 || strlen(s->name)>lname) {
+		if(lname==0 || strlen(s->name)>(unsigned int)lname) {
 			new->name = estrdup(0,s->name);
 		} else {
 			strcpy(new->name,s->name);
 		}
-		if(lstrval==0 || strlen(s->strval)>lstrval) {
+		if(lstrval==0 || strlen(s->strval)>(unsigned int)lstrval) {
 			new->strval = estrdup(0,s->strval);
 			new->allocated = strlen(s->strval) + 1;
 		} else {
@@ -1932,14 +1975,14 @@ void copyarray(VarTree *dvar, VarTree *svar, VarTree *dtop, int renum) {
 		new->douval = s->douval;
 		new->count = s->count;
 		if(renum==0) {
-			if(liname==0 || strlen(s->iname)>liname) {
+			if(liname==0 || strlen(s->iname)>(unsigned int)liname) {
 				new->iname = estrdup(0,s->iname);
 			} else {
 				strcpy(new->iname,s->iname);
 			}
 		} else if(renum==1) {
 			sprintf(newnum,"%d",count-1);
-			if(liname==0 || strlen(newnum)>liname) {
+			if(liname==0 || strlen(newnum)>(unsigned int)liname) {
 				new->iname = estrdup(0,newnum);
 			} else {
 				strcpy(new->iname,newnum);
@@ -1991,11 +2034,56 @@ void deletearray(VarTree *old) {
 	old->lastnode=old;
 }
 
-void UnSet(char *name) {
-	VarTree *var;
+void UnSet(char *name, int index) {
+	VarTree *var, *firstvar, vartemp;
+	Stack *s=NULL;
 
-	var = GetVar(name,NULL,0);
-	if(var && var->allocated) {
-		deletearray(var);
+	if(index) {
+		s = Pop();
+		if(!s) {
+			Error("Stack Error in UnSet");
+			return;
+		}
+		var = GetVar(name,s->strval,0);
+		if(var) {
+			firstvar = GetVar(name,NULL,0);
+			if(firstvar) {
+				firstvar->count--;
+				if(firstvar==var) {	/* check if it is the first item in an array */
+					var = var->next;
+					while(var) { /* find the first undeleted item */
+						if(!(var->deleted)) break;
+						var = var->next;
+					}
+					if(var) {
+						memcpy(&vartemp,var,sizeof(VarTree));	/* grab a copy of other var */
+						/* switch the two */
+						memcpy(var,firstvar,sizeof(VarTree));
+						memcpy(firstvar,&vartemp,sizeof(VarTree));	
+
+						/* now fix the links */
+						firstvar->lacc   = (VarTree *)-1;
+						var->prev = firstvar->prev;
+						firstvar->prev = (VarTree *)-1;
+						var->next   = firstvar->next;
+						firstvar->next = vartemp.next;
+
+						/* And we want the count to be accurate on the new first node */
+						firstvar->count = var->count;
+
+						/* lastnode needs to be set accurately as well */
+						firstvar->lastnode = var->lastnode;
+
+						/* Delete the switched item */
+					}
+				}
+			}
+			var->deleted = 1;	
+		}
+	} else {
+		var = GetVar(name,NULL,0);
+		if(var && var->allocated) {
+			deletearray(var);
+		}
 	}
 }

@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: snmp.c,v 1.5 1997/04/23 22:06:30 rasmus Exp $ */
+/* $Id: snmp.c,v 1.6 1997/08/12 15:37:13 ssb Exp $ */
 /*
  * Portions of this file contain code which was originally part of the
  * CMU SNMP project.  The following copyright notice applies
@@ -45,8 +45,8 @@ WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
 ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
 SOFTWARE.
 ******************************************************************/
-#if PHP_SNMP_SUPPORT
 #include "php.h"
+#if PHP_SNMP_SUPPORT
 #include "parse.h"
 /* conflict - work around */
 #define PHPSTRING 260

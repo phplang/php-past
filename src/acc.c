@@ -19,7 +19,7 @@
 *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.                 *
 *                                                                            *
 \****************************************************************************/
-/* $Id: acc.c,v 1.27 1997/01/08 04:33:23 cvswrite Exp $ */
+/* $Id: acc.c,v 1.28 1997/08/16 03:51:37 rasmus Exp $ */
 #include "php.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -173,7 +173,7 @@ void AddRule(char *db) {
 	var = GetVar("addrule",NULL,0);
 	if(!var) return;
 	_dbmClose(db);
-	ret = _dbmOpen(db,"w");
+	ret = _dbmOpen(db,"w",0);
 	if(ret) return;
 	if(!strcmp(var->strval,"Default")) strcpy(temp,"cfg-accessALL");
 	else sprintf(temp,"cfg-access-%s",var->strval);
@@ -196,7 +196,7 @@ void AddRule(char *db) {
 	}
 	_dbmReplace(db,temp,temp2);
 	_dbmClose(db);
-	_dbmOpen(db,"r");
+	_dbmOpen(db,"r",0);
 }
 		
 void AddFile(char *db, char *path) {
@@ -214,14 +214,14 @@ void AddFile(char *db, char *path) {
 	s = _dbmFetch(db,temp);
 	if(s && strlen(s)>2) return;
 	_dbmClose(db);
-	ret = _dbmOpen(db,"w");
+	ret = _dbmOpen(db,"w",0);
 	if(ret) return;
 
 	s = _dbmFetch(db,"cfg-accessALL");
 	if(s) _dbmInsert(db,temp,s);	
 	else _dbmInsert(db,temp,"pub\033L\033dom.*");
 	_dbmClose(db);
-	_dbmOpen(db,"r");
+	_dbmOpen(db,"r",0);
 }
 
 void ChkPostVars(char *db) {
@@ -231,7 +231,7 @@ void ChkPostVars(char *db) {
 	var = GetVar("cfg-email-URL",NULL,0);
 	if(var) {
 		_dbmClose(db);
-		ret = _dbmOpen(db,"w");
+		ret = _dbmOpen(db,"w",0);
 		if(ret) return;
 		op = 1;
 		_dbmReplace(db,"cfg-email-URL",var->strval);
@@ -242,7 +242,7 @@ void ChkPostVars(char *db) {
 	if(var) {
 		if(!op) {
 			_dbmClose(db);
-			ret = _dbmOpen(db,"w");
+			ret = _dbmOpen(db,"w",0);
 			if(ret) return;
 			op = 1;
 		}
@@ -254,7 +254,7 @@ void ChkPostVars(char *db) {
 	if(var) {
 		if(!op) {
 			_dbmClose(db);
-			ret = _dbmOpen(db,"w");
+			ret = _dbmOpen(db,"w",0);
 			if(ret) return;
 			op = 1;
 		}
@@ -266,7 +266,7 @@ void ChkPostVars(char *db) {
 	if(var) {
 		if(!op) {
 			_dbmClose(db);
-			ret = _dbmOpen(db,"w");
+			ret = _dbmOpen(db,"w",0);
 			if(ret) return;
 			op = 1;
 		}
@@ -280,7 +280,7 @@ void ChkPostVars(char *db) {
 	}
 	if(op) {
 		_dbmClose(db);
-		_dbmOpen(db,"r");
+		_dbmOpen(db,"r",0);
 	}
 }
 
@@ -296,7 +296,7 @@ void PostToAccessStr(char *db) {
 	var = GetVar("file",NULL,0);
 	if(!var) return;
 	_dbmClose(db);
-	ret = _dbmOpen(db,"w");
+	ret = _dbmOpen(db,"w",0);
 	if(ret) return;
 	if(!strcmp(var->strval,"Default")) strcpy(temp,"cfg-accessALL");
 	else sprintf(temp,"cfg-access-%s",var->strval);
@@ -356,7 +356,7 @@ void PostToAccessStr(char *db) {
 		_dbmReplace(db,temp,temp2);
 	}
 	_dbmClose(db);
-	_dbmOpen(db,"r");
+	_dbmOpen(db,"r",0);
 }
 
 int CheckAccess(char *filename, long uid) {
@@ -382,7 +382,7 @@ int CheckAccess(char *filename, long uid) {
 	sprintf(db,"%s/%ld-cfg",AccessDir,uid);
 
 	es = ErrorPrintState(0);
-	ret = _dbmOpen(db,"r");
+	ret = _dbmOpen(db,"r",0);
 	ErrorPrintState(es);
 	if(ret) return(0);
 
