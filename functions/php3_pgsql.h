@@ -27,7 +27,7 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: php3_pgsql.h,v 1.17 1998/09/19 21:46:11 jah Exp $ */
+/* $Id: php3_pgsql.h,v 1.18 1998/10/04 16:44:32 zeev Exp $ */
 
 #ifndef _PHP3_PGSQL_H
 #define _PHP3_PGSQL_H
@@ -41,6 +41,10 @@
 
 extern php3_module_entry pgsql_module_entry;
 #define pgsql_module_ptr &pgsql_module_entry
+
+
+#include <libpq-fe.h>
+#include <libpq/libpq-fs.h>
 
 extern int php3_minit_pgsql(INIT_FUNC_ARGS);
 extern int php3_rinit_pgsql(INIT_FUNC_ARGS);
@@ -77,8 +81,15 @@ extern void php3_pgsql_lo_read(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_lo_write(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pgsql_lo_readall(INTERNAL_FUNCTION_PARAMETERS);
 
-#include <libpq-fe.h>
-#include <libpq/libpq-fs.h>
+void php3_pgsql_do_connect(INTERNAL_FUNCTION_PARAMETERS,int persistent);
+int php3_pgsql_get_default_link(INTERNAL_FUNCTION_PARAMETERS);
+void php3_pgsql_get_link_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type);
+void php3_pgsql_get_result_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type);
+char *get_field_name(PGconn *pgsql, Oid oid, HashTable *list);
+void php3_pgsql_get_field_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type);
+void php3_pgsql_fetch_hash(INTERNAL_FUNCTION_PARAMETERS);
+void php3_pgsql_data_info(INTERNAL_FUNCTION_PARAMETERS, int entry_type);
+
 
 typedef struct pgLofp {
         PGconn *conn;

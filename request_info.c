@@ -65,7 +65,7 @@ int php3_init_request_info(void *conf)
 	   requires we get the info from path translated.  This can be removed at
 	   such a time taht apache nt is fixed */
 	else if (GLOBAL(request_info).path_translated) {
-		GLOBAL(request_info).script_filename = estrdup(GLOBAL(request_info).path_translated);
+		GLOBAL(request_info).script_filename = GLOBAL(request_info).path_translated;
 	} else {
 		GLOBAL(request_info).script_filename = NULL;
 	}

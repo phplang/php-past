@@ -1,5 +1,9 @@
-
 <script language=PHP>
+//
+// test script to exercise basic PHP3 Informix driver functionality
+// uses the ODS/SE 7.x stores7 demo database
+// sept 1998 Danny.Heijl@cevi.be
+//
 
 function check_ifx($res) {
     $msg = ifx_error($res);

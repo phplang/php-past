@@ -31,7 +31,7 @@
    |          Rasmus Lerdorf      <rasmus@lerdorf.on.ca>                  |
    +----------------------------------------------------------------------+
  */
-/* $Id: imap.c,v 1.41 1998/09/18 16:55:09 rasmus Exp $ */
+/* $Id: imap.c,v 1.42 1998/09/26 06:29:29 musone Exp $ */
 
 #define IMAP41
 
@@ -156,6 +156,7 @@ function_entry imap_functions[] =
 	{"imap_status", php3_imap_status, NULL},
 	{"imap_bodystruct", php3_imap_bodystruct, NULL},
 	{"imap_fetch_overview", php3_imap_fetch_overview, NULL},
+	{"imap_mail_compose", php3_imap_mail_compose, NULL},
 	{NULL, NULL, NULL}
 };
 
@@ -224,7 +225,6 @@ int imap_init(INIT_FUNC_ARGS)
 	mail_link (&mbxdriver);      /* link in the mbox driver */
 #else
 	mail_link(&unixdriver);   /* link in the unix driver */
-	mail_link (&mboxdriver);      /* link in the mbox driver */
 #endif
 	mail_link (&imapdriver);      /* link in the imap driver */
 	mail_link (&nntpdriver);      /* link in the nntp driver */
@@ -371,6 +371,37 @@ int imap_init(INIT_FUNC_ARGS)
         REGISTER_MAIN_LONG_CONSTANT("SORTSIZE",SORTSIZE , CONST_PERSISTENT | CONST_CS);
               /* size */
 
+        REGISTER_MAIN_LONG_CONSTANT("TYPETEXT",TYPETEXT , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEMULTIPART",TYPEMULTIPART , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEMESSAGE",TYPEMESSAGE , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEAPPLICATION",TYPEAPPLICATION , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEAUDIO",TYPEAUDIO , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEIMAGE",TYPEIMAGE , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEVIDEO",TYPEVIDEO , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("TYPEOTHER",TYPEOTHER , CONST_PERSISTENT | CONST_CS);
+	/*      TYPETEXT                unformatted text
+        TYPEMULTIPART           multiple part
+        TYPEMESSAGE             encapsulated message
+        TYPEAPPLICATION         application data
+        TYPEAUDIO               audio
+        TYPEIMAGE               static image (GIF, JPEG, etc.)
+        TYPEVIDEO               video
+        TYPEOTHER               unknown
+	*/
+        REGISTER_MAIN_LONG_CONSTANT("ENC7BIT",ENC7BIT , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("ENC8BIT",ENC8BIT , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("ENCBINARY",ENCBINARY , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("ENCBASE64",ENCBASE64, CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("ENCQUOTEDPRINTABLE",ENCQUOTEDPRINTABLE , CONST_PERSISTENT | CONST_CS);
+        REGISTER_MAIN_LONG_CONSTANT("ENCOTHER",ENCOTHER , CONST_PERSISTENT | CONST_CS);
+	/*
+	  ENC7BIT                 7 bit SMTP semantic data
+	  ENC8BIT                 8 bit SMTP semantic data
+	  ENCBINARY               8 bit binary data
+	  ENCBASE64               base-64 encoded data
+	  ENCQUOTEDPRINTABLE      human-readable 8-as-7 bit data
+	  ENCOTHER                unknown
+	*/
 
     le_imap = register_list_destructors(mail_close_it,NULL);
 	return SUCCESS;
@@ -2174,7 +2205,220 @@ void php3_imap_fetch_overview(INTERNAL_FUNCTION_PARAMETERS)
 	      add_property_long(&myoverview,"seen",elt->seen);
 	      add_next_index_object(return_value,myoverview);
 	    }
+	}
 }
+
+
+void php3_imap_mail_compose(INTERNAL_FUNCTION_PARAMETERS)
+{
+  pval *envelope, *body;
+  char *key;
+  pval *data,*pvalue;
+  ulong ind;
+  char *cookie = NIL;
+  ENVELOPE *env;
+  BODY *bod=NULL,*topbod=NULL;
+  PART *mypart=NULL,*toppart=NULL,*part;
+  PARAMETER *param;
+  char tmp[8*MAILTMPLEN],*mystring=NULL,*t,*tempstring;
+  int myargc=ARG_COUNT(ht);
+  if (myargc != 2 || getParameters(ht,myargc,&envelope,&body) == FAILURE) {
+    WRONG_PARAM_COUNT;
+  }
+  convert_to_array(envelope);
+  convert_to_array(body);
+  env=mail_newenvelope();
+  if(_php3_hash_find(envelope->value.ht,"remail",sizeof("remail"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    env->remail=cpystr(pvalue->value.str.val);
+  }
+  
+  if(_php3_hash_find(envelope->value.ht,"return_path",sizeof("return_path"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    rfc822_parse_adrlist (&env->return_path,pvalue->value.str.val,"NO HOST");
+  }
+  if(_php3_hash_find(envelope->value.ht,"date",sizeof("date"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    env->date=cpystr(pvalue->value.str.val);
+  }
+  if(_php3_hash_find(envelope->value.ht,"from",sizeof("from"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    rfc822_parse_adrlist (&env->from,pvalue->value.str.val,"NO HOST");
+  }
+  if(_php3_hash_find(envelope->value.ht,"reply_to",sizeof("reply_to"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    rfc822_parse_adrlist (&env->reply_to,pvalue->value.str.val,"NO HOST");
+  }
+  if(_php3_hash_find(envelope->value.ht,"to",sizeof("to"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    rfc822_parse_adrlist (&env->to,pvalue->value.str.val,"NO HOST");
+  }
+  if(_php3_hash_find(envelope->value.ht,"cc",sizeof("cc"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    rfc822_parse_adrlist (&env->cc,pvalue->value.str.val,"NO HOST");
+  }
+  if(_php3_hash_find(envelope->value.ht,"bcc",sizeof("bcc"),(void **) &pvalue)== SUCCESS){
+    convert_to_string(pvalue);
+    rfc822_parse_adrlist (&env->bcc,pvalue->value.str.val,"NO HOST");
+  }
+ if(_php3_hash_find(envelope->value.ht,"message_id",sizeof("message_id"),(void **) &pvalue)== SUCCESS){
+   convert_to_string(pvalue);
+   env->message_id=cpystr(pvalue->value.str.val);
+ }
+ 
+ _php3_hash_internal_pointer_reset(body->value.ht);
+ _php3_hash_get_current_key(body->value.ht, &key, &ind);
+ _php3_hash_get_current_data(body->value.ht, (void **) &data);
+ if(data->type == IS_ARRAY)
+   {
+     bod=mail_newbody();
+     topbod=bod;
+     if(_php3_hash_find(data->value.ht,"type",sizeof("type"),(void **) &pvalue)== SUCCESS){
+       convert_to_long(pvalue);
+       bod->type=pvalue->value.lval;
+     }
+     if(_php3_hash_find(data->value.ht,"encoding",sizeof("encoding"),(void **) &pvalue)== SUCCESS){
+       convert_to_long(pvalue);
+       bod->encoding=pvalue->value.lval;
+     }
+     if(_php3_hash_find(data->value.ht,"subtype",sizeof("subtype"),(void **) &pvalue)== SUCCESS){
+       convert_to_string(pvalue);
+       bod->subtype=cpystr(pvalue->value.str.val);
+     }
+     if(_php3_hash_find(data->value.ht,"id",sizeof("id"),(void **) &pvalue)== SUCCESS){
+       convert_to_string(pvalue);
+       bod->id=cpystr(pvalue->value.str.val);
+     }
+     if(_php3_hash_find(data->value.ht,"contents.data",sizeof("contents.data"),(void **) &pvalue)== SUCCESS){
+       convert_to_string(pvalue);     
+       bod->contents.text.data=(char *)fs_get(pvalue->value.str.len);
+       memcpy(bod->contents.text.data,pvalue->value.str.val,pvalue->value.str.len+1);
+       bod->contents.text.size=pvalue->value.str.len;
+     }
+     if(_php3_hash_find(data->value.ht,"lines",sizeof("lines"),(void **) &pvalue)== SUCCESS){
+       convert_to_long(pvalue);
+       bod->size.lines=pvalue->value.lval;
+     }
+     if(_php3_hash_find(data->value.ht,"bytes",sizeof("bytes"),(void **) &pvalue)== SUCCESS){
+       convert_to_long(pvalue);
+       bod->size.bytes=pvalue->value.lval;
+     }
+     if(_php3_hash_find(data->value.ht,"md5",sizeof("md5"),(void **) &pvalue)== SUCCESS){
+       convert_to_string(pvalue);
+       bod->md5=cpystr(pvalue->value.str.val);
+     }
+   }
+ _php3_hash_move_forward(body->value.ht);
+ while(_php3_hash_get_current_data(body->value.ht, (void **) &data)==SUCCESS)
+   {
+     _php3_hash_get_current_key(body->value.ht, &key, &ind);
+     if(data->type == IS_ARRAY)
+       {
+	 if(!toppart)
+	   {		     
+	     bod->nested.part=mail_newbody_part();
+	     mypart=bod->nested.part;
+	     toppart=mypart;
+	     bod=&mypart->body;
+	   }
+	 else
+	   {
+	     mypart->next=mail_newbody_part();
+	     mypart=mypart->next;
+	     bod=&mypart->body;
+	   }
+	 if(_php3_hash_find(data->value.ht,"type",sizeof("type"),(void **) &pvalue)== SUCCESS){
+	   convert_to_long(pvalue);
+	   bod->type=pvalue->value.lval;
+	 }
+	 if(_php3_hash_find(data->value.ht,"encoding",sizeof("encoding"),(void **) &pvalue)== SUCCESS){
+	   convert_to_long(pvalue);
+	   bod->encoding=pvalue->value.lval;
+	 }
+	 if(_php3_hash_find(data->value.ht,"subtype",sizeof("subtype"),(void **) &pvalue)== SUCCESS){
+	   convert_to_string(pvalue);
+	   bod->subtype=cpystr(pvalue->value.str.val);
+	 }
+	 if(_php3_hash_find(data->value.ht,"id",sizeof("id"),(void **) &pvalue)== SUCCESS){
+	   convert_to_string(pvalue);
+	   bod->id=cpystr(pvalue->value.str.val);
+	 }
+	 if(_php3_hash_find(data->value.ht,"contents.data",sizeof("contents.data"),(void **) &pvalue)== SUCCESS){
+	   convert_to_string(pvalue);     
+	   bod->contents.text.data=(char *)fs_get(pvalue->value.str.len);
+	   memcpy(bod->contents.text.data,pvalue->value.str.val,pvalue->value.str.len+1);
+	   bod->contents.text.size=pvalue->value.str.len;
+	 }
+	 if(_php3_hash_find(data->value.ht,"lines",sizeof("lines"),(void **) &pvalue)== SUCCESS){
+	   convert_to_long(pvalue);
+	   bod->size.lines=pvalue->value.lval;
+	 }
+	 if(_php3_hash_find(data->value.ht,"bytes",sizeof("bytes"),(void **) &pvalue)== SUCCESS){
+	   convert_to_long(pvalue);
+	   bod->size.bytes=pvalue->value.lval;
+	 }
+	 if(_php3_hash_find(data->value.ht,"md5",sizeof("md5"),(void **) &pvalue)== SUCCESS){
+	   convert_to_string(pvalue);
+	   bod->md5=cpystr(pvalue->value.str.val);
+	 }
+	 _php3_hash_move_forward(body->value.ht);
+       }
+   }
+
+  rfc822_encode_body_7bit (env,topbod); 
+  rfc822_header (tmp,env,topbod);  
+  mystring=emalloc(strlen(tmp)+1);
+  strcpy(mystring,tmp);
+
+  bod=topbod;
+  switch (bod->type) {
+  case TYPEMULTIPART:           /* multipart gets special handling */
+    part = bod->nested.part;   /* first body part */
+                                /* find cookie */
+    for (param = bod->parameter; param && !cookie; param = param->next)
+      if (!strcmp (param->attribute,"BOUNDARY")) cookie = param->value;
+    if (!cookie) cookie = "-";  /* yucky default */
+    do {                        /* for each part */
+                                /* build cookie */
+      sprintf (t=tmp,"--%s\015\012",cookie);
+                                /* append mini-header */
+      rfc822_write_body_header (&t,&part->body);
+      strcat (t,"\015\012");    /* write terminating blank line */
+                                /* output cookie, mini-header, and contents */
+      tempstring=emalloc(strlen(mystring)+strlen(tmp)+1);
+      strcpy(tempstring,mystring);
+      efree(mystring);
+      mystring=tempstring;
+      strcat(mystring,tmp);
+
+      bod=&part->body;
+
+      tempstring=emalloc(strlen(bod->contents.text.data)+strlen(mystring)+1);
+      strcpy(tempstring,mystring);
+      efree(mystring);
+      mystring=tempstring;
+      strcat(mystring,bod->contents.text.data);
+
+    } while ((part = part->next));/* until done */
+                                /* output trailing cookie */
+
+    sprintf(tmp,"--%s--",cookie);
+    tempstring=emalloc(strlen(tmp)+strlen(mystring)+1);
+    strcpy(tempstring,mystring);
+    efree(mystring);
+    mystring=tempstring;
+    strcat(mystring,tmp);
+    break;
+  default:                      /* all else is text now */
+    tempstring=emalloc(strlen(bod->contents.text.data)+strlen(mystring)+1);
+    strcpy(tempstring,mystring);
+    efree(mystring);
+    mystring=tempstring;
+    strcat(mystring,bod->contents.text.data);
+    break;
+  }
+  
+  RETURN_STRINGL(mystring,strlen(mystring),1);  
 }
 
 

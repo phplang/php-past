@@ -30,7 +30,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: oci8.c,v 1.15 1998/09/14 17:25:44 ssb Exp $ */
+/* $Id: oci8.c,v 1.19 1998/10/01 18:24:13 ssb Exp $ */
 
 #include "php.h"
 #include "internal_functions.h"
@@ -146,23 +146,23 @@ static sb4 oci8_bind_out_callback(dvoid *, OCIBind *, ub4, ub4, dvoid **, ub4 **
 /* }}} */
 /* {{{ extension function prototypes */
 
-void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_logoff(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS);
 void php3_oci8_columnname(INTERNAL_FUNCTION_PARAMETERS);
 void php3_oci8_columnsize(INTERNAL_FUNCTION_PARAMETERS);
 void php3_oci8_columntype(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS);
 void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS);
 void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_logoff(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_result(INTERNAL_FUNCTION_PARAMETERS);
 void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_test(INTERNAL_FUNCTION_PARAMETERS);
-void php3_oci8_test2(INTERNAL_FUNCTION_PARAMETERS);
+void php3_oci8_statementtype(INTERNAL_FUNCTION_PARAMETERS);
 
 /* }}} */
 /* {{{ extension definition structures */
@@ -170,24 +170,24 @@ void php3_oci8_test2(INTERNAL_FUNCTION_PARAMETERS);
 static unsigned char refs_aaf[] = {3, BYREF_ALLOW, BYREF_ALLOW, BYREF_FORCE};
 
 function_entry oci8_functions[] = {
-    {"ocilogon",         php3_oci8_logon,         NULL},
-/*    {"ociplogon",        php3_oci8_plogon,      	NULL},*/
-    {"ocilogoff",        php3_oci8_logoff,        NULL},
-	{"ociinternaldebug", php3_oci8_internaldebug, NULL},
-	{"ociparse",         php3_oci8_parse,         NULL},
-	{"ociexecute",       php3_oci8_execute,       NULL},
+	{"ocibindbyname",    php3_oci8_bindbyname,    refs_aaf},
+	{"ocicolumnisnull",  php3_oci8_columnisnull,  NULL},
 	{"ocicolumnname",    php3_oci8_columnname,    NULL},
 	{"ocicolumnsize",    php3_oci8_columnsize,    NULL},
 	{"ocicolumntype",    php3_oci8_columntype,    NULL},
-	{"ocicolumnisnull",  php3_oci8_columnisnull,  NULL},
-	{"ocinumcols",       php3_oci8_numcols,       NULL},
+	{"ociexecute",       php3_oci8_execute,       NULL},
 	{"ocifetch",         php3_oci8_fetch,         NULL},
-	{"ociresult",        php3_oci8_result,        NULL},
 	{"ocifetchinto",     php3_oci8_fetchinto,     second_arg_force_ref},
+	{"ocifreestatement", php3_oci8_freestatement, NULL},
+	{"ociinternaldebug", php3_oci8_internaldebug, NULL},
+	{"ocinumcols",       php3_oci8_numcols,       NULL},
+	{"ociparse",         php3_oci8_parse,         NULL},
+	{"ociresult",        php3_oci8_result,        NULL},
 	{"ociserverversion", php3_oci8_serverversion, NULL},
-	{"ocibindbyname",    php3_oci8_bindbyname,    refs_aaf},
-	{"ocitest",          php3_oci8_test,          first_arg_force_ref},
-	{"ocitest2",         php3_oci8_test2,         NULL},
+	{"ocistatementtype", php3_oci8_statementtype, NULL},
+    {"ocilogoff",        php3_oci8_logoff,        NULL},
+    {"ocilogon",         php3_oci8_logon,         NULL},
+/*    {"ociplogon",        php3_oci8_plogon,      	NULL},*/
     {NULL,               NULL,                    NULL}
 };
 
@@ -348,6 +348,7 @@ CONST void myfree(dvoid *ctx, dvoid *ptr)
 #endif
 
 /* }}} */
+/* {{{ oci8_free_column() */
 
 static int
 oci8_free_column(oci8_out_column *column)
@@ -361,6 +362,7 @@ oci8_free_column(oci8_out_column *column)
 	return 0;
 }
 
+/* }}} */
 /* {{{ oci8_free_stmt() */
 
 static void
@@ -596,20 +598,21 @@ oci8_execute(oci8_statement *statement, char *func)
 	int counter;
 	sword error, def_error;
 	ub2 define_type;
-	ub4 fncode = 0, iters, mode;
+	ub2 stmttype = 0;
+	ub4 iters, mode;
 	OCI8_TLS_VARS;
 
-	OCIAttrGet((dvoid *)statement, OCI_HTYPE_STMT,
-			   (dvoid *)&fncode, (ub4 *)0, OCI_ATTR_SQLFNCODE,
+	OCIAttrGet((dvoid *)statement->pStmt, OCI_HTYPE_STMT,
+			   (ub2 *)&stmttype, (ub4 *)0, OCI_ATTR_STMT_TYPE,
 			   statement->pError);
 
-	if (fncode == FT_SELECT) {
+	if (stmttype == OCI_STMT_SELECT) {
 		iters = 0;
 	} else {
 		iters = 1;
 	}
 	mode = OCI_COMMIT_ON_SUCCESS;
-	oci8_debug("oci8_execute: fncode=%d mode=%d", fncode, mode);
+	oci8_debug("oci8_execute: stmttype=%d mode=%d", stmttype, mode);
 	error = OCIStmtExecute(statement->conn->pServiceContext,
 						   statement->pStmt, statement->pError,
 						   iters, 0, NULL, NULL, mode);
@@ -622,12 +625,12 @@ oci8_execute(oci8_statement *statement, char *func)
 	statement->columns = emalloc(sizeof(HashTable));
 	if (!statement->columns ||
 		_php3_hash_init(statement->columns, 13, NULL,
-						(void (*)(void *))oci8_efree_column, 0) == FAILURE) {
+						(void (*)(void *))oci8_free_column, 0) == FAILURE) {
 		/* out of memory */
 		return 0;
 	}
 
-	if (fncode == FT_SELECT) {
+	if (stmttype == OCI_STMT_SELECT) {
 		OCIHandleAlloc(statement->conn->pEnv, (dvoid **)&param,
 					   OCI_DTYPE_PARAM, 0, NULL);
 		counter = 1;
@@ -828,25 +831,41 @@ oci8_bind_out_callback(dvoid *ctxp, /* context pointer */
 	oci8_bind *phpbind;
 	pval *val;
 
-	oci8_debug("oci8_bind_out_callback: iter=%d index=%d alen=%d", iter, index, *(*alenpp));
+	oci8_debug("oci8_bind_out_callback: iter=%d index=%d alen=%d piece=%d",
+			   iter, index, **alenpp, *piecep);
 
 	phpbind = (oci8_bind *)ctxp;
+	if (!phpbind) {
+		oci8_debug("oci8_bind_out_callback: phpbind = NULL");
+		return OCI_ERROR;
+	}
 	val = phpbind->value;
 	if (val == NULL) {
+		oci8_debug("oci8_bind_out_callback: phpbind->value = NULL");
 		return OCI_ERROR;
 	}
 	if (phpbind->is_opaque) {
 		oci8_debug("OUT binding of opaque types not yet implemented");
 		return OCI_ERROR;
 	} else {
-		/* non-opaque values always get converted to strings */
-		convert_to_string(val);
+		/* XXX risky, if the variable has been freed, nasty things
+		 * could happen here.
+		 */
+		if (val->type == IS_STRING && val->value.str.val) {
+			efree(val->value.str.val);
+		}
+		val->type = IS_STRING;
+		
+		phpbind->buf = val->value.str.val;
+		phpbind->size = val->value.str.len + 1;
+#if 0
 		phpbind->buf = (dvoid *)val->value.str.val;
 		phpbind->size = (ub4)val->value.str.len;
 		*alenpp = (dvoid *)&phpbind->buf;
 		*bufpp = (dvoid *)&phpbind->size;
 		*piecep = OCI_ONE_PIECE;
 		*indpp = (dvoid *)&phpbind->indicator;
+#endif
 	}
 	
 	return OCI_CONTINUE;
@@ -858,185 +877,71 @@ oci8_bind_out_callback(dvoid *ctxp, /* context pointer */
 
 /************************* EXTENSION FUNCTIONS *************************/
 
-/* {{{ void   OCIDebug(int onoff) */
+/* {{{ int    OCIBindByName(int stmt, string name, mixed &var) */
 
-/* Disables or enables the internal debug output.
- * By default it is disabled.
- */
-void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS)
+void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *arg;
-	OCI8_TLS_VARS;
-
-	if (getParameters(ht, 1, &arg) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_long(arg);
-	OCI8_GLOBAL(php3_oci8_module).debug_mode = arg->value.lval;
-}
-
-
-/* }}} */
-/* {{{ int    OCILogon(string user, string pass[, string db]) */
-
-/* Connects to an Oracle 8 database and logs on.  If the
- * optional third parameter is not specified, PHP uses the environment
- * variable ORACLE_SID to determine which database to connect to.
- */
-void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS)
-{
-    text *username, *password, *dbname;
-    pval *userParam, *passParam, *dbParam;
-    ub4 username_len, password_len, dbname_len;
-    oci8_connection *connection;
-    sword error;
-    OCI8_TLS_VARS;
-
-    if (getParameters(ht, 3, &userParam, &passParam, &dbParam) == SUCCESS) {
-		convert_to_string(userParam);
-		convert_to_string(passParam);
-		convert_to_string(dbParam);
-		username = userParam->value.str.val;
-		password = passParam->value.str.val;
-		dbname = dbParam->value.str.val;
-		dbname_len = dbParam->value.str.len;
-    } else if (getParameters(ht, 2, &userParam, &passParam) == SUCCESS) {
-		convert_to_string(userParam);
-		convert_to_string(passParam);
-		username = userParam->value.str.val;
-		password = passParam->value.str.val;
-		dbname = (text *)NULL;
-		dbname_len = 0;
-    } else {
-		WRONG_PARAM_COUNT;
-    }
-    username_len = userParam->value.str.len;
-    password_len = passParam->value.str.len;
-
-    if (OCI8_GLOBAL(php3_oci8_module).max_links != -1 &&
-		OCI8_GLOBAL(php3_oci8_module).num_links >=
-		OCI8_GLOBAL(php3_oci8_module).max_links) {
-		php3_error(E_WARNING, "OCILogon: Too many open links (%d)",
-				   OCI8_GLOBAL(php3_oci8_module).num_links);
-		RETURN_FALSE;
-    }
-
-	connection = (oci8_connection *)ecalloc(1,sizeof(oci8_connection));
-
-	if (connection == NULL) {
-		RETURN_OUT_OF_MEMORY;
-	}
-		
-	/* Set up the Oracle environment. */
-#if 0
-    OCIInitialize(OCI_DEFAULT, (dvoid *)connection, mymalloc, myrealloc, myfree);
-#else
-    OCIInitialize(OCI_DEFAULT, NULL, NULL, NULL, NULL);
-#endif
-	OCIEnvInit(&connection->pEnv, OCI_DEFAULT, 0, NULL);
-	OCIHandleAlloc(connection->pEnv, (dvoid **)&connection->pError,
-				   OCI_HTYPE_ERROR, 0, NULL);
-	OCIHandleAlloc(connection->pEnv,
-				   (dvoid **)&connection->pServiceContext,
-				   OCI_HTYPE_SVCCTX, 0, NULL);
-
-	error = OCILogon((OCIEnv *)connection->pEnv,
-					 (OCIError *)connection->pError,
-					 (OCISvcCtx **)&connection->pServiceContext,
-					 (CONST text *)username, (ub4)username_len,
-					 (CONST text *)password, (ub4)password_len,
-					 (CONST text *)dbname,   (ub4)dbname_len);
-	if (error) {
-		oci8_error(connection->pError, "OCILogon", error);
-		RETURN_FALSE;
-	}
-		
-	connection->open = 1;
-		
-	/* non persistent, simply add to list */
-	RETVAL_LONG(php3_list_insert(connection, OCI8_GLOBAL(php3_oci8_module).le_conn));
-	OCI8_GLOBAL(php3_oci8_module).num_links++;
-}
-
-/* }}} */
-/* {{{ int    OCILogoff(int conn) */
-
-/* Logs off and disconnects.
- */
-void php3_oci8_logoff(INTERNAL_FUNCTION_PARAMETERS)
-{
-	oci8_connection *connection;
-	pval *arg;
-	int index, index_t;
-	OCI8_TLS_VARS;
-
-	if (getParameters(ht, 1, &arg) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_long(arg);
-	index = arg->value.lval;
-	connection = (oci8_connection *)php3_list_find(index, &index_t);
-	if (!connection || !OCI8_CONN_TYPE(index_t)) {
-		RETURN_FALSE;
-	}
-	if (php3_list_delete(index) == SUCCESS) {
-		RETVAL_TRUE;
-	} else {
-		oci8_debug("OCILogoff: php3_list_delete failed.");
-		RETVAL_FALSE;
-	}
-}
-
-/* }}} */
-/* {{{ int    OCIParse(int conn, string query) */
-
-void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS)
-{
-	pval *conn, *query;
-	oci8_connection *connection;
-	OCI8_TLS_VARS;
-
-	if (getParameters(ht, 2, &conn, &query) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-
-	convert_to_long(conn);
-	convert_to_string(query);
-
-	connection = oci8_get_conn(conn->value.lval, "OCIParse", list, plist);
-	if (connection == NULL) {
-		RETURN_FALSE;
-	}
-
-	RETVAL_LONG(oci8_parse(connection,
-						   query->value.str.val,
-						   query->value.str.len,
-						   list));
-}
-
-/* }}} */
-/* {{{ int    OCIExecute(int stmt) */
-
-void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS)
-{
-	pval *stmt;
+	pval *stmt, *name, *var;
 	oci8_statement *statement;
-	OCI8_TLS_VARS;
+	oci8_bind *bind, *tmp_bind;
+	sword error;
 
-	if (getParameters(ht, 1, &stmt) == FAILURE) {
+	if (getParameters(ht, 3, &stmt, &name, &var) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(stmt);
-	statement = oci8_get_stmt(stmt->value.lval, "OCIExecute", list);
+	convert_to_string(name);
+	convert_to_string(var);
+	statement = oci8_get_stmt(stmt->value.lval, "OCIBindByName", list);
 	if (statement == NULL) {
 		RETURN_FALSE;
 	}
-	
-	if (oci8_execute(statement, "OCIExecute")) {
-		RETVAL_TRUE;
-	} else {
-		RETVAL_FALSE;
+	bind = ecalloc(1,sizeof(oci8_bind));
+	if (!bind) {
+		/* out of memory */
+		RETURN_FALSE;
 	}
+	if (statement->binds == NULL) {
+		statement->binds = emalloc(sizeof(HashTable));
+		if (statement->binds == NULL ||
+			_php3_hash_init(statement->binds, 13, NULL, NULL, 0) == FAILURE) {
+			/* out of memory */
+			RETURN_FALSE;
+		}
+	}
+	if (_php3_hash_next_index_insert(statement->binds, bind,
+									 sizeof(oci8_bind),
+									 (void **)&tmp_bind) == SUCCESS) {
+		efree(bind);
+		bind = tmp_bind;
+	}
+	bind->value = var;
+	error = OCIBindByName(statement->pStmt, /* statement handle */
+						  (OCIBind **)&bind->pBind, /* bind hdl (will alloc) */
+						  statement->pError, /* error handle */
+						  name->value.str.val, /* placeholder name */
+						  name->value.str.len, /* placeholder length */
+						  (dvoid *)0, /* in/out data */
+						  OCI8_GLOBAL(php3_oci8_module).max_bind_data_size,
+						  (ub2)SQLT_STR, /* in/out data type */
+						  (dvoid *)0, /* indicator (ignored) */
+						  (ub2 *)0, /* size array (ignored) */
+						  (ub2 *)0, /* return code (ignored) */
+						  (ub4)0, /* maxarr_len (PL/SQL only?) */
+						  (ub4 *)0, /* actual array size (PL/SQL only?) */
+						  OCI_DATA_AT_EXEC /* mode */);
+	if (error != OCI_SUCCESS) {
+		oci8_error(statement->pError, "OCIBindByName", error);
+		RETURN_FALSE;
+	}
+	error = OCIBindDynamic(bind->pBind,
+						   statement->pError,
+						   (dvoid *)bind,
+						   oci8_bind_in_callback,
+						   (dvoid *)bind,
+						   oci8_bind_out_callback
+		);
+	RETVAL_TRUE;
 }
 
 /* }}} */
@@ -1181,9 +1086,28 @@ void php3_oci8_columnisnull(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCINumCols(int stmt) */
+/* {{{ void   OCIDebug(int onoff) */
 
-void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
+/* Disables or enables the internal debug output.
+ * By default it is disabled.
+ */
+void php3_oci8_internaldebug(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *arg;
+	OCI8_TLS_VARS;
+
+	if (getParameters(ht, 1, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(arg);
+	OCI8_GLOBAL(php3_oci8_module).debug_mode = arg->value.lval;
+}
+
+
+/* }}} */
+/* {{{ int    OCIExecute(int stmt) */
+
+void php3_oci8_execute(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *stmt;
 	oci8_statement *statement;
@@ -1193,11 +1117,16 @@ void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(stmt);
-	statement = oci8_get_stmt(stmt->value.lval, "OCINumCols", list);
+	statement = oci8_get_stmt(stmt->value.lval, "OCIExecute", list);
 	if (statement == NULL) {
 		RETURN_FALSE;
 	}
-	RETVAL_LONG(statement->ncolumns);
+	
+	if (oci8_execute(statement, "OCIExecute")) {
+		RETVAL_TRUE;
+	} else {
+		RETVAL_FALSE;
+	}
 }
 
 /* }}} */
@@ -1224,6 +1153,228 @@ void php3_oci8_fetch(INTERNAL_FUNCTION_PARAMETERS)
 	} else {
 		RETVAL_FALSE;
 	}
+}
+
+/* }}} */
+/* {{{ int    OCIFetchInto(int stmt, array &output) */
+
+void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *stmt, *array, *element;
+	oci8_statement *statement;
+	oci8_out_column *column;
+	ub4 nrows = 1;
+	int i;
+	OCI8_TLS_VARS;
+
+	if (getParameters(ht, 2, &stmt, &array) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(stmt);
+	statement = oci8_get_stmt(stmt->value.lval, "OCIFetchInto", list);
+	if (statement == NULL) {
+		RETURN_FALSE;
+	}
+	if (array->type != IS_ARRAY) {
+		if (array_init(array) == FAILURE) {
+			php3_error(E_WARNING,
+					   "OCIFetchInto: unable to convert arg 2 to array");
+			RETURN_FALSE;
+		}
+	}
+	if (!oci8_fetch(statement, nrows, "OCIFetchInto")) {
+		RETURN_FALSE;
+	}
+
+	for (i = 0; i < statement->ncolumns; i++) {
+		column = oci8_get_col(statement, i + 1, "OCIFetchInto");
+		if (column == NULL || column->indicator == -1) {
+			continue;
+		}
+		element = oci8_make_pval(column, "OCIFetchInto");
+		_php3_hash_index_update(array->value.ht, i, (void *)element,
+								sizeof(pval), NULL);
+	}
+	RETVAL_LONG(statement->ncolumns);
+}
+
+/* }}} */
+/* {{{ int    OCIFreeStatement(int stmt) */
+
+void php3_oci8_freestatement(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *stmt;
+	oci8_statement *statement;
+	OCI8_TLS_VARS;
+
+	if (getParameters(ht, 1, &stmt) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(stmt);
+	statement = oci8_get_stmt(stmt->value.lval, "OCIFreeStatement", list);
+	if (statement == NULL) {
+		RETURN_FALSE;
+	}
+	oci8_free_stmt(statement);
+	RETVAL_TRUE;
+}
+
+/* }}} */
+/* {{{ int    OCILogoff(int conn) */
+
+/* Logs off and disconnects.
+ */
+void php3_oci8_logoff(INTERNAL_FUNCTION_PARAMETERS)
+{
+	oci8_connection *connection;
+	pval *arg;
+	int index, index_t;
+	OCI8_TLS_VARS;
+
+	if (getParameters(ht, 1, &arg) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(arg);
+	index = arg->value.lval;
+	connection = (oci8_connection *)php3_list_find(index, &index_t);
+	if (!connection || !OCI8_CONN_TYPE(index_t)) {
+		RETURN_FALSE;
+	}
+	if (php3_list_delete(index) == SUCCESS) {
+		RETVAL_TRUE;
+	} else {
+		oci8_debug("OCILogoff: php3_list_delete failed.");
+		RETVAL_FALSE;
+	}
+}
+
+/* }}} */
+/* {{{ int    OCILogon(string user, string pass[, string db]) */
+
+/* Connects to an Oracle 8 database and logs on.  If the
+ * optional third parameter is not specified, PHP uses the environment
+ * variable ORACLE_SID to determine which database to connect to.
+ */
+void php3_oci8_logon(INTERNAL_FUNCTION_PARAMETERS)
+{
+    text *username, *password, *dbname;
+    pval *userParam, *passParam, *dbParam;
+    ub4 username_len, password_len, dbname_len;
+    oci8_connection *connection;
+    sword error;
+    OCI8_TLS_VARS;
+
+    if (getParameters(ht, 3, &userParam, &passParam, &dbParam) == SUCCESS) {
+		convert_to_string(userParam);
+		convert_to_string(passParam);
+		convert_to_string(dbParam);
+		username = userParam->value.str.val;
+		password = passParam->value.str.val;
+		dbname = dbParam->value.str.val;
+		dbname_len = dbParam->value.str.len;
+    } else if (getParameters(ht, 2, &userParam, &passParam) == SUCCESS) {
+		convert_to_string(userParam);
+		convert_to_string(passParam);
+		username = userParam->value.str.val;
+		password = passParam->value.str.val;
+		dbname = (text *)NULL;
+		dbname_len = 0;
+    } else {
+		WRONG_PARAM_COUNT;
+    }
+    username_len = userParam->value.str.len;
+    password_len = passParam->value.str.len;
+
+    if (OCI8_GLOBAL(php3_oci8_module).max_links != -1 &&
+		OCI8_GLOBAL(php3_oci8_module).num_links >=
+		OCI8_GLOBAL(php3_oci8_module).max_links) {
+		php3_error(E_WARNING, "OCILogon: Too many open links (%d)",
+				   OCI8_GLOBAL(php3_oci8_module).num_links);
+		RETURN_FALSE;
+    }
+
+	connection = (oci8_connection *)ecalloc(1,sizeof(oci8_connection));
+
+	if (connection == NULL) {
+		RETURN_OUT_OF_MEMORY;
+	}
+		
+	/* Set up the Oracle environment. */
+#if 0
+    OCIInitialize(OCI_DEFAULT, (dvoid *)connection, mymalloc, myrealloc, myfree);
+#else
+    OCIInitialize(OCI_DEFAULT, NULL, NULL, NULL, NULL);
+#endif
+	OCIEnvInit(&connection->pEnv, OCI_DEFAULT, 0, NULL);
+	OCIHandleAlloc(connection->pEnv, (dvoid **)&connection->pError,
+				   OCI_HTYPE_ERROR, 0, NULL);
+	OCIHandleAlloc(connection->pEnv,
+				   (dvoid **)&connection->pServiceContext,
+				   OCI_HTYPE_SVCCTX, 0, NULL);
+
+	error = OCILogon((OCIEnv *)connection->pEnv,
+					 (OCIError *)connection->pError,
+					 (OCISvcCtx **)&connection->pServiceContext,
+					 (CONST text *)username, (ub4)username_len,
+					 (CONST text *)password, (ub4)password_len,
+					 (CONST text *)dbname,   (ub4)dbname_len);
+	if (error) {
+		oci8_error(connection->pError, "OCILogon", error);
+		RETURN_FALSE;
+	}
+		
+	connection->open = 1;
+		
+	/* non persistent, simply add to list */
+	RETVAL_LONG(php3_list_insert(connection, OCI8_GLOBAL(php3_oci8_module).le_conn));
+	OCI8_GLOBAL(php3_oci8_module).num_links++;
+}
+
+/* }}} */
+/* {{{ int    OCINumCols(int stmt) */
+
+void php3_oci8_numcols(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *stmt;
+	oci8_statement *statement;
+	OCI8_TLS_VARS;
+
+	if (getParameters(ht, 1, &stmt) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_long(stmt);
+	statement = oci8_get_stmt(stmt->value.lval, "OCINumCols", list);
+	if (statement == NULL) {
+		RETURN_FALSE;
+	}
+	RETVAL_LONG(statement->ncolumns);
+}
+
+/* }}} */
+/* {{{ int    OCIParse(int conn, string query) */
+
+void php3_oci8_parse(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *conn, *query;
+	oci8_connection *connection;
+	OCI8_TLS_VARS;
+
+	if (getParameters(ht, 2, &conn, &query) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+
+	convert_to_long(conn);
+	convert_to_string(query);
+
+	connection = oci8_get_conn(conn->value.lval, "OCIParse", list, plist);
+	if (connection == NULL) {
+		RETURN_FALSE;
+	}
+
+	RETVAL_LONG(oci8_parse(connection,
+						   query->value.str.val,
+						   query->value.str.len,
+						   list));
 }
 
 /* }}} */
@@ -1289,148 +1440,66 @@ void php3_oci8_serverversion(INTERNAL_FUNCTION_PARAMETERS)
 }
 
 /* }}} */
-/* {{{ int    OCIFetchInto(int stmt, array &output) */
+/* {{{ int    OCIStatementType(int stmt) */
 
-void php3_oci8_fetchinto(INTERNAL_FUNCTION_PARAMETERS)
+/* XXX it would be better with a general interface to OCIAttrGet() */
+
+void php3_oci8_statementtype(INTERNAL_FUNCTION_PARAMETERS)
 {
-	pval *stmt, *array, *element;
+	pval *stmt;
 	oci8_statement *statement;
-	oci8_out_column *column;
-	ub4 nrows = 1;
-	int i;
-	OCI8_TLS_VARS;
-
-	if (getParameters(ht, 2, &stmt, &array) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_long(stmt);
-	statement = oci8_get_stmt(stmt->value.lval, "OCIFetchInto", list);
-	if (statement == NULL) {
-		RETURN_FALSE;
-	}
-	if (array->type != IS_ARRAY) {
-		if (array_init(array) == FAILURE) {
-			php3_error(E_WARNING,
-					   "OCIFetchInto: unable to convert arg 2 to array");
-			RETURN_FALSE;
-		}
-	}
-	if (!oci8_fetch(statement, nrows, "OCIFetchInto")) {
-		RETURN_FALSE;
-	}
-
-	for (i = 0; i < statement->ncolumns; i++) {
-		column = oci8_get_col(statement, i + 1, "OCIFetchInto");
-		if (column == NULL || column->indicator == -1) {
-			continue;
-		}
-		element = oci8_make_pval(column, "OCIFetchInto");
-		_php3_hash_index_update(array->value.ht, i, (void *)element,
-								sizeof(pval), NULL);
-	}
-	RETVAL_LONG(statement->ncolumns);
-}
-
-/* }}} */
-/* {{{ int    OCITest() */
-
-void php3_oci8_test(INTERNAL_FUNCTION_PARAMETERS)
-{
-	pval *var;
-	OCI8_TLS_VARS;
-
-	if (getParameters(ht, 1, &var) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	RETURN_LONG((long)var);
-}
-
-/* }}} */
-/* {{{ string OCITest2(int ptr) */
-
-void php3_oci8_test2(INTERNAL_FUNCTION_PARAMETERS)
-{
-	pval *var;
-	char buf[200];
-	OCI8_TLS_VARS;
-
-	if (getParameters(ht, 1, &var) == FAILURE) {
-		WRONG_PARAM_COUNT;
-	}
-	convert_to_long(var);
-	var = (pval *)var->value.lval;
-	snprintf(buf, sizeof(buf), "var=%08x var->value=%08x str=%s",
-			 var, var->value, var->value.str.val);
-	buf[sizeof(buf)-1] = '\0';
-	RETVAL_STRING(buf,1);
-}
-
-/* }}} */
-/* {{{ int    OCIBindByName(int stmt, string name, mixed &var) */
-
-void php3_oci8_bindbyname(INTERNAL_FUNCTION_PARAMETERS)
-{
-	pval *stmt, *name, *var;
-	oci8_statement *statement;
-	oci8_bind *bind, *tmp_bind;
+	ub2 stmttype;
 	sword error;
+	OCI8_TLS_VARS;
 
-	if (getParameters(ht, 3, &stmt, &name, &var) == FAILURE) {
+	if (getParameters(ht, 1, &stmt) == FAILURE) {
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_long(stmt);
-	convert_to_string(name);
-	convert_to_string(var);
-	statement = oci8_get_stmt(stmt->value.lval, "OCIBindByName", list);
+	statement = oci8_get_stmt(stmt->value.lval, "OCIStatementType", list);
 	if (statement == NULL) {
 		RETURN_FALSE;
 	}
-	bind = ecalloc(1,sizeof(oci8_bind));
-	if (!bind) {
-		/* out of memory */
-		RETURN_FALSE;
-	}
-	if (statement->binds == NULL) {
-		statement->binds = emalloc(sizeof(HashTable));
-		if (statement->binds == NULL ||
-			_php3_hash_init(statement->binds, 13, NULL, NULL, 0) == FAILURE) {
-			/* out of memory */
-			RETURN_FALSE;
-		}
-	}
-	if (_php3_hash_next_index_insert(statement->binds, bind,
-									 sizeof(oci8_bind),
-									 (void **)&tmp_bind) == SUCCESS) {
-		efree(bind);
-		bind = tmp_bind;
-	}
-	bind->value = var;
-	error = OCIBindByName(statement->pStmt, /* statement handle */
-						  (OCIBind **)&bind->pBind, /* bind hdl (will alloc) */
-						  statement->pError, /* error handle */
-						  name->value.str.val, /* placeholder name */
-						  name->value.str.len, /* placeholder length */
-						  (dvoid *)0, /* in/out data */
-						  OCI8_GLOBAL(php3_oci8_module).max_bind_data_size,
-						  (ub2)SQLT_STR, /* in/out data type */
-						  (dvoid *)0, /* indicator (ignored) */
-						  (ub2 *)0, /* size array (ignored) */
-						  (ub2 *)0, /* return code (ignored) */
-						  (ub4)0, /* maxarr_len (PL/SQL only?) */
-						  (ub4 *)0, /* actual array size (PL/SQL only?) */
-						  OCI_DATA_AT_EXEC /* mode */);
+
+	error = OCIAttrGet((dvoid *)statement->pStmt, OCI_HTYPE_STMT,
+					   (ub2 *)&stmttype, (ub4 *)0, OCI_ATTR_STMT_TYPE,
+					   statement->pError);
 	if (error != OCI_SUCCESS) {
-		oci8_error(statement->pError, "OCIBindByName", error);
+		oci8_error(statement->pError, "OCIStatementType", error);
 		RETURN_FALSE;
 	}
-	error = OCIBindDynamic(bind->pBind,
-						   statement->pError,
-						   (dvoid *)bind,
-						   oci8_bind_in_callback,
-						   (dvoid *)bind,
-						   oci8_bind_out_callback
-		);
-	RETVAL_TRUE;
+
+	switch (stmttype) {
+		case OCI_STMT_SELECT:
+			RETVAL_STRING("SELECT",1);
+			break;
+		case OCI_STMT_UPDATE:
+			RETVAL_STRING("UPDATE",1);
+			break;
+		case OCI_STMT_DELETE:
+			RETVAL_STRING("DELETE",1);
+			break;
+		case OCI_STMT_INSERT:
+			RETVAL_STRING("INSERT",1);
+			break;
+		case OCI_STMT_CREATE:
+			RETVAL_STRING("CREATE",1);
+			break;
+		case OCI_STMT_DROP:
+			RETVAL_STRING("DROP",1);
+			break;
+		case OCI_STMT_ALTER:
+			RETVAL_STRING("ALTER",1);
+			break;
+		case OCI_STMT_BEGIN:
+			RETVAL_STRING("BEGIN",1);
+			break;
+		case OCI_STMT_DECLARE:
+			RETVAL_STRING("DECLARE",1);
+			break;
+		default:
+			RETVAL_STRING("UNKNOWN",1);
+	}
 }
 
 /* }}} */

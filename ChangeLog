@@ -1,6 +1,22 @@
 'PHP 3.0 CHANGE LOG                                                    ChangeLog
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-Sept. 22, 1998 Version 3.0.4
+October 5, Version 3.0.5
+- mysql_field_flags now reports all MySQL flags and the result is suitable
+  for automatic parsing. Compatibility warning: The result format has
+  changed. If you have scripts parsing the result of this function, you
+  may need to adapt them.
+- Made nl2br() binary safe (not that it's of much use).
+- Fixed a bug in the API function getThis().  It affected mostly the dir
+  functions, if nested within objects.
+- Fixed a problem in require() in conjunction with switch(), and in some other
+  cases.  Also fixed an identical problem with the call_user_function() API
+  function.
+- Removed -lpthread when compiling with MySQL support.  It caused various
+  serious problems when compiled into Apache.
+- Fix in_addr_t check for systems with in_addr_t in netinet/in.h
+- Add atan2() function
+
+September 22, 1998 Version 3.0.4
 - Added uksort() - array key sort using a user defined comparison function.
 - Added 'j' support to date() - generates the day of the month, without
   possible leading zeros.

@@ -29,14 +29,18 @@
    |          Andreas Karajannis <Andreas.Karajannis@gmd.de>              |
    +----------------------------------------------------------------------+
  */
+#if defined(COMPILE_DL)
+#include "dl/phpdl.h"
+#endif
 #include "php.h"
 #include "internal_functions.h"
 #include "oracle.h"
 
 #if HAVE_ORACLE
-
 #include "php3_list.h"
+#if !(WIN32|WINNT)
 #include "build-defs.h"
+#endif
 #include "snprintf.h"
 
 #ifndef min
@@ -812,7 +816,7 @@ void php3_Ora_Bind(INTERNAL_FUNCTION_PARAMETERS)
 	paramptr->progvl = argv[3]->value.lval + 1;
 	if(argc > 4){
 		convert_to_long(argv[4]);
-		paramptr->type = argv[4]->value.lval;
+		paramptr->type = (short)argv[4]->value.lval;
 	}else{
 		paramptr->type = 0;
 	}
@@ -1387,10 +1391,12 @@ void php3_Ora_ErrorCode(INTERNAL_FUNCTION_PARAMETERS)
 
 void php3_info_oracle()
 {
+#if !(WIN32|WINNT)
 	php3_printf("Oracle version: %s<br>\n"
 			    "Compile-time ORACLE_HOME: %s<br>\n"
 			    "Libraries used: %s",
 			    PHP_ORACLE_VERSION, PHP_ORACLE_HOME, PHP_ORACLE_LIBS);
+#endif
 }
 
 
@@ -1603,7 +1609,9 @@ int ora_set_param_values(oraCursor *cursor, int isout)
 			efree(paramname);
 			continue;
 		}
-
+		
+		/* FIXME Globals don't work in extensions on windows, have to do something
+			else here */
 		if(_php3_hash_find(&GLOBAL(symbol_table), paramname, strlen(paramname) + 1, (void **)&pdata) == FAILURE){
 			php3_error(E_WARNING, "Can't find variable for parameter");
 			efree(paramname);

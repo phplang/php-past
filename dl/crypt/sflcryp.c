@@ -287,7 +287,7 @@ crypt_data (
                 mdc_decrypt ((qbyte *) buffer + index, aligned_block,
                                                        aligned_intkey);
 
-            memcpy ((qbyte *) buffer + index, block, 32);
+//            memcpy ((qbyte *) buffer + index, block, 32);
           }
       }
     else

@@ -132,7 +132,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.174 1998/09/18 16:55:00 rasmus Exp $ */
+/* $Id: language-parser.y,v 1.176 1998/10/04 12:26:59 zeev Exp $ */
 
 
 /* 
@@ -217,6 +217,7 @@ int include_count;
  * soon-to-be-called function symbol table.
  */
 FunctionState function_state;
+FunctionState php3g_function_state_for_require; /* to save state when forcing execution in require() evaluation */
 
 /* The following two variables are used when inside class definitions. */
 char *class_name=NULL;
@@ -494,36 +495,36 @@ static const short yyrhs[] = {   117,
 
 #if YYDEBUG != 0
 static const short yyrline[] = { 0,
-   271,   273,   277,   279,   279,   280,   280,   280,   281,   281,
-   282,   282,   282,   282,   283,   283,   284,   285,   286,   287,
-   288,   288,   288,   289,   290,   291,   292,   293,   294,   295,
-   296,   297,   297,   298,   299,   300,   301,   302,   302,   303,
-   303,   304,   305,   306,   307,   307,   308,   309,   310,   311,
-   312,   313,   317,   319,   322,   324,   325,   326,   329,   331,
-   334,   336,   336,   340,   342,   342,   342,   346,   348,   349,
-   350,   351,   352,   356,   358,   359,   359,   360,   363,   365,
-   366,   366,   367,   370,   372,   373,   376,   378,   379,   382,
-   384,   384,   385,   385,   385,   386,   386,   387,   387,   387,
-   391,   393,   393,   397,   399,   400,   401,   402,   403,   404,
-   405,   409,   411,   415,   417,   418,   419,   420,   421,   424,
-   426,   430,   432,   433,   434,   439,   441,   445,   447,   451,
-   453,   454,   455,   456,   461,   463,   464,   465,   469,   471,
-   472,   476,   478,   479,   483,   485,   486,   487,   488,   489,
-   490,   491,   492,   493,   494,   495,   496,   497,   498,   499,
-   500,   501,   501,   502,   502,   503,   503,   504,   504,   505,
-   506,   507,   508,   509,   510,   511,   512,   513,   514,   515,
-   516,   517,   518,   519,   520,   521,   522,   523,   524,   525,
-   526,   527,   528,   529,   530,   531,   532,   533,   534,   535,
-   536,   537,   538,   539,   540,   541,   542,   543,   544,   545,
-   546,   547,   548,   549,   550,   551,   552,   552,   553,   554,
-   555,   556,   557,   560,   562,   563,   564,   565,   566,   567,
-   568,   571,   573,   574,   577,   583,   585,   589,   591,   595,
-   597,   602,   604,   605,   608,   616,   625,   632,   646,   648,
-   649,   650,   650,   654,   656,   657,   660,   661,   665,   667,
-   668,   668,   669,   669,   673,   675,   678,   680,   681,   682,
-   686,   688,   689,   690,   691,   692,   693,   694,   695,   696,
-   697,   698,   699,   700,   701,   702,   703,   704,   705,   706,
-   707,   708,   712,   714,   715,   719,   721,   722
+   272,   274,   278,   280,   280,   281,   281,   281,   282,   282,
+   283,   283,   283,   283,   284,   284,   285,   286,   287,   288,
+   289,   289,   289,   290,   291,   292,   293,   294,   295,   296,
+   297,   298,   298,   299,   300,   301,   302,   303,   303,   304,
+   304,   305,   306,   307,   308,   308,   309,   310,   311,   312,
+   313,   314,   318,   320,   323,   325,   326,   327,   330,   332,
+   335,   337,   337,   341,   343,   343,   343,   347,   349,   350,
+   351,   352,   353,   357,   359,   360,   360,   361,   364,   366,
+   367,   367,   368,   371,   373,   374,   377,   379,   380,   383,
+   385,   385,   386,   386,   386,   387,   387,   388,   388,   388,
+   392,   394,   394,   398,   400,   401,   402,   403,   404,   405,
+   406,   410,   412,   416,   418,   419,   420,   421,   422,   425,
+   427,   431,   433,   434,   435,   440,   442,   446,   448,   452,
+   454,   455,   456,   457,   462,   464,   465,   466,   470,   472,
+   473,   477,   479,   480,   484,   486,   487,   488,   489,   490,
+   491,   492,   493,   494,   495,   496,   497,   498,   499,   500,
+   501,   502,   502,   503,   503,   504,   504,   505,   505,   506,
+   507,   508,   509,   510,   511,   512,   513,   514,   515,   516,
+   517,   518,   519,   520,   521,   522,   523,   524,   525,   526,
+   527,   528,   529,   530,   531,   532,   533,   534,   535,   536,
+   537,   538,   539,   540,   541,   542,   543,   544,   545,   546,
+   547,   548,   549,   550,   551,   552,   553,   553,   554,   555,
+   556,   557,   558,   561,   563,   564,   565,   566,   567,   568,
+   569,   572,   574,   575,   578,   584,   586,   590,   592,   596,
+   598,   603,   605,   606,   609,   617,   626,   633,   647,   649,
+   650,   651,   651,   655,   657,   658,   661,   662,   666,   668,
+   669,   669,   670,   670,   674,   676,   679,   681,   682,   683,
+   687,   689,   690,   691,   692,   693,   694,   695,   696,   697,
+   698,   699,   700,   701,   702,   703,   704,   705,   706,   707,
+   708,   709,   713,   715,   716,   720,   722,   723
 };
 #endif
 
@@ -1517,7 +1518,7 @@ static const short yycheck[] = {     2,
 #define YYPURE 1
 
 /* -*-C-*-  Note some compilers choke on comments on `#line' lines.  */
-#line 3 "/usr/local/share/bison.simple"
+#line 3 "/usr/lib/bison.simple"
 
 /* Skeleton output parser for bison,
    Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
@@ -1710,7 +1711,7 @@ __yy_memcpy (char *to, char *from, int count)
 #endif
 #endif
 
-#line 196 "/usr/local/share/bison.simple"
+#line 196 "/usr/lib/bison.simple"
 
 /* The user can define YYPARSE_PARAM as the name of an argument to be passed
    into yyparse.  The argument should have type void *.
@@ -2015,815 +2016,815 @@ yyreduce:
   switch (yyn) {
 
 case 4:
-#line 279 "language-parser.y"
+#line 280 "language-parser.y"
 { cs_start_if (&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 5:
-#line 279 "language-parser.y"
+#line 280 "language-parser.y"
 { cs_end_if ( _INLINE_TLS_VOID); ;
     break;}
 case 6:
-#line 280 "language-parser.y"
+#line 281 "language-parser.y"
 { cs_start_if (&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 7:
-#line 280 "language-parser.y"
+#line 281 "language-parser.y"
 { cs_end_if ( _INLINE_TLS_VOID); ;
     break;}
 case 9:
-#line 281 "language-parser.y"
+#line 282 "language-parser.y"
 { cs_start_while(&yyvsp[-3], &yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 10:
-#line 281 "language-parser.y"
+#line 282 "language-parser.y"
 { cs_end_while(&yyvsp[-5],&yychar _INLINE_TLS); ;
     break;}
 case 12:
-#line 282 "language-parser.y"
+#line 283 "language-parser.y"
 { cs_start_do_while(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 13:
-#line 282 "language-parser.y"
+#line 283 "language-parser.y"
 { cs_force_eval_do_while( _INLINE_TLS_VOID); ;
     break;}
 case 14:
-#line 282 "language-parser.y"
+#line 283 "language-parser.y"
 { cs_end_do_while(&yyvsp[-8],&yyvsp[-2],&yychar _INLINE_TLS); ;
     break;}
 case 16:
-#line 283 "language-parser.y"
+#line 284 "language-parser.y"
 { for_pre_expr1(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 17:
-#line 284 "language-parser.y"
+#line 285 "language-parser.y"
 { if (GLOBAL(Execute)) pval_destructor(&yyvsp[0] _INLINE_TLS); for_pre_expr2(&yyvsp[-3] _INLINE_TLS); ;
     break;}
 case 18:
-#line 285 "language-parser.y"
+#line 286 "language-parser.y"
 { for_pre_expr3(&yyvsp[-6],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 19:
-#line 286 "language-parser.y"
+#line 287 "language-parser.y"
 { for_pre_statement(&yyvsp[-9],&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 20:
-#line 287 "language-parser.y"
+#line 288 "language-parser.y"
 { for_post_statement(&yyvsp[-12],&yyvsp[-7],&yyvsp[-4],&yyvsp[-1],&yychar _INLINE_TLS); ;
     break;}
 case 22:
-#line 288 "language-parser.y"
+#line 289 "language-parser.y"
 { cs_switch_start(&yyvsp[-3],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 23:
-#line 288 "language-parser.y"
+#line 289 "language-parser.y"
 { cs_switch_end(&yyvsp[-3] _INLINE_TLS); ;
     break;}
 case 24:
-#line 289 "language-parser.y"
+#line 290 "language-parser.y"
 { DO_OR_DIE(cs_break_continue(NULL,DO_BREAK _INLINE_TLS)) ;
     break;}
 case 25:
-#line 290 "language-parser.y"
+#line 291 "language-parser.y"
 { DO_OR_DIE(cs_break_continue(&yyvsp[-1],DO_BREAK _INLINE_TLS)) ;
     break;}
 case 26:
-#line 291 "language-parser.y"
+#line 292 "language-parser.y"
 { DO_OR_DIE(cs_break_continue(NULL,DO_CONTINUE _INLINE_TLS)) ;
     break;}
 case 27:
-#line 292 "language-parser.y"
+#line 293 "language-parser.y"
 { DO_OR_DIE(cs_break_continue(&yyvsp[-1],DO_CONTINUE _INLINE_TLS)) ;
     break;}
 case 28:
-#line 293 "language-parser.y"
+#line 294 "language-parser.y"
 { start_function_decleration(_INLINE_TLS_VOID); ;
     break;}
 case 29:
-#line 294 "language-parser.y"
+#line 295 "language-parser.y"
 { end_function_decleration(&yyvsp[-7],&yyvsp[-6] _INLINE_TLS); ;
     break;}
 case 30:
-#line 295 "language-parser.y"
+#line 296 "language-parser.y"
 { start_function_decleration(_INLINE_TLS_VOID); ;
     break;}
 case 31:
-#line 296 "language-parser.y"
+#line 297 "language-parser.y"
 { end_function_decleration(&yyvsp[-8],&yyvsp[-7] _INLINE_TLS); ;
     break;}
 case 32:
-#line 297 "language-parser.y"
+#line 298 "language-parser.y"
 { tc_set_token(&GLOBAL(token_cache_manager), yyvsp[-1].offset, FUNCTION); ;
     break;}
 case 33:
-#line 297 "language-parser.y"
+#line 298 "language-parser.y"
 { if (!GLOBAL(shutdown_requested)) GLOBAL(shutdown_requested) = TERMINATE_CURRENT_PHPPARSE; ;
     break;}
 case 34:
-#line 298 "language-parser.y"
+#line 299 "language-parser.y"
 { cs_return(NULL _INLINE_TLS); ;
     break;}
 case 35:
-#line 299 "language-parser.y"
+#line 300 "language-parser.y"
 { cs_return(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 38:
-#line 302 "language-parser.y"
+#line 303 "language-parser.y"
 { cs_start_class_decleration(&yyvsp[0],NULL _INLINE_TLS); ;
     break;}
 case 39:
-#line 302 "language-parser.y"
+#line 303 "language-parser.y"
 { cs_end_class_decleration( _INLINE_TLS_VOID); ;
     break;}
 case 40:
-#line 303 "language-parser.y"
+#line 304 "language-parser.y"
 { cs_start_class_decleration(&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 41:
-#line 303 "language-parser.y"
+#line 304 "language-parser.y"
 { cs_end_class_decleration( _INLINE_TLS_VOID); ;
     break;}
 case 43:
-#line 305 "language-parser.y"
+#line 306 "language-parser.y"
 { if (GLOBAL(Execute)) { if (php3_header()) PUTS(yyvsp[0].value.str.val); } ;
     break;}
 case 44:
-#line 306 "language-parser.y"
+#line 307 "language-parser.y"
 { if (GLOBAL(Execute)) pval_destructor(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 45:
-#line 307 "language-parser.y"
-{ cs_start_include(&yyvsp[0] _INLINE_TLS); ;
+#line 308 "language-parser.y"
+{ php3cs_start_require(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 46:
-#line 307 "language-parser.y"
-{ cs_end_include(&yyvsp[-3],&yyvsp[-1] _INLINE_TLS); ;
+#line 308 "language-parser.y"
+{ php3cs_end_require(&yyvsp[-3],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 47:
-#line 308 "language-parser.y"
+#line 309 "language-parser.y"
 { if (GLOBAL(Execute)) cs_show_source(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 48:
-#line 309 "language-parser.y"
+#line 310 "language-parser.y"
 { if (GLOBAL(Execute)) eval_string(&yyvsp[-2],NULL,1 _INLINE_TLS); ;
     break;}
 case 49:
-#line 310 "language-parser.y"
+#line 311 "language-parser.y"
 { if (GLOBAL(Execute)) eval_string(&yyvsp[-4],&yyvsp[-2],2 _INLINE_TLS); ;
     break;}
 case 50:
-#line 311 "language-parser.y"
+#line 312 "language-parser.y"
 { if (GLOBAL(Execute)) eval_string(&yyvsp[-2],&yyvsp[0],0 _INLINE_TLS); ;
     break;}
 case 51:
-#line 312 "language-parser.y"
+#line 313 "language-parser.y"
 { if (GLOBAL(Execute)) conditional_include_file(&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 62:
-#line 336 "language-parser.y"
+#line 337 "language-parser.y"
 { cs_start_while(&yyvsp[-3], &yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 63:
-#line 336 "language-parser.y"
+#line 337 "language-parser.y"
 { cs_end_while(&yyvsp[-5],&yychar _INLINE_TLS); ;
     break;}
 case 65:
-#line 342 "language-parser.y"
+#line 343 "language-parser.y"
 { cs_start_do_while(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 66:
-#line 342 "language-parser.y"
+#line 343 "language-parser.y"
 { cs_force_eval_do_while( _INLINE_TLS_VOID); ;
     break;}
 case 67:
-#line 342 "language-parser.y"
+#line 343 "language-parser.y"
 { cs_end_do_while(&yyvsp[-8],&yyvsp[-2],&yychar _INLINE_TLS); ;
     break;}
 case 69:
-#line 348 "language-parser.y"
+#line 349 "language-parser.y"
 { for_pre_expr1(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 70:
-#line 349 "language-parser.y"
+#line 350 "language-parser.y"
 { if (GLOBAL(Execute)) pval_destructor(&yyvsp[0] _INLINE_TLS); for_pre_expr2(&yyvsp[-3] _INLINE_TLS); ;
     break;}
 case 71:
-#line 350 "language-parser.y"
+#line 351 "language-parser.y"
 { for_pre_expr3(&yyvsp[-6],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 72:
-#line 351 "language-parser.y"
+#line 352 "language-parser.y"
 { for_pre_statement(&yyvsp[-9],&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 73:
-#line 352 "language-parser.y"
+#line 353 "language-parser.y"
 { for_post_statement(&yyvsp[-12],&yyvsp[-7],&yyvsp[-4],&yyvsp[-1],&yychar _INLINE_TLS); ;
     break;}
 case 75:
-#line 358 "language-parser.y"
+#line 359 "language-parser.y"
 { cs_elseif_start_evaluate( _INLINE_TLS_VOID); ;
     break;}
 case 76:
-#line 359 "language-parser.y"
+#line 360 "language-parser.y"
 { cs_elseif_end_evaluate( _INLINE_TLS_VOID); ;
     break;}
 case 77:
-#line 359 "language-parser.y"
+#line 360 "language-parser.y"
 { cs_start_elseif (&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 80:
-#line 365 "language-parser.y"
+#line 366 "language-parser.y"
 { cs_elseif_start_evaluate( _INLINE_TLS_VOID); ;
     break;}
 case 81:
-#line 366 "language-parser.y"
+#line 367 "language-parser.y"
 { cs_elseif_end_evaluate( _INLINE_TLS_VOID); ;
     break;}
 case 82:
-#line 366 "language-parser.y"
+#line 367 "language-parser.y"
 { cs_start_elseif (&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 85:
-#line 372 "language-parser.y"
+#line 373 "language-parser.y"
 { cs_start_else( _INLINE_TLS_VOID); ;
     break;}
 case 88:
-#line 378 "language-parser.y"
+#line 379 "language-parser.y"
 { cs_start_else( _INLINE_TLS_VOID); ;
     break;}
 case 91:
-#line 384 "language-parser.y"
+#line 385 "language-parser.y"
 { cs_switch_case_pre(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 92:
-#line 384 "language-parser.y"
+#line 385 "language-parser.y"
 { cs_switch_case_post( _INLINE_TLS_VOID); ;
     break;}
 case 94:
-#line 385 "language-parser.y"
+#line 386 "language-parser.y"
 { cs_switch_case_pre(NULL _INLINE_TLS); ;
     break;}
 case 95:
-#line 385 "language-parser.y"
+#line 386 "language-parser.y"
 { cs_switch_case_post( _INLINE_TLS_VOID); ;
     break;}
 case 96:
-#line 386 "language-parser.y"
+#line 387 "language-parser.y"
 { cs_switch_case_pre(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 97:
-#line 386 "language-parser.y"
+#line 387 "language-parser.y"
 { cs_switch_case_post( _INLINE_TLS_VOID); ;
     break;}
 case 99:
-#line 387 "language-parser.y"
+#line 388 "language-parser.y"
 { cs_switch_case_pre(NULL _INLINE_TLS); ;
     break;}
 case 100:
-#line 387 "language-parser.y"
+#line 388 "language-parser.y"
 { cs_switch_case_post( _INLINE_TLS_VOID); ;
     break;}
 case 101:
-#line 392 "language-parser.y"
+#line 393 "language-parser.y"
 { GLOBAL(param_index)=0; ;
     break;}
 case 104:
-#line 398 "language-parser.y"
+#line 399 "language-parser.y"
 { get_function_parameter(&yyvsp[0], BYREF_NONE, NULL _INLINE_TLS); ;
     break;}
 case 105:
-#line 399 "language-parser.y"
+#line 400 "language-parser.y"
 { get_function_parameter(&yyvsp[0], BYREF_FORCE, NULL _INLINE_TLS); ;
     break;}
 case 106:
-#line 400 "language-parser.y"
+#line 401 "language-parser.y"
 { get_function_parameter(&yyvsp[0], BYREF_ALLOW, NULL _INLINE_TLS); ;
     break;}
 case 107:
-#line 401 "language-parser.y"
+#line 402 "language-parser.y"
 { get_function_parameter(&yyvsp[-2], BYREF_NONE, &yyvsp[0] _INLINE_TLS); ;
     break;}
 case 108:
-#line 402 "language-parser.y"
+#line 403 "language-parser.y"
 { get_function_parameter(&yyvsp[0], BYREF_NONE, NULL _INLINE_TLS); ;
     break;}
 case 109:
-#line 403 "language-parser.y"
+#line 404 "language-parser.y"
 { get_function_parameter(&yyvsp[0], BYREF_FORCE, NULL  _INLINE_TLS); ;
     break;}
 case 110:
-#line 404 "language-parser.y"
+#line 405 "language-parser.y"
 { get_function_parameter(&yyvsp[0], BYREF_ALLOW, NULL _INLINE_TLS); ;
     break;}
 case 111:
-#line 405 "language-parser.y"
+#line 406 "language-parser.y"
 { get_function_parameter(&yyvsp[-2], BYREF_NONE, &yyvsp[0] _INLINE_TLS); ;
     break;}
 case 114:
-#line 416 "language-parser.y"
+#line 417 "language-parser.y"
 { pass_parameter_by_value(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 115:
-#line 417 "language-parser.y"
+#line 418 "language-parser.y"
 { pass_parameter(&yyvsp[0],0 _INLINE_TLS); ;
     break;}
 case 116:
-#line 418 "language-parser.y"
+#line 419 "language-parser.y"
 { pass_parameter(&yyvsp[0],1 _INLINE_TLS); ;
     break;}
 case 117:
-#line 419 "language-parser.y"
+#line 420 "language-parser.y"
 { pass_parameter_by_value(&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 118:
-#line 420 "language-parser.y"
+#line 421 "language-parser.y"
 { pass_parameter(&yyvsp[0],0 _INLINE_TLS); ;
     break;}
 case 119:
-#line 421 "language-parser.y"
+#line 422 "language-parser.y"
 { pass_parameter(&yyvsp[0],1 _INLINE_TLS); ;
     break;}
 case 120:
-#line 425 "language-parser.y"
-{ cs_global_variable(&yyvsp[0] _INLINE_TLS); ;
-    break;}
-case 121:
 #line 426 "language-parser.y"
 { cs_global_variable(&yyvsp[0] _INLINE_TLS); ;
     break;}
+case 121:
+#line 427 "language-parser.y"
+{ cs_global_variable(&yyvsp[0] _INLINE_TLS); ;
+    break;}
 case 122:
-#line 431 "language-parser.y"
+#line 432 "language-parser.y"
 { cs_static_variable(&yyvsp[0],NULL _INLINE_TLS); ;
     break;}
 case 123:
-#line 432 "language-parser.y"
+#line 433 "language-parser.y"
 { cs_static_variable(&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 124:
-#line 433 "language-parser.y"
+#line 434 "language-parser.y"
 { cs_static_variable(&yyvsp[0],NULL _INLINE_TLS); ;
     break;}
 case 125:
-#line 434 "language-parser.y"
+#line 435 "language-parser.y"
 { cs_static_variable(&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 126:
-#line 440 "language-parser.y"
+#line 441 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
 case 127:
-#line 441 "language-parser.y"
+#line 442 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
     break;}
 case 131:
-#line 453 "language-parser.y"
+#line 454 "language-parser.y"
 { start_function_decleration(_INLINE_TLS_VOID); ;
     break;}
 case 132:
-#line 454 "language-parser.y"
+#line 455 "language-parser.y"
 { end_function_decleration(&yyvsp[-7],&yyvsp[-6] _INLINE_TLS); ;
     break;}
 case 133:
-#line 455 "language-parser.y"
+#line 456 "language-parser.y"
 { start_function_decleration(_INLINE_TLS_VOID); ;
     break;}
 case 134:
-#line 456 "language-parser.y"
+#line 457 "language-parser.y"
 { end_function_decleration(&yyvsp[-8],&yyvsp[-7] _INLINE_TLS); ;
     break;}
 case 135:
-#line 462 "language-parser.y"
+#line 463 "language-parser.y"
 { declare_class_variable(&yyvsp[0],NULL _INLINE_TLS); ;
     break;}
 case 136:
-#line 463 "language-parser.y"
+#line 464 "language-parser.y"
 { declare_class_variable(&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 137:
-#line 464 "language-parser.y"
+#line 465 "language-parser.y"
 { declare_class_variable(&yyvsp[0],NULL _INLINE_TLS); ;
     break;}
 case 138:
-#line 465 "language-parser.y"
+#line 466 "language-parser.y"
 { declare_class_variable(&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 140:
-#line 471 "language-parser.y"
-{ if (GLOBAL(Execute)) { php3i_print_variable(&yyvsp[0] _INLINE_TLS); pval_destructor(&yyvsp[0] _INLINE_TLS); } ;
-    break;}
-case 141:
 #line 472 "language-parser.y"
 { if (GLOBAL(Execute)) { php3i_print_variable(&yyvsp[0] _INLINE_TLS); pval_destructor(&yyvsp[0] _INLINE_TLS); } ;
     break;}
+case 141:
+#line 473 "language-parser.y"
+{ if (GLOBAL(Execute)) { php3i_print_variable(&yyvsp[0] _INLINE_TLS); pval_destructor(&yyvsp[0] _INLINE_TLS); } ;
+    break;}
 case 142:
-#line 477 "language-parser.y"
+#line 478 "language-parser.y"
 { yyval.value.lval=1;  yyval.type=IS_LONG; ;
     break;}
 case 143:
-#line 478 "language-parser.y"
+#line 479 "language-parser.y"
 { if (GLOBAL(Execute)) { yyval = yyvsp[0]; pval_destructor(&yyvsp[-2] _INLINE_TLS); } ;
     break;}
 case 144:
-#line 479 "language-parser.y"
+#line 480 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
 case 145:
-#line 484 "language-parser.y"
+#line 485 "language-parser.y"
 { assign_to_list(&yyval, &yyvsp[-3], &yyvsp[0] _INLINE_TLS);;
     break;}
 case 146:
-#line 485 "language-parser.y"
+#line 486 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],NULL _INLINE_TLS); ;
     break;}
 case 147:
-#line 486 "language-parser.y"
+#line 487 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],add_function _INLINE_TLS); ;
     break;}
 case 148:
-#line 487 "language-parser.y"
+#line 488 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],sub_function _INLINE_TLS); ;
     break;}
 case 149:
-#line 488 "language-parser.y"
+#line 489 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],mul_function _INLINE_TLS); ;
     break;}
 case 150:
-#line 489 "language-parser.y"
+#line 490 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],div_function _INLINE_TLS); ;
     break;}
 case 151:
-#line 490 "language-parser.y"
+#line 491 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],concat_function_with_free _INLINE_TLS); ;
     break;}
 case 152:
-#line 491 "language-parser.y"
+#line 492 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],mod_function _INLINE_TLS); ;
     break;}
 case 153:
-#line 492 "language-parser.y"
+#line 493 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],bitwise_and_function _INLINE_TLS); ;
     break;}
 case 154:
-#line 493 "language-parser.y"
+#line 494 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],bitwise_or_function _INLINE_TLS); ;
     break;}
 case 155:
-#line 494 "language-parser.y"
+#line 495 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],bitwise_xor_function _INLINE_TLS); ;
     break;}
 case 156:
-#line 495 "language-parser.y"
+#line 496 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],shift_left_function _INLINE_TLS); ;
     break;}
 case 157:
-#line 496 "language-parser.y"
+#line 497 "language-parser.y"
 { if (GLOBAL(Execute)) assign_to_variable(&yyval,&yyvsp[-2],&yyvsp[0],shift_right_function _INLINE_TLS); ;
     break;}
 case 158:
-#line 497 "language-parser.y"
+#line 498 "language-parser.y"
 { if (GLOBAL(Execute)) incdec_variable(&yyval,&yyvsp[-1],increment_function,1 _INLINE_TLS); ;
     break;}
 case 159:
-#line 498 "language-parser.y"
+#line 499 "language-parser.y"
 { if (GLOBAL(Execute)) incdec_variable(&yyval,&yyvsp[0],increment_function,0 _INLINE_TLS); ;
     break;}
 case 160:
-#line 499 "language-parser.y"
+#line 500 "language-parser.y"
 { if (GLOBAL(Execute)) incdec_variable(&yyval,&yyvsp[-1],decrement_function,1 _INLINE_TLS); ;
     break;}
 case 161:
-#line 500 "language-parser.y"
+#line 501 "language-parser.y"
 { if (GLOBAL(Execute)) incdec_variable(&yyval,&yyvsp[0],decrement_function,0 _INLINE_TLS); ;
     break;}
 case 162:
-#line 501 "language-parser.y"
+#line 502 "language-parser.y"
 { cs_pre_boolean_or(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 163:
-#line 501 "language-parser.y"
+#line 502 "language-parser.y"
 { cs_post_boolean_or(&yyval,&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 164:
-#line 502 "language-parser.y"
+#line 503 "language-parser.y"
 { cs_pre_boolean_and(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 165:
-#line 502 "language-parser.y"
+#line 503 "language-parser.y"
 { cs_post_boolean_and(&yyval,&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 166:
-#line 503 "language-parser.y"
+#line 504 "language-parser.y"
 { cs_pre_boolean_or(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 167:
-#line 503 "language-parser.y"
+#line 504 "language-parser.y"
 { cs_post_boolean_or(&yyval,&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 168:
-#line 504 "language-parser.y"
+#line 505 "language-parser.y"
 { cs_pre_boolean_and(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 169:
-#line 504 "language-parser.y"
+#line 505 "language-parser.y"
 { cs_post_boolean_and(&yyval,&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 170:
-#line 505 "language-parser.y"
+#line 506 "language-parser.y"
 { if (GLOBAL(Execute)) { boolean_xor_function(&yyval,&yyvsp[-2],&yyvsp[0]); } ;
     break;}
 case 171:
-#line 506 "language-parser.y"
+#line 507 "language-parser.y"
 { if (GLOBAL(Execute)) bitwise_or_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 172:
-#line 507 "language-parser.y"
+#line 508 "language-parser.y"
 { if (GLOBAL(Execute)) bitwise_xor_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 173:
-#line 508 "language-parser.y"
+#line 509 "language-parser.y"
 { if (GLOBAL(Execute)) bitwise_and_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 174:
-#line 509 "language-parser.y"
+#line 510 "language-parser.y"
 { if (GLOBAL(Execute)) concat_function(&yyval,&yyvsp[-2],&yyvsp[0],1 _INLINE_TLS); ;
     break;}
 case 175:
-#line 510 "language-parser.y"
+#line 511 "language-parser.y"
 { if (GLOBAL(Execute)) add_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 176:
-#line 511 "language-parser.y"
+#line 512 "language-parser.y"
 { if (GLOBAL(Execute)) sub_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 177:
-#line 512 "language-parser.y"
+#line 513 "language-parser.y"
 { if (GLOBAL(Execute)) mul_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 178:
-#line 513 "language-parser.y"
+#line 514 "language-parser.y"
 { if (GLOBAL(Execute)) div_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 179:
-#line 514 "language-parser.y"
+#line 515 "language-parser.y"
 { if (GLOBAL(Execute)) mod_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 180:
-#line 515 "language-parser.y"
+#line 516 "language-parser.y"
 { if (GLOBAL(Execute)) shift_left_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 181:
-#line 516 "language-parser.y"
+#line 517 "language-parser.y"
 { if (GLOBAL(Execute)) shift_right_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 182:
-#line 517 "language-parser.y"
+#line 518 "language-parser.y"
 { if (GLOBAL(Execute)) { pval tmp;  tmp.value.lval=0;  tmp.type=IS_LONG;  add_function(&yyval,&tmp,&yyvsp[0] _INLINE_TLS); } ;
     break;}
 case 183:
-#line 518 "language-parser.y"
+#line 519 "language-parser.y"
 { if (GLOBAL(Execute)) { pval tmp;  tmp.value.lval=0;  tmp.type=IS_LONG;  sub_function(&yyval,&tmp,&yyvsp[0] _INLINE_TLS); } ;
     break;}
 case 184:
-#line 519 "language-parser.y"
+#line 520 "language-parser.y"
 { if (GLOBAL(Execute)) boolean_not_function(&yyval,&yyvsp[0]); ;
     break;}
 case 185:
-#line 520 "language-parser.y"
+#line 521 "language-parser.y"
 { if (GLOBAL(Execute)) bitwise_not_function(&yyval,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 186:
-#line 521 "language-parser.y"
+#line 522 "language-parser.y"
 { if (GLOBAL(Execute)) is_equal_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 187:
-#line 522 "language-parser.y"
+#line 523 "language-parser.y"
 { if (GLOBAL(Execute)) is_not_equal_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 188:
-#line 523 "language-parser.y"
+#line 524 "language-parser.y"
 { if (GLOBAL(Execute)) is_smaller_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 189:
-#line 524 "language-parser.y"
+#line 525 "language-parser.y"
 { if (GLOBAL(Execute)) is_smaller_or_equal_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 190:
-#line 525 "language-parser.y"
+#line 526 "language-parser.y"
 { if (GLOBAL(Execute)) is_greater_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 191:
-#line 526 "language-parser.y"
+#line 527 "language-parser.y"
 { if (GLOBAL(Execute)) is_greater_or_equal_function(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 192:
-#line 527 "language-parser.y"
+#line 528 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
     break;}
 case 193:
-#line 528 "language-parser.y"
+#line 529 "language-parser.y"
 {  php3_error(E_PARSE,"'(' unmatched",GLOBAL(current_lineno)); if (GLOBAL(Execute)) yyval = yyvsp[-1]; yyerrok; ;
     break;}
 case 194:
-#line 529 "language-parser.y"
+#line 530 "language-parser.y"
 { cs_questionmark_op_pre_expr1(&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 195:
-#line 530 "language-parser.y"
+#line 531 "language-parser.y"
 { cs_questionmark_op_pre_expr2(&yyvsp[-4] _INLINE_TLS); ;
     break;}
 case 196:
-#line 531 "language-parser.y"
+#line 532 "language-parser.y"
 { cs_questionmark_op_post_expr2(&yyval,&yyvsp[-6],&yyvsp[-3],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 197:
-#line 532 "language-parser.y"
+#line 533 "language-parser.y"
 { cs_functioncall_pre_variable_passing(&yyvsp[0],NULL,1 _INLINE_TLS); ;
     break;}
 case 198:
-#line 533 "language-parser.y"
+#line 534 "language-parser.y"
 { cs_functioncall_post_variable_passing(&yyvsp[-4],&yychar _INLINE_TLS); ;
     break;}
 case 199:
-#line 534 "language-parser.y"
+#line 535 "language-parser.y"
 { cs_functioncall_end(&yyval,&yyvsp[-6],&yyvsp[-2],&yychar,1 _INLINE_TLS);;
     break;}
 case 201:
-#line 536 "language-parser.y"
+#line 537 "language-parser.y"
 { cs_functioncall_pre_variable_passing(&yyvsp[0],&yyvsp[-2],1 _INLINE_TLS); ;
     break;}
 case 202:
-#line 537 "language-parser.y"
+#line 538 "language-parser.y"
 { cs_functioncall_post_variable_passing(&yyvsp[-4],&yychar _INLINE_TLS); ;
     break;}
 case 203:
-#line 538 "language-parser.y"
+#line 539 "language-parser.y"
 { cs_functioncall_end(&yyval,&yyvsp[-6],&yyvsp[-2],&yychar,1 _INLINE_TLS); ;
     break;}
 case 204:
-#line 539 "language-parser.y"
+#line 540 "language-parser.y"
 { assign_new_object(&yyval,&yyvsp[0],1 _INLINE_TLS); ;
     break;}
 case 205:
-#line 540 "language-parser.y"
+#line 541 "language-parser.y"
 { assign_new_object(&yyval,&yyvsp[0],0 _INLINE_TLS); ;
     break;}
 case 206:
-#line 541 "language-parser.y"
+#line 542 "language-parser.y"
 { if (!GLOBAL(shutdown_requested)) { pval object_pointer; object_pointer.value.varptr.pvalue = &yyvsp[-1]; cs_functioncall_pre_variable_passing(&yyvsp[-2], &object_pointer, 1 _INLINE_TLS); } ;
     break;}
 case 207:
-#line 542 "language-parser.y"
+#line 543 "language-parser.y"
 { cs_functioncall_post_variable_passing(&yyvsp[-5], &yychar _INLINE_TLS); ;
     break;}
 case 208:
-#line 543 "language-parser.y"
+#line 544 "language-parser.y"
 { cs_functioncall_end(&yyval, &yyvsp[-7], &yyvsp[-2], &yychar, 1 _INLINE_TLS);  yyval = yyvsp[-6]; ;
     break;}
 case 209:
-#line 544 "language-parser.y"
+#line 545 "language-parser.y"
 { if (GLOBAL(Execute)) { convert_to_long(&yyvsp[0]); yyval = yyvsp[0]; } ;
     break;}
 case 210:
-#line 545 "language-parser.y"
+#line 546 "language-parser.y"
 { if (GLOBAL(Execute)) { convert_to_double(&yyvsp[0]); yyval = yyvsp[0]; } ;
     break;}
 case 211:
-#line 546 "language-parser.y"
+#line 547 "language-parser.y"
 { if (GLOBAL(Execute)) { convert_to_string(&yyvsp[0]); yyval = yyvsp[0]; } ;
     break;}
 case 212:
-#line 547 "language-parser.y"
+#line 548 "language-parser.y"
 { if (GLOBAL(Execute)) { convert_to_array(&yyvsp[0]); yyval = yyvsp[0]; } ;
     break;}
 case 213:
-#line 548 "language-parser.y"
+#line 549 "language-parser.y"
 { if (GLOBAL(Execute)) { convert_to_object(&yyvsp[0]); yyval = yyvsp[0]; } ;
     break;}
 case 214:
-#line 549 "language-parser.y"
-{ if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; yyval.type=IS_LONG; yyval.value.lval=1; } ;
-    break;}
-case 215:
 #line 550 "language-parser.y"
 { if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; yyval.type=IS_LONG; yyval.value.lval=1; } ;
     break;}
-case 216:
+case 215:
 #line 551 "language-parser.y"
+{ if (GLOBAL(Execute)) { php3_header(); GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; yyval.type=IS_LONG; yyval.value.lval=1; } ;
+    break;}
+case 216:
+#line 552 "language-parser.y"
 { if (GLOBAL(Execute)) { if (php3_header()) { convert_to_string(&yyvsp[-1]);  PUTS(yyvsp[-1].value.str.val);  pval_destructor(&yyvsp[-1] _INLINE_TLS); } GLOBAL(shutdown_requested)=ABNORMAL_SHUTDOWN; yyval.type=IS_LONG; yyval.value.lval=1; } ;
     break;}
 case 217:
-#line 552 "language-parser.y"
+#line 553 "language-parser.y"
 { yyvsp[0].cs_data.error_reporting=GLOBAL(error_reporting); GLOBAL(error_reporting)=0; ;
     break;}
 case 218:
-#line 552 "language-parser.y"
+#line 553 "language-parser.y"
 { GLOBAL(error_reporting)=yyvsp[-2].cs_data.error_reporting; yyval = yyvsp[0]; ;
     break;}
 case 219:
-#line 553 "language-parser.y"
+#line 554 "language-parser.y"
 { php3_error(E_ERROR,"@ operator may only be used on expressions"); ;
     break;}
 case 220:
-#line 554 "language-parser.y"
+#line 555 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
 case 221:
-#line 555 "language-parser.y"
+#line 556 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
     break;}
 case 222:
-#line 556 "language-parser.y"
+#line 557 "language-parser.y"
 { cs_system(&yyval,&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 223:
-#line 557 "language-parser.y"
+#line 558 "language-parser.y"
 { if (GLOBAL(Execute)) { php3i_print_variable(&yyvsp[0] _INLINE_TLS);  pval_destructor(&yyvsp[0] _INLINE_TLS);  yyval.value.lval=1; yyval.type=IS_LONG; } ;
     break;}
 case 224:
-#line 561 "language-parser.y"
-{ if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
-    break;}
-case 225:
 #line 562 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
-case 226:
+case 225:
 #line 563 "language-parser.y"
-{ if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
+{ if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
-case 227:
+case 226:
 #line 564 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
     break;}
-case 228:
+case 227:
 #line 565 "language-parser.y"
+{ if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
+    break;}
+case 228:
+#line 566 "language-parser.y"
 { if (GLOBAL(Execute)) { yyval = yyvsp[0]; COPY_STRING(yyval); } ;
     break;}
 case 229:
-#line 566 "language-parser.y"
+#line 567 "language-parser.y"
 { if (GLOBAL(Execute)) { yyval = yyvsp[0]; COPY_STRING(yyval); php3_error(E_NOTICE,"'%s' is not a valid constant - assumed to be \"%s\"",yyvsp[0].value.str.val,yyvsp[0].value.str.val); } ;
     break;}
 case 230:
-#line 567 "language-parser.y"
+#line 568 "language-parser.y"
 { if (GLOBAL(Execute)) { yyval = yyvsp[0]; } ;
     break;}
 case 231:
-#line 568 "language-parser.y"
+#line 569 "language-parser.y"
 { if (GLOBAL(Execute)) { yyval = yyvsp[0]; COPY_STRING(yyval); } ;
     break;}
 case 232:
-#line 572 "language-parser.y"
-{ if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
-    break;}
-case 233:
 #line 573 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
-case 234:
+case 233:
 #line 574 "language-parser.y"
+{ if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
+    break;}
+case 234:
+#line 575 "language-parser.y"
 { if (GLOBAL(Execute)) { pval tmp;  tmp.value.lval=0;  tmp.type=IS_LONG;  sub_function(&yyval,&tmp,&yyvsp[0] _INLINE_TLS); } ;
     break;}
 case 235:
-#line 578 "language-parser.y"
+#line 579 "language-parser.y"
 { if (GLOBAL(Execute)){ yyval = yyvsp[0]; };
     break;}
 case 236:
-#line 584 "language-parser.y"
+#line 585 "language-parser.y"
 { if (GLOBAL(Execute)) read_pointer_value(&yyval,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 237:
-#line 585 "language-parser.y"
+#line 586 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
 case 238:
-#line 590 "language-parser.y"
+#line 591 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[0]; ;
     break;}
 case 239:
-#line 591 "language-parser.y"
+#line 592 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
     break;}
 case 240:
-#line 596 "language-parser.y"
+#line 597 "language-parser.y"
 { if (GLOBAL(Execute)) {yyval = yyvsp[0];COPY_STRING(yyval); };
     break;}
 case 241:
-#line 597 "language-parser.y"
+#line 598 "language-parser.y"
 { if (GLOBAL(Execute)) yyval = yyvsp[-1]; ;
     break;}
 case 242:
-#line 603 "language-parser.y"
+#line 604 "language-parser.y"
 { get_object_symtable(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 243:
-#line 604 "language-parser.y"
+#line 605 "language-parser.y"
 { if (GLOBAL(Execute)) { if (yyvsp[0].value.varptr.pvalue && ((pval *)yyvsp[0].value.varptr.pvalue)->type == IS_OBJECT) { yyval=yyvsp[0]; } else { yyval.value.varptr.pvalue=NULL; } } ;
     break;}
 case 244:
-#line 605 "language-parser.y"
+#line 606 "language-parser.y"
 { get_object_symtable(&yyval,NULL,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 245:
-#line 609 "language-parser.y"
+#line 610 "language-parser.y"
 {
 
 	if (GLOBAL(Execute)) {
@@ -2833,7 +2834,7 @@ case 245:
 ;
     break;}
 case 246:
-#line 616 "language-parser.y"
+#line 617 "language-parser.y"
 {
 
 	if (GLOBAL(Execute)) {
@@ -2845,7 +2846,7 @@ case 246:
 ;
     break;}
 case 247:
-#line 625 "language-parser.y"
+#line 626 "language-parser.y"
 {
 	if (GLOBAL(Execute)) {
 		yyval=yyvsp[-1];
@@ -2855,7 +2856,7 @@ case 247:
 ;
     break;}
 case 248:
-#line 632 "language-parser.y"
+#line 633 "language-parser.y"
 {
 	if (GLOBAL(Execute)) {
 		pval tmp;
@@ -2869,196 +2870,196 @@ case 248:
 ;
     break;}
 case 249:
-#line 647 "language-parser.y"
+#line 648 "language-parser.y"
 { get_regular_variable_pointer(&yyval,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 250:
-#line 648 "language-parser.y"
+#line 649 "language-parser.y"
 { if (GLOBAL(Execute)) yyval=yyvsp[0]; ;
     break;}
 case 251:
-#line 649 "language-parser.y"
+#line 650 "language-parser.y"
 { get_class_variable_pointer(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 252:
-#line 650 "language-parser.y"
+#line 651 "language-parser.y"
 { start_array_parsing(&yyvsp[-1],&yyvsp[-3] _INLINE_TLS); ;
     break;}
 case 253:
-#line 650 "language-parser.y"
+#line 651 "language-parser.y"
 { end_array_parsing(&yyval,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 254:
-#line 655 "language-parser.y"
+#line 656 "language-parser.y"
 { if (GLOBAL(Execute)) get_regular_variable_contents(&yyval,&yyvsp[0],1 _INLINE_TLS); ;
     break;}
 case 255:
-#line 656 "language-parser.y"
+#line 657 "language-parser.y"
 { if (GLOBAL(Execute)) {yyval = yyvsp[0];COPY_STRING(yyval);} ;
     break;}
 case 256:
-#line 657 "language-parser.y"
+#line 658 "language-parser.y"
 {  if (GLOBAL(Execute)) read_pointer_value(&yyval,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 257:
-#line 661 "language-parser.y"
+#line 662 "language-parser.y"
 { start_array_parsing(&yyvsp[-1],NULL _INLINE_TLS); ;
     break;}
 case 258:
-#line 661 "language-parser.y"
+#line 662 "language-parser.y"
 { end_array_parsing(&yyval,&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 259:
-#line 666 "language-parser.y"
+#line 667 "language-parser.y"
 { fetch_array_index(&yyval,&yyvsp[-1],&yyvsp[-3] _INLINE_TLS); ;
     break;}
 case 260:
-#line 667 "language-parser.y"
+#line 668 "language-parser.y"
 { fetch_array_index(&yyval,NULL,&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 261:
-#line 668 "language-parser.y"
+#line 669 "language-parser.y"
 { start_dimensions_parsing(&yyval _INLINE_TLS); ;
     break;}
 case 262:
-#line 668 "language-parser.y"
+#line 669 "language-parser.y"
 { fetch_array_index(&yyval,NULL,&yyval _INLINE_TLS); ;
     break;}
 case 263:
-#line 669 "language-parser.y"
+#line 670 "language-parser.y"
 { start_dimensions_parsing(&yyval _INLINE_TLS); ;
     break;}
 case 264:
-#line 669 "language-parser.y"
+#line 670 "language-parser.y"
 { fetch_array_index(&yyval,&yyvsp[-1],&yyval _INLINE_TLS); ;
     break;}
 case 265:
-#line 674 "language-parser.y"
+#line 675 "language-parser.y"
 { if (GLOBAL(Execute)) { yyval.value.ht = (HashTable *) emalloc(sizeof(HashTable));  _php3_hash_init(yyval.value.ht,0,NULL,PVAL_DESTRUCTOR,0); yyval.type = IS_ARRAY; } ;
     break;}
 case 266:
-#line 675 "language-parser.y"
+#line 676 "language-parser.y"
 { yyval = yyvsp[0]; ;
     break;}
 case 267:
-#line 679 "language-parser.y"
+#line 680 "language-parser.y"
 { if (GLOBAL(Execute)) {yyval=yyvsp[-4]; add_array_pair_list(&yyval, &yyvsp[-2], &yyvsp[0], 0 _INLINE_TLS);} ;
     break;}
 case 268:
-#line 680 "language-parser.y"
+#line 681 "language-parser.y"
 { if (GLOBAL(Execute)) {yyval=yyvsp[-2]; add_array_pair_list(&yyval, NULL, &yyvsp[0], 0 _INLINE_TLS);} ;
     break;}
 case 269:
-#line 681 "language-parser.y"
+#line 682 "language-parser.y"
 { if (GLOBAL(Execute)) add_array_pair_list(&yyval, &yyvsp[-2], &yyvsp[0], 1 _INLINE_TLS); ;
     break;}
 case 270:
-#line 682 "language-parser.y"
+#line 683 "language-parser.y"
 { if (GLOBAL(Execute)) add_array_pair_list(&yyval, NULL, &yyvsp[0], 1 _INLINE_TLS); ;
     break;}
 case 271:
-#line 687 "language-parser.y"
+#line 688 "language-parser.y"
 { add_regular_encapsed_variable(&yyval,&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 272:
-#line 688 "language-parser.y"
+#line 689 "language-parser.y"
 { add_assoc_array_encapsed_variable(&yyval,&yyvsp[-5],&yyvsp[-3],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 273:
-#line 689 "language-parser.y"
+#line 690 "language-parser.y"
 { add_regular_array_encapsed_variable(&yyval,&yyvsp[-5],&yyvsp[-3],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 274:
-#line 690 "language-parser.y"
+#line 691 "language-parser.y"
 { add_variable_array_encapsed_variable(&yyval,&yyvsp[-6],&yyvsp[-4],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 275:
-#line 691 "language-parser.y"
+#line 692 "language-parser.y"
 { add_encapsed_object_property(&yyval,&yyvsp[-4],&yyvsp[-2],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 276:
-#line 692 "language-parser.y"
+#line 693 "language-parser.y"
 { add_regular_encapsed_variable(&yyval,&yyvsp[-4],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 277:
-#line 693 "language-parser.y"
+#line 694 "language-parser.y"
 { add_assoc_array_encapsed_variable(&yyval,&yyvsp[-7],&yyvsp[-4],&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 278:
-#line 694 "language-parser.y"
+#line 695 "language-parser.y"
 { add_regular_array_encapsed_variable(&yyval,&yyvsp[-7],&yyvsp[-4],&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 279:
-#line 695 "language-parser.y"
+#line 696 "language-parser.y"
 { add_variable_array_encapsed_variable(&yyval,&yyvsp[-8],&yyvsp[-5],&yyvsp[-2] _INLINE_TLS); ;
     break;}
 case 280:
-#line 696 "language-parser.y"
+#line 697 "language-parser.y"
 { add_encapsed_object_property(&yyval,&yyvsp[-6],&yyvsp[-3],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 281:
-#line 697 "language-parser.y"
+#line 698 "language-parser.y"
 { add_indirect_encapsed_variable(&yyval,&yyvsp[-5],&yyvsp[-1] _INLINE_TLS); ;
     break;}
 case 282:
-#line 698 "language-parser.y"
-{ if (GLOBAL(Execute)) { concat_function(&yyval,&yyvsp[-1],&yyvsp[0],0 _INLINE_TLS); } ;
-    break;}
-case 283:
 #line 699 "language-parser.y"
 { if (GLOBAL(Execute)) { concat_function(&yyval,&yyvsp[-1],&yyvsp[0],0 _INLINE_TLS); } ;
     break;}
-case 284:
+case 283:
 #line 700 "language-parser.y"
 { if (GLOBAL(Execute)) { concat_function(&yyval,&yyvsp[-1],&yyvsp[0],0 _INLINE_TLS); } ;
     break;}
-case 285:
+case 284:
 #line 701 "language-parser.y"
+{ if (GLOBAL(Execute)) { concat_function(&yyval,&yyvsp[-1],&yyvsp[0],0 _INLINE_TLS); } ;
+    break;}
+case 285:
+#line 702 "language-parser.y"
 { if (GLOBAL(Execute)) add_char_to_string(&yyval,&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
     break;}
 case 286:
-#line 702 "language-parser.y"
+#line 703 "language-parser.y"
 { if (GLOBAL(Execute)) { php3_error(E_NOTICE,"Bad escape sequence:  %s",yyvsp[0].value.str.val); concat_function(&yyval,&yyvsp[-1],&yyvsp[0],0 _INLINE_TLS); } ;
     break;}
 case 287:
-#line 703 "language-parser.y"
-{ if (GLOBAL(Execute)) add_char_to_string(&yyval,&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
-    break;}
-case 288:
 #line 704 "language-parser.y"
 { if (GLOBAL(Execute)) add_char_to_string(&yyval,&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
     break;}
-case 289:
+case 288:
 #line 705 "language-parser.y"
 { if (GLOBAL(Execute)) add_char_to_string(&yyval,&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
     break;}
-case 290:
+case 289:
 #line 706 "language-parser.y"
 { if (GLOBAL(Execute)) add_char_to_string(&yyval,&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
     break;}
-case 291:
+case 290:
 #line 707 "language-parser.y"
+{ if (GLOBAL(Execute)) add_char_to_string(&yyval,&yyvsp[-1],&yyvsp[0] _INLINE_TLS); ;
+    break;}
+case 291:
+#line 708 "language-parser.y"
 {  if (GLOBAL(Execute)) { pval tmp;  tmp.value.str.val="->"; tmp.value.str.len=2; tmp.type=IS_STRING; concat_function(&yyval,&yyvsp[-1],&tmp,0 _INLINE_TLS); } ;
     break;}
 case 292:
-#line 708 "language-parser.y"
+#line 709 "language-parser.y"
 { if (GLOBAL(Execute)) var_reset(&yyval); ;
     break;}
 case 293:
-#line 713 "language-parser.y"
+#line 714 "language-parser.y"
 { php3_unset(&yyval, &yyvsp[-1]); ;
     break;}
 case 294:
-#line 714 "language-parser.y"
+#line 715 "language-parser.y"
 { php3_isset(&yyval, &yyvsp[-1]); ;
     break;}
 case 295:
-#line 715 "language-parser.y"
+#line 716 "language-parser.y"
 { php3_empty(&yyval, &yyvsp[-1]); ;
     break;}
 }
    /* the action file gets copied in in place of this dollarsign */
-#line 498 "/usr/local/share/bison.simple"
+#line 498 "/usr/lib/bison.simple"
 
   yyvsp -= yylen;
   yyssp -= yylen;
@@ -3254,7 +3255,7 @@ yyerrhandle:
   yystate = yyn;
   goto yynewstate;
 }
-#line 725 "language-parser.y"
+#line 726 "language-parser.y"
 
 
 inline void clear_lookahead(int *yychar)
@@ -3275,6 +3276,8 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 	int i;
 	pval class_ptr;
 	int original_shutdown_requested=GLOBAL(shutdown_requested);
+	int original_execute_flag = GLOBAL(ExecuteFlag);
+	FunctionState original_function_state = GLOBAL(function_state);
 
 	/* save the location to go back to */
 	return_offset.offset = tc_get_current_offset(&GLOBAL(token_cache_manager))-1;	
@@ -3289,9 +3292,11 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 	}
 	
 	/* Do some magic... */
+	GLOBAL(shutdown_requested) = 0;
+	GLOBAL(function_state).loop_nest_level = GLOBAL(function_state).loop_change_level = GLOBAL(function_state).loop_change_type = 0;
+	GLOBAL(function_state).returned = 0;
 	GLOBAL(ExecuteFlag) = EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
-	GLOBAL(shutdown_requested) = 0;
 
 	tc_set_token(&token_cache_manager, func->offset, IC_FUNCTION);
 	if (object) {
@@ -3308,7 +3313,11 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 	if (GLOBAL(shutdown_requested)) { /* we died during this function call */
 		return FAILURE;
 	}
-	GLOBAL(shutdown_requested) = original_shutdown_requested;
 	cs_functioncall_end(retval,function_name,&return_offset,NULL,0);
+	GLOBAL(function_state) = original_function_state;
+	GLOBAL(ExecuteFlag) = original_execute_flag;
+	GLOBAL(shutdown_requested) = original_shutdown_requested;
+	GLOBAL(Execute) = SHOULD_EXECUTE;
+
 	return SUCCESS;
 }

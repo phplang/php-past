@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Amitay Isaacs <amitay@pspl.co.in>                           |
+   | Authors: Amitay Isaacs <amitay@w-o-i.com>                            |
    |          Eric Warnke   <ericw@albany.edu>                            |
    +----------------------------------------------------------------------+
  */
  
 
-/* $Id: ldap.c,v 1.57 1998/09/22 18:17:40 rasmus Exp $ */
+/* $Id: ldap.c,v 1.58 1998/09/30 04:35:04 amitay Exp $ */
 #define IS_EXT_MODULE
 #if !PHP_31 && defined(THREAD_SAFE)
 #undef THREAD_SAFE
@@ -304,7 +304,7 @@ void php3_info_ldap(void)
 
 	php3_printf("<table>"
 				"<tr><td>Total links:</td><td>%d/%s</td></tr>\n"
-		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.57 1998/09/22 18:17:40 rasmus Exp $</td></tr>\n"
+		        "<tr><td>RCS Version:</td><td>$Id: ldap.c,v 1.58 1998/09/30 04:35:04 amitay Exp $</td></tr>\n"
 #if HAVE_NSLDAP
 				"<tr><td>SDK Version:</td><td>%f</td></tr>"
 				"<tr><td>Highest LDAP Protocol Supported:</td><td>%f</td></tr>"

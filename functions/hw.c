@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hw.c,v 1.11 1998/09/20 22:43:47 zeev Exp $ */
+/* $Id: hw.c,v 1.12 1998/10/03 19:10:14 shane Exp $ */
 #if COMPILE_DL
 #include "dl/phpdl.h"
 #endif
@@ -1454,6 +1454,8 @@ void php3_hw_edittext(INTERNAL_FUNCTION_PARAMETERS) {
 	convert_to_long(arg2);
 	link=arg1->value.lval;
 	ptr = php3_list_find(link,&type);
+
+	/* FIXME id is not set anywhere */
 	if(!ptr || (type!=php3_hw_module.le_socketp && type!=php3_hw_module.le_psocketp)) {
 		php3_error(E_WARNING,"Unable to find file identifier %d",id);
 		RETURN_FALSE;
@@ -1461,6 +1463,8 @@ void php3_hw_edittext(INTERNAL_FUNCTION_PARAMETERS) {
 
 	doc=arg2->value.lval;
 	docptr = php3_list_find(doc,&type);
+
+	/* FIXME id is not set anywhere */
 	if(!docptr || (type!=php3_hw_module.le_document)) {
 		php3_error(E_WARNING,"Unable to find file identifier %d",id);
 		RETURN_FALSE;

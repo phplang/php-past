@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: control_structures_inline.h,v 1.188 1998/09/19 20:31:45 zeev Exp $ */
+/* $Id: control_structures_inline.h,v 1.190 1998/10/04 12:26:59 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -70,8 +70,8 @@ extern inline void for_pre_expr3(pval *for_token, pval *expr2 INLINE_TLS);
 extern inline void for_pre_statement(pval *for_token, pval *expr2, pval *expr3 INLINE_TLS);
 extern inline void for_post_statement(pval *for_token, pval *first_semicolon, pval *second_semicolon, pval *close_parentheses, int *yychar INLINE_TLS);
 extern inline void cs_return(pval *expr INLINE_TLS);
-extern inline void cs_start_include(pval *include_token INLINE_TLS);
-extern inline void cs_end_include(pval *include_token, pval *expr INLINE_TLS);
+extern inline void php3cs_start_require(pval *include_token INLINE_TLS);
+extern inline void php3cs_end_require(pval *include_token, pval *expr INLINE_TLS);
 extern inline void cs_show_source(pval *expr INLINE_TLS);
 extern inline void cs_pre_boolean_or(pval *left_expr INLINE_TLS);
 extern inline void cs_post_boolean_or(pval *result, pval *left_expr, pval *right_expr INLINE_TLS);
@@ -679,7 +679,7 @@ inline void cs_return(pval *expr INLINE_TLS)
 }
 
 
-inline void cs_start_include(pval *include_token INLINE_TLS)
+inline void php3cs_start_require(pval *include_token INLINE_TLS)
 {
 	/* evaluate the expression even at Execute=0, if it's the first time we see this include(), otherwise,
 	 * don't evaluate it.
@@ -687,8 +687,13 @@ inline void cs_start_include(pval *include_token INLINE_TLS)
 	if (GLOBAL(php3_display_source)) {
 		return;
 	}
+
 	stack_push(&GLOBAL(css), &GLOBAL(ExecuteFlag), sizeof(int));
+	GLOBAL(php3g_function_state_for_require) = GLOBAL(function_state);
+
 	if (!include_token->cs_data.included) {
+		GLOBAL(function_state).loop_nest_level = GLOBAL(function_state).loop_change_level = GLOBAL(function_state).loop_change_type = 0;
+		GLOBAL(function_state).returned = 0;
 		GLOBAL(ExecuteFlag) = EXECUTE;
 		GLOBAL(Execute) = SHOULD_EXECUTE;
 	} else {
@@ -697,14 +702,17 @@ inline void cs_start_include(pval *include_token INLINE_TLS)
 	}
 }
 
-inline void cs_end_include(pval *include_token, pval *expr INLINE_TLS)
+
+inline void php3cs_end_require(pval *include_token, pval *expr INLINE_TLS)
 {
 	if (GLOBAL(php3_display_source)) {
 		return;
 	}
 	GLOBAL(ExecuteFlag) = stack_int_top(&GLOBAL(css));
 	stack_del_top(&GLOBAL(css));
+	GLOBAL(function_state) = GLOBAL(php3g_function_state_for_require);
 	GLOBAL(Execute) = SHOULD_EXECUTE;
+	
 	if (!include_token->cs_data.included) {
 		if (!GLOBAL(php3_display_source)) {
 			include_file(expr,0);

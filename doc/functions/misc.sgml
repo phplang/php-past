@@ -8,6 +8,63 @@
     categories seemed to fit.
   </partintro>
 
+  <refentry id="function.eval">
+   <refnamediv>
+    <refname>eval</refname>
+    <refpurpose>Evaluate a string as PHP code</refpurpose>
+   </refnamediv>
+   <refsect1>
+    <title>Description</title>
+    <funcsynopsis>
+     <funcdef>void <function>eval</function></funcdef>
+     <paramdef>string <parameter>code_str</parameter></paramdef>
+    </funcsynopsis>
+    
+    <simpara>
+     <function>eval</function> evaluates the string given in
+     <parameter>code_str</parameter> as PHP code. Among other things,
+     this can be useful for storing code in a database text field for
+     later execution.
+
+    <simpara>
+     There are some factors to keep in mind when using
+     <function>eval</function>. Remember that the string passed must
+     be valid PHP code, including things like terminating statements
+     with a semicolon so the parser doesn't die on the line after the
+     <function>eval</function>, and properly escaping things in
+     <parameter>code_str</parameter>. 
+
+    <simpara>
+     Also remember that variables given values under
+     <function>eval</function> will retain these values in the main
+     script afterwards.
+
+    <para>
+     <example>
+      <title>eval() example - simple text merge</title>
+      <programlisting>
+&lt;?php
+$string = 'cup';
+$name = 'coffee';
+$str = 'This is a $string with my $name in it.&lt;br&gt;';
+echo $str;
+eval( "\$str = \"$str\";" );
+echo $str;
+?&gt;
+      </programlisting>
+     </example>
+
+    <para>
+     The above example will show:
+      <programlisting>
+This is a $string with my $name in it.
+This is a cup with my coffee in it.
+      </programlisting>
+
+   </refsect1>
+  </refentry>
+
+
   <refentry id="function.leak">
    <refnamediv>
     <refname>leak</refname>

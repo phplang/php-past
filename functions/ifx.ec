@@ -86,6 +86,9 @@ Changes 14.9.1998 (chc@idgruppe.de)
 - supports now IUS- serial8,int8,boolean, nchar, nvchar, lvarchar
 - still incomplete slob-support
 
+Changes 25.9.1998 (danny.heijl@cevi.be)
+- cursory and non-cursory stored procedures
+
 */
 
 
@@ -914,6 +917,7 @@ EXEC SQL END DECLARE SECTION;
     int  ctype;
     int  affected_rows;
     int  query_type;
+    int  cursoryproc;
         
     Informix_TLS_VARS;
 
@@ -1006,11 +1010,19 @@ $ifdef HAVE_IFX_IUS;
     for (i = 0; i < MAXSLOBS; ++i)
         Ifx_Result->slob_id[i] = -1;
 $endif;
+    
+    cursoryproc = 0;
+    if (query_type == SQ_EXECPROC) {
+        EXEC SQL GET DESCRIPTOR :descrpid :i = COUNT;
+        if (i > 0) {
+            cursoryproc = 1;
+        } 
+    }
 
     Ifx_Result->iscursory = -1; /* prevent ifx_do */
     Ifx_Result->paramquery=0;  
     
-    if (query_type != 0) {    /* not a select, execute immediate */
+    if ((query_type != 0) && (!cursoryproc)) {  /* NO RESULT SET */
       /* ##
          ## NONSELECT-STATEMENT 
          ##
@@ -1243,6 +1255,7 @@ EXEC SQL END DECLARE SECTION;
     int  ctype;
     int  affected_rows;
     int  query_type;
+    int  cursoryproc;
     
     Informix_TLS_VARS;
 
@@ -1339,10 +1352,18 @@ $ifdef HAVE_IFX_IUS;
         Ifx_Result->slob_id[i] = -1;
 $endif;
   
+    cursoryproc = 0;
+    if (query_type == SQ_EXECPROC) {
+        EXEC SQL GET DESCRIPTOR :descrpid :i = COUNT;
+        if (i > 0) {
+            cursoryproc = 1;
+        }
+    }
+
     Ifx_Result->iscursory = -1; /* prevent ifx_do */
     Ifx_Result->paramquery=0;  
 
-    if (query_type != 0) {    /* not a select, execute immediate */
+    if ((query_type != 0) && (!cursoryproc)) {  /* NO RESULT SET */
       /* ##
          ## NONSELECT-STATEMENT 
          ##
@@ -1943,6 +1964,9 @@ EXEC SQL END DECLARE SECTION;
         p = fieldname;         /* rtrim fieldname */
         while ((*p != ' ') && (p < &fieldname[sizeof(fieldname) - 1])) ++p;
         *p = 0;
+         
+        if (strcmp("(expression)", fieldname) == 0)	/* stored proc */
+            sprintf(fieldname, "[Expr_%d]", i);
 
         if (indicator == -1) {        /* NULL */
            if((Informix_GLOBAL(php3_ifx_module).textasvarchar==0 
@@ -2257,6 +2281,8 @@ EXEC SQL END DECLARE SECTION;
         *p = toupper(*p);
         while ((*p != ' ') && (p < &fieldname[sizeof(fieldname) - 1])) ++p;
         *p = 0;
+        if (strcmp("(expression)", fieldname) == 0)	/* stored proc */
+            sprintf(fieldname, "[Expr_%d]", i);
         
         php3_printf("<th>%s</th>", fieldname);
     }    
@@ -2555,6 +2581,8 @@ EXEC SQL END DECLARE SECTION;
         p = fieldname;         /* rtrim fieldname */
         while ((*p != ' ') && (p < &fieldname[sizeof(fieldname) - 1])) ++p;
         *p = 0;
+        if (strcmp("(expression)", fieldname) == 0)	/* stored proc */
+            sprintf(fieldname, "[Expr_%d]", i);
         
         switch (fieldtype) {
             case SQLSERIAL  : 
@@ -2761,6 +2789,9 @@ EXEC SQL END DECLARE SECTION;
         p = fieldname;         /* rtrim fieldname */
         while ((*p != ' ') && (p < &fieldname[sizeof(fieldname) - 1])) ++p;
         *p = 0;
+        if (strcmp("(expression)", fieldname) == 0)	/* stored proc */
+            sprintf(fieldname, "[Expr_%d]", i);
+
         switch (fieldtype) {
             case SQLSERIAL  : 
                 char_data = "SQLSERIAL";

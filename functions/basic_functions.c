@@ -73,6 +73,7 @@
 #include "functions/uniqid.h"
 #include "functions/base64.h"
 #include "functions/php3_mail.h"
+#include "functions/php3_var.h"
 #if WIN32|WINNT
 #include "win32/unistd.h"
 #endif
@@ -232,6 +233,7 @@ function_entry basic_functions[] = {
 	{"asin",		php3_asin,					NULL},
 	{"acos",		php3_acos,					NULL},
 	{"atan",		php3_atan,					NULL},
+	{"atan2",		php3_atan2,					NULL},
 	{"pi",			php3_pi,					NULL},
 	{"pow",			php3_pow,					NULL},
 	{"exp",			php3_exp,					NULL},
@@ -277,8 +279,12 @@ function_entry basic_functions[] = {
 	{"error_log",	php3_error_log,				NULL},	
 	{"call_user_func",	php3_call_user_func,	NULL},
 	{"call_user_method", php3_call_user_method,	NULL},
+
+	PHP_FE(var_dump,					NULL)
+	PHP_FE(serialize,					first_arg_allow_ref)
+	PHP_FE(unserialize,					first_arg_allow_ref)
 	
-	PHP_FE(register_shutdown_function, NULL)
+	PHP_FE(register_shutdown_function,	NULL)
 	
 	{NULL, NULL, NULL}
 };
@@ -868,10 +874,13 @@ static int array_user_key_compare(const void *a, const void *b)
 	Bucket *f;
 	Bucket *s;
 	pval key1, key2;
-	pval *args[2] = {&key1, &key2};
+	pval *args[2];
 	pval retval;
 	int status;
 
+	args[0] = &key1;
+	args[1] = &key2;
+	
 	f = *((Bucket **) a);
 	s = *((Bucket **) b);
 
@@ -918,7 +927,7 @@ void php3_user_key_sort(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	if (!(array->type & IS_HASH)) {
-		php3_error(E_WARNING, "Wrong datatype in uasort() call");
+		php3_error(E_WARNING, "Wrong datatype in uksort() call");
 		user_compare_func_name = old_compare_func;
 		return;
 	}

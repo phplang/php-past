@@ -28,7 +28,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: php3_unified_odbc.h,v 1.32 1998/07/18 13:10:32 ssb Exp $ */
+/* $Id: php3_unified_odbc.h,v 1.33 1998/10/03 20:48:39 shane Exp $ */
 
 #ifndef _UNIFIED_ODBC_H
 #define _UNIFIED_ODBC_H
@@ -82,6 +82,7 @@ php binary*/
 #define PHP3_UODBC_FIELD_LEN php3_uodbc_field_len
 #define PHP3_UODBC_FIELD_NAME php3_uodbc_field_name
 #define PHP3_UODBC_FIELD_TYPE php3_uodbc_field_type
+#define PHP3_UODBC_FIELD_NUM php3_uodbc_field_num
 #define PHP3_UODBC_FREE_RESULT php3_uodbc_free_result
 #define PHP3_UODBC_NUM_FIELDS php3_uodbc_num_fields
 #define PHP3_UODBC_NUM_ROWS php3_uodbc_num_rows
@@ -123,6 +124,7 @@ php binary*/
 #define ODBC_FIELD_LEN "odbc_field_len"
 #define ODBC_FIELD_NAME "odbc_field_name"
 #define ODBC_FIELD_TYPE "odbc_field_type"
+#define ODBC_FIELD_NUM "odbc_field_num"
 #define ODBC_FREE_RESULT "odbc_free_result"
 #define ODBC_NUM_FIELDS "odbc_num_fields"
 #define ODBC_NUM_ROWS "odbc_num_rows"
@@ -423,6 +425,7 @@ extern void PHP3_UODBC_FETCH_ROW(INTERNAL_FUNCTION_PARAMETERS);
 extern void PHP3_UODBC_FIELD_LEN(INTERNAL_FUNCTION_PARAMETERS);
 extern void PHP3_UODBC_FIELD_NAME(INTERNAL_FUNCTION_PARAMETERS);
 extern void PHP3_UODBC_FIELD_TYPE(INTERNAL_FUNCTION_PARAMETERS);
+extern void PHP3_UODBC_FIELD_NUM(INTERNAL_FUNCTION_PARAMETERS);
 extern void PHP3_UODBC_FREE_RESULT(INTERNAL_FUNCTION_PARAMETERS);
 extern void PHP3_UODBC_NUM_FIELDS(INTERNAL_FUNCTION_PARAMETERS);
 extern void PHP3_UODBC_NUM_ROWS(INTERNAL_FUNCTION_PARAMETERS);

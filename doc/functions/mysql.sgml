@@ -788,8 +788,13 @@ mysql_close();
     </funcsynopsis>
     <para> 
      <function>mysql_field_flags</function> returns the field flags of
-     the specified field. Currently this is either, "not null",
-     "primary key", a combination of the two or "" (an empty string).
+     the specified field. The flags are reported as a single word
+     per flag separated by a single space, so that you can split the
+     returned value using <function>explode</function>.
+    <para>The following flags are reported, if your version of MySQL
+     is current enough to support them: "not_null", "primary_key",
+     "unique_key", "multiple_key", "blob", "unsigned", "zerofill",
+     "binary", "enum", "auto_increment", "timestamp".
     <para> 
      For downward compatibility <function>mysql_fieldflags</function>
      can also be used.

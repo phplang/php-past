@@ -36,10 +36,11 @@ CONVENTIONS
         name the HTML files after these IDs.
 
     2.  Function reference IDs look like this (case does not matter):
-         `function.imageloadfont'
+        `function.imageloadfont'.  Please note that underscores cannot
+        be used in IDs, they should be replaced by minus signs (-).
 
     3.  Function section titles (<reference><title>...</>...) look
-        like this: `ref.category'
+        like this: `ref.category'.
 
     4.  The contents of examples with program listings start on column
         0 in the SGML code.

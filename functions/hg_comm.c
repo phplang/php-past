@@ -23,7 +23,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: hg_comm.c,v 1.7 1998/09/22 15:57:28 steinm Exp $ */
+/* $Id: hg_comm.c,v 1.8 1998/10/03 19:10:13 shane Exp $ */
 
 /* #define HW_DEBUG */
 
@@ -3213,6 +3213,7 @@ int fn_findpath(int sockfd, int *retIDs, int count, int id) {
 	u = count-1;
 	pid = id;
 	pcount = 1;
+	/* FIXME but parentIDs is not set at this point, why checking it? */
 	while((u >= 0) && (pcount != 0) && (parentIDs != NULL) && (pid != 0)) {
 /*fprintf(stderr, "Get parents for %d\n", pid); */
 		if(0 != send_getparents(sockfd, pid, &parentIDs, &pcount)) {
@@ -3940,7 +3941,7 @@ int send_pipedocument(int sockfd, char *host, hw_objectID objectID, int mode, in
 	int *ptr;
 
 	if(-1 == (fd = fnCOpenDataCon(sockfd, &port))) {
-		   efree(msg.buf);
+		 /* not set yet  efree(msg.buf); */
 		   return(-1);
 	}
 
@@ -4117,7 +4118,7 @@ int send_pipecgi(int sockfd, char *host, hw_objectID objectID, char *cgi_env_str
 	int *ptr;
 
 	if(-1 == (fd = fnCOpenDataCon(sockfd, &port))) {
-		   efree(msg.buf);
+		  /* not set yet? efree(msg.buf); */
 		   return(-1);
 	}
 

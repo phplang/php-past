@@ -51,12 +51,6 @@
 
 # include <oci.h>
 
-/* some SQL function codes */
-#define FT_INSERT      3
-#define FT_SELECT      4
-#define FT_UPDATE      5
-#define FT_DELETE      9
-
 # if 0
 typedef struct {
     OCIEnv *pEnv;

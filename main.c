@@ -29,7 +29,7 @@
    +----------------------------------------------------------------------+
  */
 
-/* $Id: main.c,v 1.470 1998/09/21 16:41:47 zeev Exp $ */
+/* $Id: main.c,v 1.472 1998/10/03 19:43:18 zeev Exp $ */
 
 /* #define CRASH_DETECTION */
 
@@ -248,7 +248,7 @@ void php3_log_err(char *log_message)
 /* is 4K big enough? */
 #define PRINTF_BUFFER_SIZE 1024*4
 
-/*wrapper for modules to use PHPWRITE */
+/* wrapper for modules to use PHPWRITE */
 PHPAPI int php3_write(void *buf, int size)
 {
 	TLS_VARS;
@@ -1180,10 +1180,6 @@ void php3_module_shutdown_for_exec(void)
 
 void php3_module_shutdown(INLINE_TLS_VOID)
 {
-	if (GLOBAL(module_initialized) & INIT_MODULE_REGISTRY) {
-		_php3_hash_destroy(&GLOBAL(module_registry));
-		GLOBAL(module_initialized) &= ~INIT_MODULE_REGISTRY;
-	}
 	if (GLOBAL(module_initialized) & INIT_PLIST) {
 		destroy_resource_plist();
 		GLOBAL(module_initialized) &= ~INIT_PLIST;
@@ -1195,6 +1191,14 @@ void php3_module_shutdown(INLINE_TLS_VOID)
 	if (GLOBAL(module_initialized) & INIT_CONSTANTS) {
 		php3_shutdown_constants();
 		GLOBAL(module_initialized) &= ~INIT_CONSTANTS;
+	}
+
+	/* THIS MUST HAPPEN AFTER THE ABOVE, otherwise it causes crashes
+	 * in some modules
+	 */
+	if (GLOBAL(module_initialized) & INIT_MODULE_REGISTRY) {
+		_php3_hash_destroy(&GLOBAL(module_registry));
+		GLOBAL(module_initialized) &= ~INIT_MODULE_REGISTRY;
 	}
 #if !USE_SAPI
 	/* close down the ini config */

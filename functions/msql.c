@@ -27,12 +27,12 @@
    +----------------------------------------------------------------------+
  */
  
-/* $Id: msql.c,v 1.96 1998/09/10 23:57:19 zeev Exp $ */
+/* $Id: msql.c,v 1.97 1998/09/29 23:33:37 shane Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
 
-#ifndef MSVC5
+#if !(WIN32|WINNT)
 #include "config.h"
 #endif
 #include "php.h"

@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: phpmath.h,v 1.12 1998/08/25 12:26:53 ssb Exp $ */
+/* $Id: phpmath.h,v 1.13 1998/09/24 01:06:51 rasmus Exp $ */
 
 #ifndef _PHPMATH_H
 #define _PHPMATH_H
@@ -39,6 +39,7 @@ extern void php3_tan(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_asin(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_acos(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_atan(INTERNAL_FUNCTION_PARAMETERS);
+extern void php3_atan2(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_pi(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_exp(INTERNAL_FUNCTION_PARAMETERS);
 extern void php3_log(INTERNAL_FUNCTION_PARAMETERS);

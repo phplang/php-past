@@ -795,8 +795,7 @@ Making a bowl of acidophilus raspberry.
    <title>CLASS</title>
    <para>
     A class is a collection of variables and functions working with
-    this variables.  A class is defined using syntax such as the
-    following:
+    these variables.  A class is defined using the following syntax:
 
 <informalexample>
 <programlisting role=php>

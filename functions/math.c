@@ -216,6 +216,19 @@ void php3_atan(INTERNAL_FUNCTION_PARAMETERS)
 	return_value->type = IS_DOUBLE;
 }
 
+void php3_atan2(INTERNAL_FUNCTION_PARAMETERS)
+{
+	pval *num1, *num2;
+
+	if (ARG_COUNT(ht) != 2 || getParameters(ht, 2, &num1, &num2) == FAILURE) {
+		WRONG_PARAM_COUNT;
+	}
+	convert_to_double(num1);
+	convert_to_double(num2);
+	return_value->value.dval = atan2(num1->value.dval,num2->value.dval);
+	return_value->type = IS_DOUBLE;
+}
+
 void php3_pi(INTERNAL_FUNCTION_PARAMETERS)
 {
 	return_value->value.dval = M_PI;

@@ -35,7 +35,8 @@ mail("rasmus@lerdorf.on.ca", "My Subject", "Line 1\nLine 2\nLine 3");
      </example>
     <simpara>
      If a fourth string argument is passed, this string is inserted at
-     the end of the header.
+     the end of the header.  This is typically used to add extra
+     headers.  Multiple extra headers are separated with a newline.
     <para>
      <example>
       <title>Sending mail with extra headers.</title>

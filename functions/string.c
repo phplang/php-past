@@ -30,7 +30,7 @@
  */
 
 
-/* $Id: string.c,v 1.140 1998/09/18 16:55:10 rasmus Exp $ */
+/* $Id: string.c,v 1.144 1998/10/04 16:03:29 zeev Exp $ */
 #ifdef THREAD_SAFE
 #include "tls.h"
 #endif
@@ -306,7 +306,7 @@ void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 	static char *strtok_pos1 = NULL;
 	static char *strtok_pos2 = NULL;
 #endif
-	char *token = NULL;
+	char *token = NULL, *tokp=NULL;
 	char *first = NULL;
 	int argc;
 	TLS_VARS;
@@ -319,7 +319,7 @@ void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 		WRONG_PARAM_COUNT;
 	}
 	convert_to_string(tok);
-	token = tok->value.str.val;
+	tokp = token = tok->value.str.val;
 
 	if (argc == 2) {
 		convert_to_string(str);
@@ -336,11 +336,19 @@ void php3_strtok(INTERNAL_FUNCTION_PARAMETERS)
 				first = STATIC(strtok_pos2);
 			}
 		}						/* NB: token is unusable now */
+
 		STATIC(strtok_pos2) = first;
 		if (STATIC(strtok_pos2)) {
 			*STATIC(strtok_pos2) = '\0';
 		}
 		RETVAL_STRING(STATIC(strtok_pos1),1);
+#if 0
+		/* skip 'token' white space for next call to strtok */
+		while (STATIC(strtok_pos2) && 
+			strchr(tokp, *(STATIC(strtok_pos2)+1))) {
+			STATIC(strtok_pos2)++;
+		}
+#endif
 		if (STATIC(strtok_pos2))
 			STATIC(strtok_pos1) = STATIC(strtok_pos2) + 1;
 		else
@@ -979,7 +987,7 @@ PHPAPI char *_php3_addslashes(char *str, int length, int *new_length, int should
 static void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,pval *result)
 {
 	int char_count=0;
-	char *source,*target,*tmp;
+	char *source,*target,*tmp,*source_end=str+len;
 	
 	for (source=str; *source; source++) {
 		if (*source==from) {
@@ -998,7 +1006,7 @@ static void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,p
 	result->value.str.len = len+char_count*(to_len-1);
 	result->value.str.val = target = (char *) emalloc(result->value.str.len+1);
 	
-	for (source=str; *source; source++) {
+	for (source=str; source<source_end; source++) {
 		if (*source==from) {
 			for (tmp=to; *tmp; tmp++) {
 				*target = *tmp;
@@ -1009,7 +1017,7 @@ static void _php3_char_to_str(char *str,uint len,char from,char *to,int to_len,p
 			target++;
 		}
 	}
-	*target = *source;
+	*target = 0;
 }
 
 
@@ -1195,7 +1203,6 @@ void php3_hebrev_with_conversion(INTERNAL_FUNCTION_PARAMETERS)
 void php3_newline_to_br(INTERNAL_FUNCTION_PARAMETERS)
 {
 	pval *str;
-	
 	
 	if (ARG_COUNT(ht)!=1 || getParameters(ht, 1, &str)==FAILURE) {
 		WRONG_PARAM_COUNT;

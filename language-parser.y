@@ -31,7 +31,7 @@
 */
 
 
-/* $Id: language-parser.y,v 1.174 1998/09/18 16:55:00 rasmus Exp $ */
+/* $Id: language-parser.y,v 1.176 1998/10/04 12:26:59 zeev Exp $ */
 
 
 /* 
@@ -116,6 +116,7 @@ int include_count;
  * soon-to-be-called function symbol table.
  */
 FunctionState function_state;
+FunctionState php3g_function_state_for_require; /* to save state when forcing execution in require() evaluation */
 
 /* The following two variables are used when inside class definitions. */
 char *class_name=NULL;
@@ -304,7 +305,7 @@ statement:
 	|	PHP_ECHO echo_expr_list ';'
 	|	INLINE_HTML { if (GLOBAL(Execute)) { if (php3_header()) PUTS($1.value.str.val); } }
 	|	expr ';'  { if (GLOBAL(Execute)) pval_destructor(&$1 _INLINE_TLS); }
-	|	REQUIRE { cs_start_include(&$1 _INLINE_TLS); } expr ';' { cs_end_include(&$1,&$3 _INLINE_TLS); }
+	|	REQUIRE { php3cs_start_require(&$1 _INLINE_TLS); } expr ';' { php3cs_end_require(&$1,&$3 _INLINE_TLS); }
 	|	HIGHLIGHT_FILE expr ';' { if (GLOBAL(Execute)) cs_show_source(&$2 _INLINE_TLS); }
 	|	HIGHLIGHT_STRING '(' expr ')' ';'  { if (GLOBAL(Execute)) eval_string(&$3,NULL,1 _INLINE_TLS); }
 	|	HIGHLIGHT_STRING '(' expr ',' expr ')' ';' { if (GLOBAL(Execute)) eval_string(&$3,&$5,2 _INLINE_TLS); }
@@ -742,6 +743,8 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 	int i;
 	pval class_ptr;
 	int original_shutdown_requested=GLOBAL(shutdown_requested);
+	int original_execute_flag = GLOBAL(ExecuteFlag);
+	FunctionState original_function_state = GLOBAL(function_state);
 
 	/* save the location to go back to */
 	return_offset.offset = tc_get_current_offset(&GLOBAL(token_cache_manager))-1;	
@@ -756,9 +759,11 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 	}
 	
 	/* Do some magic... */
+	GLOBAL(shutdown_requested) = 0;
+	GLOBAL(function_state).loop_nest_level = GLOBAL(function_state).loop_change_level = GLOBAL(function_state).loop_change_type = 0;
+	GLOBAL(function_state).returned = 0;
 	GLOBAL(ExecuteFlag) = EXECUTE;
 	GLOBAL(Execute) = SHOULD_EXECUTE;
-	GLOBAL(shutdown_requested) = 0;
 
 	tc_set_token(&token_cache_manager, func->offset, IC_FUNCTION);
 	if (object) {
@@ -775,7 +780,11 @@ int call_user_function(HashTable *function_table, pval *object, pval *function_n
 	if (GLOBAL(shutdown_requested)) { /* we died during this function call */
 		return FAILURE;
 	}
-	GLOBAL(shutdown_requested) = original_shutdown_requested;
 	cs_functioncall_end(retval,function_name,&return_offset,NULL,0);
+	GLOBAL(function_state) = original_function_state;
+	GLOBAL(ExecuteFlag) = original_execute_flag;
+	GLOBAL(shutdown_requested) = original_shutdown_requested;
+	GLOBAL(Execute) = SHOULD_EXECUTE;
+
 	return SUCCESS;
 }

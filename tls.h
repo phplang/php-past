@@ -82,7 +82,7 @@ typedef struct php3_global_struct{
 	Stack css;
 	Stack for_stack;
 	Stack input_source_stack;
-	Stack function_state_stack;     
+	Stack function_state_stack;
 	Stack switch_stack;
 	Stack variable_unassign_stack; 
 	HashTable *active_symbol_table;  
@@ -91,6 +91,7 @@ typedef struct php3_global_struct{
 	int current_lineno;
 	int include_count;
 	FunctionState function_state;
+	FunctionState php3g_function_state_for_require;
 	char *class_name;
 	HashTable *class_symbol_table;
 	pval return_value,globals;

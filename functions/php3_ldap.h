@@ -23,13 +23,13 @@
    | If you did not, or have any questions about PHP licensing, please    |
    | contact core@php.net.                                                |
    +----------------------------------------------------------------------+
-   | Authors: Amitay Isaacs <amitay@pspl.co.in>                           |
+   | Authors: Amitay Isaacs <amitay@w-o-i.com>                            |
    |          Eric Warnke   <ericw@albany.edu>                            |
    +----------------------------------------------------------------------+
  */
 
 
-/* $Id: php3_ldap.h,v 1.22 1998/08/30 19:06:45 shane Exp $ */
+/* $Id: php3_ldap.h,v 1.23 1998/09/30 04:35:05 amitay Exp $ */
 
 #ifndef _PHP3_LDAP_H
 #define _PHP3_LDAP_H

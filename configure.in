@@ -1,4 +1,4 @@
-dnl $Id: configure.in,v 1.255 1998/09/22 12:51:09 rasmus Exp $
+dnl $Id: configure.in,v 1.260 1998/10/03 19:43:16 zeev Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(main.c)
@@ -39,7 +39,7 @@ fi
 dnl Haven't quite figured out how to make libtool go yet
 dnl AM_PROG_LIBTOOL
 dnl AC_PROG_INSTALL
-AC_PATH_PROG(PROG_SENDMAIL, sendmail, /usr/lib/sendmail, $PATH /usr/bin /usr/sbin /usr/etc /etc)
+AC_PATH_PROG(PROG_SENDMAIL, sendmail, /usr/lib/sendmail, $PATH /usr/bin /usr/sbin /usr/etc /etc /usr/ucblib)
 if test -n "$PROG_SENDMAIL"; then
   AC_DEFINE(HAVE_SENDMAIL)
 fi
@@ -54,6 +54,10 @@ if test -d /usr/pkg/include -a -d /usr/pkg/lib ; then
 fi
 
 AC_PREFERRED_DB_LIB
+
+AC_CHECK_LIB(nsl, gethostname, [
+  LIBS="-lnsl $LIBS"
+  AC_DEFINE(HAVE_LIBNSL) ], [])
 
 AC_CHECK_LIB(c, socket, [:], [
  AC_CHECK_LIB(socket, socket, [
@@ -96,26 +100,6 @@ AC_CHECK_LIB(socket, res_search, [
   AC_CHECK_LIB(resolv, dn_skipname)
  ]) 
 ])
-
-dnl AIX keeps in_addr_t in /usr/include/netinet/in.h
-dnl AC_MSG_CHECKING(for in_addr_t)
-AC_CACHE_VAL(ac_cv_type_$1,
-[AC_EGREP_CPP(dnl
-changequote(<<,>>)dnl
-<<in_addr_t[^a-zA-Z_0-9]>>dnl
-changequote([,]), [#include <sys/types.h>
-#if STDC_HEADERS
-#include <stdlib.h>
-#include <stddef.h>
-#endif
-#ifdef HAVE_NETINET_IN_H
-#include <netinet/in.h>
-#endif], ac_cv_type_in_addr_t=yes, ac_cv_type_in_addr_t=no)])dnl
-
-dnl AC_MSG_RESULT($ac_cv_type_in_addr_t)
-if test $ac_cv_type_in_addr_t = no; then
-  AC_DEFINE(in_addr_t, u_int)
-fi
 
 dnl Checks for header files.
 AC_HEADER_STDC
@@ -178,6 +162,26 @@ AC_FUNC_UTIME_NULL
 AC_FUNC_ALLOCA
 AC_BROKEN_SPRINTF
 AC_REPLACE_FUNCS(getopt)
+
+dnl AIX keeps in_addr_t in /usr/include/netinet/in.h
+dnl AC_MSG_CHECKING(for in_addr_t)
+AC_CACHE_VAL(ac_cv_type_$1,
+[AC_EGREP_CPP(dnl
+changequote(<<,>>)dnl
+<<in_addr_t[^a-zA-Z_0-9]>>dnl
+changequote([,]), [#include <sys/types.h>
+#if STDC_HEADERS
+#include <stdlib.h>
+#include <stddef.h>
+#endif
+#ifdef HAVE_NETINET_IN_H
+#include <netinet/in.h>
+#endif], ac_cv_type_in_addr_t=yes, ac_cv_type_in_addr_t=no)])dnl
+
+dnl AC_MSG_RESULT($ac_cv_type_in_addr_t)
+if test $ac_cv_type_in_addr_t = no; then
+  AC_DEFINE(in_addr_t, u_int)
+fi
 
 AC_CRYPT_CAP
 
@@ -584,7 +588,12 @@ AC_ARG_WITH(oracle,
   then
 
     # Oracle include files
-    if test -d "$ORACLEINST_TOP/rdbms/demo"
+
+    if test -d "$ORACLEINST_TOP/rdbms/public"
+    then
+      # V8.0.5
+      ORACLE_INCLUDE="$ORACLE_INCLUDE -I$ORACLEINST_TOP/rdbms/public"
+	elif test -d "$ORACLEINST_TOP/rdbms/demo"
     then
       # V7.[0123]
       ORACLE_INCLUDE=-I$ORACLEINST_TOP/rdbms/demo
@@ -890,9 +899,6 @@ AC_ARG_WITH(mysql,
     CPPFLAGS="$CPPFLAGS $MYSQL_INCLUDE"
     AC_CHECK_HEADERS(errmsg.h)
     CPPFLAGS="$old_CPPFLAGS"
-
-	dnl the MySQL client library is multithreaded on some systems
-	AC_CHECK_LIB(pthread, pthread_self, [ LIBS="-lpthread $LIBS" ])
   else
   	AC_MSG_RESULT(no)
 dnl Why are we defining HAVE_MYSQL here??

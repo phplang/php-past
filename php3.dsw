@@ -1,4 +1,4 @@
-Microsoft Developer Studio Workspace File, Format Version 5.00
+Microsoft Developer Studio Workspace File, Format Version 6.00
 # WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
 
 ###############################################################################
@@ -171,7 +171,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "php3"=.\php3.dsp - Package Owner=<4>
+Project: "oci73"=.\oci73.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -183,7 +183,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "phpmysql"=.\phpmysql.dsp - Package Owner=<4>
+Project: "php3"=.\php3.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name php_custom_build
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "php_custom_build"=.\php_custom_build.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

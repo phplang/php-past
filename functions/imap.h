@@ -65,6 +65,7 @@ void php3_imap_fetchtext_full(INTERNAL_FUNCTION_PARAMETERS);
 void php3_imap_status(INTERNAL_FUNCTION_PARAMETERS);
 void php3_imap_bodystruct(INTERNAL_FUNCTION_PARAMETERS);
 void php3_imap_fetch_overview(INTERNAL_FUNCTION_PARAMETERS);
+void php3_imap_mail_compose(INTERNAL_FUNCTION_PARAMETERS);
 
 #else
 #define php3_imap_module_ptr NULL

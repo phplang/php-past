@@ -142,5 +142,28 @@ Informix Universal Server support
 
 ------------------------------------------------------------------------------
 
+Beta Testers
+------------
+
+* Niklas Saers (berenmls@saers.com)
+  FreeBSD/x86
+
+* Chuck Hagenbuch <chuck@osmos.ml.org>
+  Linux/x86 glibc2, MySQL, mod_ssl
+
+* Sascha Schumann (sas@schell.de)
+  FreeBSD/x86, PostgreSQL, IMAP, gdttf
+
+* Jim Jagielski (jim@jagunet.com)
+  A/UX, FreeBSD/x86
+
+* Jouni Ahto (jah@cultnet.fi)
+  Debian Linux 2.0
+
+
+
+
+------------------------------------------------------------------------------
+
 Andi Gutmans and Zeev Suraski would like to thank Professor Michael Rodeh for
 his positive input during the initial development of the interpreter.

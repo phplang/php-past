@@ -1,4 +1,4 @@
-dnl $Id: aclocal.m4,v 1.27 1998/09/22 03:02:28 rasmus Exp $
+dnl $Id: aclocal.m4,v 1.28 1998/09/23 13:47:21 ssb Exp $
 dnl
 dnl This file contains local autoconf functions.
 
@@ -9,7 +9,7 @@ AC_DEFUN(AC_ORACLE_VERSION,[
 	ORACLE_VERSION=`grep '"ocommon"' $ORACLEINST_TOP/orainst/unix.rgs | sed 's/[ ][ ]*/:/g' | cut -d: -f 6 | cut -c 2-4`
     test -z "$ORACLE_VERSION" && ORACLE_VERSION=7.3
   else
-    ORACLE_VERSION=7.3
+    ORACLE_VERSION=8.0
   fi
   AC_MSG_RESULT($ORACLE_VERSION)
 ])

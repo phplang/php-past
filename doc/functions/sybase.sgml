@@ -256,23 +256,24 @@
    </refsect1>
   </refentry>
 
-  <refentry id="function.sybase-freeresult">
+  <refentry id="function.sybase-free-result">
    <refnamediv>
-    <refname>sybase_freeresult</refname>
+    <refname>sybase_free_result</refname>
     <refpurpose>free result memory</refpurpose>
    </refnamediv>
    <refsect1>
     <title>Description</title>
     <funcsynopsis>
-     <funcdef>int <function>sybase_freeresult</function></funcdef>
+     <funcdef>int <function>sybase_free_result</function></funcdef>
      <paramdef>int <parameter>result</parameter></paramdef>
     </funcsynopsis>
     <para>
-     sybase_freeresult() only needs to be called if you are worried
-     about using too much memory while your script is running. All
-     result memory will automatically be freed when the script, you
-     may call sybase_freeresult() with the result identifier as an
-     argument and the associated result memory will be freed.
+     <function>sybase_free_result</function> only needs to be called
+     if you are worried about using too much memory while your script
+     is running. All result memory will automatically be freed when
+     the script, you may call <function>sybase_free_result</function>
+     with the result identifier as an argument and the associated
+     result memory will be freed.
     </para>
    </refsect1>
   </refentry>

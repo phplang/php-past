@@ -24,7 +24,7 @@
 # +----------------------------------------------------------------------+
 
 #
-# $Id: Makefile.in,v 1.261 1998/09/21 16:41:44 zeev Exp $
+# $Id: Makefile.in,v 1.264 1998/10/04 17:17:34 zeev Exp $
 #
 
 prefix = @prefix@
@@ -89,7 +89,7 @@ FUNCTIONS_SOURCE = functions/adabasd.c functions/apache.c functions/fhttpd.c \
        functions/velocis.c functions/gdttf.c functions/gdcache.c \
        functions/zlib.c functions/COM.c functions/ifx.c \
        functions/hw.c functions/hg_comm.c functions/dlist.c \
-       functions/snmp.c
+       functions/snmp.c functions/var.c
 
 FUNCTIONS = $(FUNCTIONS_SOURCE:.c=.o)
 
@@ -218,6 +218,7 @@ parser-scanner:	configuration-parser.tab.c configuration-scanner.c language-pars
 depend:	parser-scanner
 	$(CC) $(CFLAGS) -MM $(SOURCE) | perl -pe 's|regex/regex.h||;' > Makefile.depend
 	$(CC) $(CFLAGS) -MM $(FUNCTIONS_SOURCE) | perl -pe 's|^(.+\.o)|functions/$$1|; s|regex/regex.h||;' >> Makefile.depend
+
 
 language-parser.tab.o: language-parser.tab.c php.h php_version.h \
  config.h request_info.h php3_hash.h alloc.h  safe_mode.h \
@@ -351,7 +352,7 @@ functions/basic_functions.o: functions/basic_functions.c php.h php_version.h \
  functions/datetime.h functions/fsock.h functions/image.h \
  functions/php3_link.h functions/php3_filestat.h functions/microtime.h \
  functions/pageinfo.h functions/uniqid.h functions/base64.h \
- functions/php3_mail.h
+ functions/php3_mail.h functions/php3_var.h
 functions/crypt.o: functions/crypt.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
@@ -591,14 +592,16 @@ functions/velocis.o: functions/velocis.c php.h php_version.h config.h \
  fopen-wrappers.h mod_php3.h stack.h operators.h token_cache.h \
  variables.h constants.h internal_functions.h modules.h \
  functions/php3_velocis.h
-functions/gdttf.o: functions/gdttf.c config.h
-functions/gdcache.o: functions/gdcache.c config.h
+functions/gdttf.o: functions/gdttf.c config.h functions/gdttf.h \
+ functions/gdcache.h
+functions/gdcache.o: functions/gdcache.c config.h functions/gdcache.h
 functions/zlib.o: functions/zlib.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  functions/head.h modules.h internal_functions.h php3_list.h \
  functions/php3_string.h functions/php3_zlib.h snprintf.h
 functions/COM.o: functions/COM.c
+functions/ifx.o: functions/ifx.c
 functions/hw.o: functions/hw.c config.h php.h php_version.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
@@ -609,6 +612,11 @@ functions/snmp.o: functions/snmp.c php.h php_version.h config.h request_info.h \
  php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
  mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
  internal_functions.h modules.h functions/php3_snmp.h
+functions/var.o: functions/var.c php.h php_version.h config.h request_info.h \
+ php3_hash.h alloc.h  safe_mode.h fopen-wrappers.h \
+ mod_php3.h stack.h operators.h token_cache.h variables.h constants.h \
+ internal_functions.h modules.h functions/reg.h functions/post.h \
+ functions/php3_string.h functions/php3_var.h
 
 
 # Local Variables:

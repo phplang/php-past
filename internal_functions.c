@@ -29,7 +29,7 @@
  */
 
 
-/* $Id: internal_functions.c,v 1.326 1998/09/10 23:56:54 zeev Exp $ */
+/* $Id: internal_functions.c,v 1.327 1998/10/04 00:19:33 zeev Exp $ */
 
 #ifdef THREAD_SAFE
 #include "tls.h"
@@ -184,11 +184,12 @@ PHPAPI int getParametersArray(HashTable *ht, int param_count, pval **argument_ar
 	return SUCCESS;
 }
 
-PHPAPI int getThis(pval **this) {
+PHPAPI int getThis(pval **this)
+{
 	pval *data;
 	TLS_VARS;
 
-	if (_php3_hash_find(GLOBAL(active_symbol_table), "this", sizeof("this"), (void **)&data) == FAILURE) {
+	if (_php3_hash_find(GLOBAL(function_state.symbol_table), "this", sizeof("this"), (void **)&data) == FAILURE) {
 		return FAILURE;
 	}
 	*this = data;

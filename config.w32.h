@@ -35,42 +35,10 @@
    external libraries to compile.  These will be removed from 
    here in a future beta, as these modules will be moved out to dll's 
    ---------------------------------------------------------------*/
-#if defined(COMPILE_DL)
-/* Define if you an ndbm compatible library (-ldbm).  */
-#define NDBM 1
-#define GDBM 0
-/* Define if using Berkley DB on Win32, you must define
-   NDBM also!  */
-#define BSD2 1
-/* Define if you have the gdbm library (-lgdbm).  */
-/* #undef GDBM */
-#define HAVE_LDAP 1
-/* Define if you have Netscapes LDAP sdk v1.1 */
-#define HAVE_NSLDAP 1
-#define HAVE_SNMP 1
-#define HAVE_CRYPT 1
-#define HAVE_ORACLE 1
-#define HAVE_ADABAS 1
-#define HAVE_SOLID 1
-#define HAVE_MYSQL 1
-#define HAVE_MSQL 1
-#define HAVE_MSSQL 1
-# define HAVE_ERRMSG_H 1 /*needed for mysql 3.21.17 and up*/
-#define HAVE_PGSQL 1
-#define HAVE_SYBASE 1
-#define HAVE_FILEPRO 1
-#define DBASE 1
-#define HAVE_ZLIB 1
-/* Define if you have the gd library (-lgd).  */
-#define HAVE_LIBGD 1
-#define HAVE_LIBGD13 1
-#define HAVE_LIBTTF 1
-#define HAVE_IMAP 1
-
-#else
+#if !defined(COMPILE_DL)
 #define HAVE_SNMP 0
-#define HAVE_MYSQL 1
-# define HAVE_ERRMSG_H 1 /*needed for mysql 3.21.17 and up*/
+#define HAVE_MYSQL 0
+# define HAVE_ERRMSG_H 0 /*needed for mysql 3.21.17 and up*/
 #define HAVE_LDAP 0
 #define DBASE 0
 #define NDBM 0
